@@ -6,7 +6,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
-using ArcheryScoring.Droid;
+using ArcheryScoringApp.Droid;
 //using Android;
 
 namespace ArcheryScoringApp.Droid
