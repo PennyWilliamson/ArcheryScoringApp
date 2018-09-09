@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{74A97C99-2623-414B-86F8-1E253BDFBE49}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>SyncFusionTrial</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)App.xaml" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainPage.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Data\ASCDatabase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Bow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Details.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\End.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Notes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\ScoringSheet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\WeatherConditions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Comp720Model.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\DetailsModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\PracticeModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UIArchMain.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)UIComp720.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UINotesAndWeather.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UIPractice.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UIStats.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\Comp720ViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\detailsViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\EndModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\PracticeViewModel.cs" />
+  </ItemGroup>
+</Project>
