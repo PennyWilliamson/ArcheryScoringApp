@@ -78,15 +78,15 @@ namespace ArcheryScoringApp
             return button;
         }
 
-        private void ContClicked(object sender, EventArgs e)
+        private async void ContClicked(object sender, EventArgs e)
         {
-            //code for setting page change
+            await Navigation.PushAsync(new UIComp720());
 
         }
 
-        private void BackClicked(object sender, EventArgs e)
+        private async void BackClicked(object sender, EventArgs e)
         {
-            //code for setting page change
+            await Navigation.PopAsync();
         }
 
         private void getStats()

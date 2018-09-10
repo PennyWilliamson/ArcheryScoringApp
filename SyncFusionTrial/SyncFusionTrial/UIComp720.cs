@@ -53,8 +53,15 @@ namespace ArcheryScoringApp
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(140) });
 
             Button detailsButton = createButton("Details");
+            popupLayout = new SfPopupLayout();
+            detailsButton.Clicked += ClickToShowPopup_Clicked;
+
             Button backButton = createButton("Back");
+            backButton.Clicked += BackButtonClicked;
+
             Button mainButton = createButton("Main");
+            mainButton.Clicked += MainButtonClicked;
+
 
             Button previousButton = createButton("Previous");
             prevPop = new SfPopupLayout();
@@ -71,8 +78,7 @@ namespace ArcheryScoringApp
             newSightMarking.TextChanged += SightChanged;
             editSightButton.Clicked += EditSightClicked;
 
-            popupLayout = new SfPopupLayout();
-            detailsButton.Clicked += ClickToShowPopup_Clicked;
+           
 
             layout.Children.Add(header);
             // Grid gridDetails = CreateGrid();
@@ -179,6 +185,15 @@ namespace ArcheryScoringApp
             ID = HoldID;
         }
 
+        private async void BackButtonClicked(object sender, EventArgs e)
+        {
+            await Navigation.PopAsync();
+        }
+
+        private async void MainButtonClicked(object sender, EventArgs e)
+        {
+            await Navigation.PopToRootAsync();
+        }
 
         static SfDataGrid CreateDataGrid()
         {

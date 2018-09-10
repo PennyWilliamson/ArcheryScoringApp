@@ -15,9 +15,11 @@ namespace ArcheryScoringApp
         double windspeed;
         double temp;
         double humid;
+        string endRef;
 
-        public UINotesAndWeather()
+        public UINotesAndWeather(string aRef)
         {
+            endRef = aRef;
             StackLayout layout = new StackLayout();
             var header = new Label { Text = " Notes and Statistics ", TextColor = Color.FromHex("#010101"), FontSize = 30 };
 
@@ -66,6 +68,8 @@ namespace ArcheryScoringApp
            notesInput.TextChanged += NoteChanged;
 
             Button backButton = CreateButton("Back");
+            backButton.Pressed += BackButtonPressed;
+
             Button saveButton = CreateButton("Save");
             saveButton.Clicked += SaveClicked;
 
@@ -103,6 +107,9 @@ namespace ArcheryScoringApp
             return button;
         }
 
+
+
+        
         public void NoteChanged(object sender, TextChangedEventArgs e)
         {
             note = e.NewTextValue;
@@ -140,15 +147,22 @@ namespace ArcheryScoringApp
         {
             if(note != null)
             {
-                App.Database.AddNotes(note);
+                App.Database.AddNotes(endRef, note);
             }
             
             //windspeed not included as if windspeed = 0, then windDir will be null. 
             //Assumption made that practice will not happen in 0 degree conditions
             if(temp != 0 || windDir != null || humid != 0 || other != null)
             {
-                App.Database.AddWeather(temp, windspeed, windDir, humid, other);
+                App.Database.AddWeather(endRef, temp, windspeed, windDir, humid, other);
             }
+
+            Navigation.PopAsync();
+        }
+
+        private async void BackButtonPressed(object sender, EventArgs e)
+        {
+            await Navigation.PopAsync();
         }
     }
 }

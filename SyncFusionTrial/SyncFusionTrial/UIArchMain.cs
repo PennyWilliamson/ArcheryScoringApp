@@ -5,6 +5,7 @@ using System.Text;
 
 using Xamarin.Forms;
 using Syncfusion.XForms.ComboBox;
+using Syncfusion.XForms.PopupLayout;
 
 namespace ArcheryScoringApp
 {
@@ -13,9 +14,12 @@ namespace ArcheryScoringApp
         static internal string bowType;
         static internal string dist;
         static internal string compType;
+        SfPopupLayout noBowOrDist;
 
-		public ArchMain ()
+        public ArchMain ()
 		{
+            noBowOrDist = new SfPopupLayout();
+
              StackLayout layout = new StackLayout()
              {
                  VerticalOptions = LayoutOptions.Start,
@@ -99,6 +103,7 @@ namespace ArcheryScoringApp
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalOptions = LayoutOptions.Center
             };
+            compButton.Clicked += CompButtonClicked;
 
             Button pracButton = new Button
             {
@@ -106,6 +111,7 @@ namespace ArcheryScoringApp
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalOptions = LayoutOptions.Center
             };
+            pracButton.Clicked += PracButtonClicked;
 
             Button backupButton = new Button
             {
@@ -127,5 +133,44 @@ namespace ArcheryScoringApp
             layout.Children.Add(grid);
             Content = layout;
         }
-	}
+
+        private async void CompButtonClicked(object sender, EventArgs e)
+        {
+            if (bowType != null && dist != null)
+            {
+                await Navigation.PushAsync(new UIStats());
+            }
+            else
+            {
+                ValuesNull();
+            }
+        }
+
+        private async void PracButtonClicked(object sender, EventArgs e)
+        {
+            if (bowType != null && dist != null)
+            {
+                await Navigation.PushAsync(new UIPractice());
+            }
+            else
+            {
+                ValuesNull();
+            }
+        }
+
+        private void ValuesNull()
+        {
+            Label content = new Label { Text = "Please select a Bow Type and Distance from the drop down menus and try again.", TextColor = Color.FromHex("#010101"), BackgroundColor = Color.White, FontSize = 30 };
+            noBowOrDist.PopupView.ContentTemplate = new DataTemplate(() =>
+                {
+                    noBowOrDist.PopupView.HeaderTitle = "Choose from dropdowns";
+                    noBowOrDist.PopupView.ShowFooter = false;
+                    return content;
+                });
+            noBowOrDist.StaysOpen = true;
+            noBowOrDist.PopupView.ShowCloseButton = true;
+            noBowOrDist.IsOpen = true;
+            noBowOrDist.Show();
+        }
+    }
 }

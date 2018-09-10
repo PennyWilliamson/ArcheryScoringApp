@@ -139,22 +139,22 @@ namespace ArcheryScoringApp.Data
 
         }
 
-        public void AddNotes(string note)
+        public void AddNotes(string endRef, string note)
         {
             var notes = new Notes()
             {
-              //  EndNum = Model.PracticeModel.eR,//sets the endNum to current end's eR
+                EndNum = endRef, //sets the endNum to current end's eR
                 EndNotes = note
             };
 
             db.InsertOrReplace(notes);
         }
 
-        public void AddWeather(double temp, double speed, string dir, double hum, string other)
+        public void AddWeather(string endRef, double temp, double speed, string dir, double hum, string other)
         {
             var weather = new WeatherConditions
             {
-               // EndNum = Model.PracticeModel.eR,//sets the endNum to current end's eR
+                EndNum = endRef,//sets the endNum to current end's eR
                 Temp = temp,
                 WindSpeed = speed,
                 WindDir = dir, 

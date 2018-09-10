@@ -63,6 +63,8 @@ namespace ArcheryScoringApp.Model
         }
 
 
+
+
        public event NotifyCollectionChangedEventHandler CollectionChanged;
 
         protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs e)

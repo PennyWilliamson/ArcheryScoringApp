@@ -23,14 +23,18 @@ namespace ArcheryScoringApp
         SfPopupLayout popupLayout;
         SfPopupLayout prevPop;
         SfPopupLayout notValid;
+        SfPopupLayout selectEndRow;
         static string date;
+       
 
         public UIPractice()
         {
+            
             dataGrid = CreateDataGrid();
             viewModel = new Model.PracticeViewModel();
 
             notValid = new SfPopupLayout();
+            selectEndRow = new SfPopupLayout();
  
             StackLayout layout = new StackLayout()
             {
@@ -66,6 +70,7 @@ namespace ArcheryScoringApp
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalOptions = LayoutOptions.Center
             };
+            mainButton.Clicked += MainButtonClicked;
 
             Button ntswthrButton = new Button //notes and weather button
             {
@@ -73,6 +78,7 @@ namespace ArcheryScoringApp
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalOptions = LayoutOptions.Center
             };
+            ntswthrButton.Clicked += NotesAndWeatherClicked;
 
             Button editSightButton = new Button //for editing sight markings
             {
@@ -138,7 +144,46 @@ namespace ArcheryScoringApp
             notValid.Show();
         }
 
-        
+        private async void MainButtonClicked(object sender, EventArgs e)
+        {
+            await Navigation.PopToRootAsync();
+        }
+
+        private async void NotesAndWeatherClicked(object sender, EventArgs e)
+        {
+            string endRef = null;
+            Model.PracticeModel curEnd = (Model.PracticeModel)dataGrid.SelectedItem;
+            if (curEnd != null)
+            {
+                endRef = curEnd.ER;
+            }
+
+            if (endRef != null)
+            {
+                await Navigation.PushAsync(new UINotesAndWeather(endRef));
+            }
+            else
+            {
+                SelectEndRow();
+            }
+
+        }
+
+        private void SelectEndRow()
+        {
+            Label content = new Label { Text = "Please Select a Row and try again.", TextColor = Color.Black, BackgroundColor = Color.White, FontSize = 30 };
+            selectEndRow.PopupView.ContentTemplate = new DataTemplate(() => {
+                selectEndRow.PopupView.HeaderTitle = "Try Again";
+                selectEndRow.PopupView.BackgroundColor = Color.White;
+                selectEndRow.HorizontalOptions = LayoutOptions.FillAndExpand;
+                selectEndRow.PopupView.ShowFooter = false;
+                return content;
+            });
+            selectEndRow.StaysOpen = true;
+            selectEndRow.PopupView.ShowCloseButton = true;
+            selectEndRow.IsOpen = true;
+            selectEndRow.Show();
+        }
 
         private void ClickToShowPopup_Clicked(object sender, EventArgs e)
         {
@@ -226,6 +271,7 @@ namespace ArcheryScoringApp
             dataGrid.EditorSelectionBehavior = EditorSelectionBehavior.SelectAll;
             dataGrid.NotificationSubscriptionMode = NotificationSubscriptionMode.PropertyChange;
             //   dataGrid.NotificationSubscriptionMode = NotificationSubscriptionMode.CollectionChange;
+            dataGrid.SelectionMode = SelectionMode.Single;
             
 
             //so end number column cannot be edited
@@ -281,7 +327,6 @@ namespace ArcheryScoringApp
             return dataGrid;
         }
 
-        
 
         static SfDataGrid CreateDataGridPrev(List<Data.End> ends)
         {

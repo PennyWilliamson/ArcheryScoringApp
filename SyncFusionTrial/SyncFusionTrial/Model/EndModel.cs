@@ -7,7 +7,7 @@ namespace ArcheryScoringApp.Model
     class EndModel
     {
         public string endNum { get; set; }
-        public string id { get; set; } // this would be highest ID value in Scoring Sheet table
+        public string id { get; set; } 
         public int endTotal { get; set; }
         public string score1 { get; set; }
         public string score2 { get; set; }
