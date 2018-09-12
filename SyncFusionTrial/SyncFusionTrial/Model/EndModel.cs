@@ -7,7 +7,7 @@ namespace ArcheryScoringApp.Model
     class EndModel
     {
         public string endNum { get; set; }
-        public string id { get; set; } 
+        public int id { get; set; } 
         public int endTotal { get; set; }
         public string score1 { get; set; }
         public string score2 { get; set; }
@@ -19,7 +19,7 @@ namespace ArcheryScoringApp.Model
         public EndModel(string anEndNum,  int anID, int anEndTotal, string aScore1, string aScore2, string aScore3, string aScore4, string aScore5, string aScore6)
         {
             endNum = anEndNum;
-            id = anID.ToString();
+            id = anID;
             endTotal = anEndTotal;
             score1 = aScore1;
             score2 = aScore2;

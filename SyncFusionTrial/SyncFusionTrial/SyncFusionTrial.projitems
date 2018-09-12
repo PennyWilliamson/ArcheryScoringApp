@@ -25,7 +25,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\WeatherConditions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Comp720Model.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\DetailsModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\NotesModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\PracticeModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\ScoringSheetModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\WeatherModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UIArchMain.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -35,8 +38,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)UIPractice.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UIStats.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\Comp720ViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\detailsViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\EndModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\NotesWeatherViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\PracticeViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\StatisticsViewModel.cs" />
   </ItemGroup>
 </Project>

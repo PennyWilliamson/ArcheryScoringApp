@@ -89,7 +89,7 @@ namespace ArcheryScoringApp
             editSightButton.Clicked += EditSightClicked;
 
             Button saveButton = createButton("Save"); //saves current sheet and associated notes and weather entries
-            saveButton.Clicked += ClickToSave_Clicked;
+            saveButton.Clicked += SaveClicked;
 
             Button detailsButton = createButton("Details");
            
@@ -241,10 +241,12 @@ namespace ArcheryScoringApp
             PracID = HoldPracID;
         }
 
-        private void ClickToSave_Clicked(object sender, EventArgs e)
+        private void SaveClicked(object sender, EventArgs e)
         {
 
             Model.PracEndsHold.Save();
+            Model.NotesHold.NotesSaved();
+            Model.WeatherHold.WeatherSaved();
         }
 
         static Button createButton(string lbl)
@@ -430,8 +432,13 @@ namespace ArcheryScoringApp
             if (PracID == -1) //set to -1 in App constructor so that this does not refire a new save
             {
                 Model.PracticeModel.rT = 0; //resets running total
-                dtlIDPrac = App.Database.InsertDetails(date);
-                PracID = App.Database.InsertScoringSheet(dtlIDPrac, type); // sets ID to the scoring sheet ID
+                Model.DetailsModel details = new Model.DetailsModel();
+                dtlIDPrac = details.SetDetails(date);
+               // dtlIDPrac = App.Database.InsertDetails(date);
+
+                Model.ScoringSheetModel scoringSheet = new Model.ScoringSheetModel();
+                //PracID = App.Database.InsertScoringSheet(dtlIDPrac, type); 
+                PracID = scoringSheet.SetScoringSheet(dtlIDPrac, type);// sets ID to the scoring sheet ID
                 int p = PracID; //seems to stop PracID being -1.
             }
         }

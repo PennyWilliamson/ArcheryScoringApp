@@ -47,8 +47,8 @@ namespace ArcheryScoringApp.Data
                 Division = "JWR",
                 Club = "Randwick",
                 Date = date,
-                ArchNZNum = 3044
-
+                ArchNZNum = 3044,
+                Dist = ArchMain.dist
         };
             db.Insert(details);
             var dtlID = details.DetailsID;
@@ -101,7 +101,7 @@ namespace ArcheryScoringApp.Data
             {
                 db.Insert(newBow);
             }
-            catch (Exception ex)
+            catch (Exception ex)//as there is no Insert Or Ignore in TwinCoders Nuget
             { }
             finally { }
         }
@@ -117,9 +117,15 @@ namespace ArcheryScoringApp.Data
             db.Update(bow);
         }
 
+        public List<Bow> GetSightMarkings(string bow)
+        {
+            var b = db.Query<Bow>("SELECT SightMarkings Where Bow = ?", bow);
+            return b;
+        }
+
         public List<ScoringSheet> getPB()
         { 
-            string type = "720Competition";
+            string type = "720Competition";//hard set as only 720 competition is in, will need passed as a variable
             var b = db.Query<ScoringSheet>("SELECT ID, FinalTotal from ScoringSheet WHERE Type = ? ORDER BY FinalTotal DESC LIMIT 1", type);
             // "Select MAX(FinalTotal) From ScoringSheet where Type = 720Competition" always returns first in list
             

@@ -16,7 +16,7 @@ namespace ArcheryScoringApp
         
 		public UIStats ()
 		{
-            sightMarking = "134.90";
+            
             getStats(); // gets the values for the stats variables
 
             StackLayout layout = new StackLayout();
@@ -91,33 +91,40 @@ namespace ArcheryScoringApp
 
         private void getStats()
         {
-            List<Data.ScoringSheet> list = new List<Data.ScoringSheet>();
-            int id = 0;
+            ViewModel.StatisticsViewModel viewModel = new ViewModel.StatisticsViewModel();
 
-            list = App.Database.getPB();
-           foreach(Data.ScoringSheet sheet in list)
-            {
-                var i = sheet.ID;
-                var ft = sheet.FinalTotal;
-                pb = ft.ToString();
-                id = i;
-            }
-            
-     
-            list = App.Database.GetLastBest(id);
-            foreach (Data.ScoringSheet sheet in list)
-            {
-                var ft = sheet.FinalTotal;
-                lastBest = ft.ToString();
-            }
+            sightMarking = viewModel.GetSightMarkings(ArchMain.bowType);
+           /* List<Data.ScoringSheet> list = new List<Data.ScoringSheet>();
+            int id = 0;*/
+
+            /*   list = App.Database.getPB();
+              foreach(Data.ScoringSheet sheet in list)
+               {
+                   var i = sheet.ID;
+                   var ft = sheet.FinalTotal;
+                   pb = ft.ToString();
+                   id = i;
+               }*/
+
+            pb = viewModel.GetPB();
+
+            /*  list = App.Database.GetLastBest(id);
+              foreach (Data.ScoringSheet sheet in list)
+              {
+                  var ft = sheet.FinalTotal;
+                  lastBest = ft.ToString();
+              }*/
+
+            lastBest = viewModel.GetLastBst();
 
 
-            list = App.Database.GetLastScore();
-            foreach (Data.ScoringSheet sheet in list)
-            {
-                var ft = sheet.FinalTotal;
-                lastScore = ft.ToString();
-            }
+            /*  list = App.Database.GetLastScore();
+              foreach (Data.ScoringSheet sheet in list)
+              {
+                  var ft = sheet.FinalTotal;
+                  lastScore = ft.ToString();
+              }*/
+            lastScore = viewModel.GetLast();
                 
 
     }

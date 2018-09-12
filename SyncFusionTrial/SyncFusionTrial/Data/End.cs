@@ -12,7 +12,7 @@ namespace ArcheryScoringApp.Data
         [PrimaryKey]
         public string EndNum { get; set; }
         [ForeignKey(typeof(ScoringSheet))]
-        public string ID { get; set; }
+        public int ID { get; set; }
         public int EndTotal { get; set; }
         public string Score1 {get; set;}
         public string Score2 { get; set; }

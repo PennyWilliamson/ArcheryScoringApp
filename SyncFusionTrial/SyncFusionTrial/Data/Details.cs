@@ -19,6 +19,7 @@ namespace ArcheryScoringApp.Data
         public string Club { get; set; }
         public string Date { get; set; }
         public int ArchNZNum { get; set; }
+        public string Dist {get; set;}
 
     }
 }

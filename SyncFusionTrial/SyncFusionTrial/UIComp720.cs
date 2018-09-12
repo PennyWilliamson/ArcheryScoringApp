@@ -370,8 +370,14 @@ namespace ArcheryScoringApp
             if (ID == -1) //set to -1 in App constructor so that this does not refire on a back or refresh
             {
                 Model.calcRTComp.curRT = 0; //resets running total
-                dtlID = App.Database.InsertDetails(date);
-                ID = App.Database.InsertScoringSheet(dtlID, type); // sets ID to the scoring sheet ID
+
+                Model.DetailsModel details = new Model.DetailsModel();
+                dtlID = details.SetDetails(date);
+                // dtlID = App.Database.InsertDetails(date);
+
+                Model.ScoringSheetModel scoringSheet = new Model.ScoringSheetModel();
+                // ID = App.Database.InsertScoringSheet(dtlID, type); // sets ID to the scoring sheet ID
+                ID = scoringSheet.SetScoringSheet(dtlID, type);// sets ID to the scoring sheet ID
             }
         }
     }

@@ -143,21 +143,24 @@ namespace ArcheryScoringApp
             other = e.NewTextValue;
         }
 
-        public void SaveClicked(object sender, EventArgs e)
+        public async void SaveClicked(object sender, EventArgs e)
         {
+            ViewModel.NotesWeatherViewModel viewModel = new ViewModel.NotesWeatherViewModel();
             if(note != null)
             {
-                App.Database.AddNotes(endRef, note);
+                //App.Database.AddNotes(endRef, note);
+                viewModel.NotesSaved(endRef, note);
             }
             
             //windspeed not included as if windspeed = 0, then windDir will be null. 
             //Assumption made that practice will not happen in 0 degree conditions
             if(temp != 0 || windDir != null || humid != 0 || other != null)
             {
-                App.Database.AddWeather(endRef, temp, windspeed, windDir, humid, other);
+                // App.Database.AddWeather(endRef, temp, windspeed, windDir, humid, other);
+                viewModel.WeatherSaved(endRef, temp, windspeed, windDir, humid, other);
             }
 
-            Navigation.PopAsync();
+            await Navigation.PopAsync();
         }
 
         private async void BackButtonPressed(object sender, EventArgs e)

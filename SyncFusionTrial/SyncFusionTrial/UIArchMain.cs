@@ -18,6 +18,11 @@ namespace ArcheryScoringApp
 
         public ArchMain ()
 		{
+            //resetting on return to main.
+            UIComp720.ID = -1;
+            UIPractice.PracID = -1;
+            Model.PracEndsHold.ResetHold();
+
             noBowOrDist = new SfPopupLayout();
 
              StackLayout layout = new StackLayout()

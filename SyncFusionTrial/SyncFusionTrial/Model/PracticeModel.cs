@@ -299,5 +299,10 @@ namespace ArcheryScoringApp.Model
                 App.Database.UpdateFinalScore(UIPractice.PracID, PracticeModel.rT, UIPractice.dtlIDPrac, "Practice");//adds final total to scoring sheet
             }
         }
+
+        static public void ResetHold()
+        {
+            hold = new Dictionary<string, EndModel>();
+        }
     }
 }
