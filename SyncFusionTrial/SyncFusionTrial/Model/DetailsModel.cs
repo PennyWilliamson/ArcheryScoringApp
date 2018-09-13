@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ArcheryScoringApp.Model
 {
@@ -67,7 +68,7 @@ namespace ArcheryScoringApp.Model
 
          public int SetDetails(string date)
         {
-            int detailsID = App.Database.InsertDetails(date);
+            int detailsID = App.Database.InsertDetails(date);           
             return detailsID;
         }
     }

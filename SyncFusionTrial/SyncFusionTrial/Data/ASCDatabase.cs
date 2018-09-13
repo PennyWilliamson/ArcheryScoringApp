@@ -4,14 +4,17 @@ using System.Text;
 using SQLiteNetExtensions;
 using SQLite;
 using System.Linq;
+using SQLiteNetExtensions.Extensions;
+using System.Threading.Tasks;
+
 
 namespace ArcheryScoringApp.Data
 {
     class ASCDatabase
     {
-        public readonly SQLiteConnection db;
+        internal readonly SQLiteConnection db;//internal so it can be closed on sleep.
         
-
+        
         public ASCDatabase(string dbFilePath)
         {
             db = new SQLiteConnection(dbFilePath);//connection string code
@@ -33,6 +36,9 @@ namespace ArcheryScoringApp.Data
             };
 
             db.Insert(sheet);
+            var detail = db.Get<Details>(dtlsID);
+            sheet.details = detail; //for ref integ
+            db.UpdateWithChildren(sheet);
             var scrShtID = sheet.ID;
             return scrShtID;
         }
@@ -51,6 +57,9 @@ namespace ArcheryScoringApp.Data
                 Dist = ArchMain.dist
         };
             db.Insert(details);
+            var bow = db.Get<Bow>(ArchMain.bowType);
+            details.bow = bow;
+            db.UpdateWithChildren(details);
             var dtlID = details.DetailsID;
             return dtlID;
 
@@ -74,7 +83,9 @@ namespace ArcheryScoringApp.Data
             };
 
                 db.InsertOrReplace(end);//handles the end already being there, ie, editing scores.
-
+                var sheet = db.Get<ScoringSheet>(anEnd.id);//for ref integ
+            end.scoringSheet = sheet;
+            db.UpdateWithChildren(end);
         }
 
         public void UpdateFinalScore(int id, int fnlTtl, int dtlsID, string typ)
@@ -95,11 +106,12 @@ namespace ArcheryScoringApp.Data
         {
             var newBow = new Bow()
             {
-                BowType = bow
+                BowType = bow,
+                SightMarkings = 0
             };
             try
             {
-                db.Insert(newBow);
+               db.Insert(newBow);
             }
             catch (Exception ex)//as there is no Insert Or Ignore in TwinCoders Nuget
             { }
@@ -114,19 +126,21 @@ namespace ArcheryScoringApp.Data
                 SightMarkings = markings
             };
 
-            db.Update(bow);
+           db.Update(bow);
         }
 
         public List<Bow> GetSightMarkings(string bow)
         {
-            var b = db.Query<Bow>("SELECT SightMarkings Where Bow = ?", bow);
+            var b = db.Query<Bow>("SELECT SightMarkings FROM Bow WHERE BowType = ?", bow);           
             return b;
         }
 
         public List<ScoringSheet> getPB()
         { 
             string type = "720Competition";//hard set as only 720 competition is in, will need passed as a variable
-            var b = db.Query<ScoringSheet>("SELECT ID, FinalTotal from ScoringSheet WHERE Type = ? ORDER BY FinalTotal DESC LIMIT 1", type);
+            string distance = ArchMain.dist;
+            string bow = ArchMain.bowType;
+            var b = db.Query<ScoringSheet>("SELECT DISTINCT ID, FinalTotal FROM ScoringSheet AS ss, DETAILS AS d WHERE ss.Type = ? AND d.BowType = ? AND d.Dist = ? ORDER BY FinalTotal DESC LIMIT 1", type, bow, distance);
             // "Select MAX(FinalTotal) From ScoringSheet where Type = 720Competition" always returns first in list
             
             return b;
@@ -134,13 +148,19 @@ namespace ArcheryScoringApp.Data
 
         public List<ScoringSheet> GetLastScore()
         {
-            var b = db.Query<ScoringSheet>("SELECT FinalTotal from ScoringSheet ORDER BY ID DESC LIMIT 1");
+            string type = "720Competition";//hard set as only 720 competition is in, will need passed as a variable
+            string distance = ArchMain.dist;
+            string bow = ArchMain.bowType;
+            var b = db.Query<ScoringSheet>("SELECT DISTINCT ID, FinalTotal FROM ScoringSheet AS ss, Details AS d WHERE ss.Type = ? AND d.BowType = ? AND d.Dist = ? ORDER BY ID DESC LIMIT 1", type, bow, distance);
             return b;
         }
 
         public List<ScoringSheet> GetLastBest(int id)
-        { 
-            var b = db.Query<ScoringSheet>("SELECT FinalTotal from ScoringSheet WHERE ID > ? ORDER BY FinalTotal DESC LIMIT 1", id);
+        {
+            string type = "720Competition";//hard set as only 720 competition is in, will need passed as a variable
+            string distance = ArchMain.dist;
+            string bow = ArchMain.bowType;
+            var b = db.Query<ScoringSheet>("SELECT DISTINCT FinalTotal FROM ScoringSheet AS ss, Details as d WHERE ss.Type = ? AND ss.ID > ? AND d.BowType = ? AND d.Dist = ? ORDER BY FinalTotal DESC LIMIT 1", type, id, bow, distance);
             return b;
 
         }
@@ -154,6 +174,9 @@ namespace ArcheryScoringApp.Data
             };
 
             db.InsertOrReplace(notes);
+            var end = db.Get<End>(endRef);
+            end.Notes = notes;
+            db.UpdateWithChildren(end);
         }
 
         public void AddWeather(string endRef, double temp, double speed, string dir, double hum, string other)
@@ -168,12 +191,14 @@ namespace ArcheryScoringApp.Data
                 Other = other, 
             };
             db.InsertOrReplace(weather);
+            var end = db.Get<End>(endRef);
+            end.Weather = weather;
+            db.UpdateWithChildren(end);
         }
 
         public List<End> GetPreviousEnds(int FinalScore, string Type)
         {
             var a = db.Query<End>("select EndNum, Score1, Score2, Score3, Score4, Score5, Score6, EndTotal from `End` AS E, ScoringSheet AS S where S.FinalTotal = ? AND S.Type = ? AND S.ID = E.ID ", FinalScore, Type);
-
             return a;
         }
     }

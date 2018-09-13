@@ -13,7 +13,6 @@ namespace ArcheryScoringApp.Data
         public string BowType { get; set; }
         public double SightMarkings { get; set; }
 
-        [OneToMany]
-        public List<Details> details { get; set; }
+        
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ArcheryScoringApp.Model
 {
@@ -27,6 +28,14 @@ namespace ArcheryScoringApp.Model
             score4 = aScore4;
             score5 = aScore5;
             score6 = aScore6;
+        }
+
+        public EndModel() { }//second constructor for calling GetPrev
+
+        public static List<Data.End> GetPrev(int finalScore, string type)
+            {
+            List<Data.End> ends = App.Database.GetPreviousEnds(finalScore, type);           
+            return ends;
         }
     }
 }

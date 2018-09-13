@@ -93,40 +93,19 @@ namespace ArcheryScoringApp
         {
             ViewModel.StatisticsViewModel viewModel = new ViewModel.StatisticsViewModel();
 
-            sightMarking = viewModel.GetSightMarkings(ArchMain.bowType);
-           /* List<Data.ScoringSheet> list = new List<Data.ScoringSheet>();
-            int id = 0;*/
+            sightMarking= viewModel.GetSightMarkings(ArchMain.bowType);
 
-            /*   list = App.Database.getPB();
-              foreach(Data.ScoringSheet sheet in list)
-               {
-                   var i = sheet.ID;
-                   var ft = sheet.FinalTotal;
-                   pb = ft.ToString();
-                   id = i;
-               }*/
 
             pb = viewModel.GetPB();
 
-            /*  list = App.Database.GetLastBest(id);
-              foreach (Data.ScoringSheet sheet in list)
-              {
-                  var ft = sheet.FinalTotal;
-                  lastBest = ft.ToString();
-              }*/
-
-            lastBest = viewModel.GetLastBst();
-
-
-            /*  list = App.Database.GetLastScore();
-              foreach (Data.ScoringSheet sheet in list)
-              {
-                  var ft = sheet.FinalTotal;
-                  lastScore = ft.ToString();
-              }*/
             lastScore = viewModel.GetLast();
-                
 
-    }
+
+            if (pb != lastScore)
+            {
+                lastBest = viewModel.GetLastBst();
+            }
+            else { lastBest = lastScore; }
+        }
 	}
 }

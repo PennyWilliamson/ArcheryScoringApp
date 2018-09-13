@@ -29,7 +29,7 @@ namespace ArcheryScoringApp
             {
                 if (database == null)
                 {
-                    database = new ASCDatabase(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ASCDatabase.db3"));
+                    database = new ASCDatabase(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ASC2Database.db3"));
 
                 }
                 return database;
@@ -46,6 +46,7 @@ namespace ArcheryScoringApp
         protected override void OnSleep()
         {
             // Handle when your app sleeps
+            database.db.Close();//stops busy errors
         }
 
         protected override void OnResume()

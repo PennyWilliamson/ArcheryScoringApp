@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ArcheryScoringApp.Model
 {
@@ -22,7 +23,6 @@ namespace ArcheryScoringApp.Model
         {
            // ScoringSheetModel scoringSheet = new ScoringSheetModel(aDetailsID, aType);
             id = App.Database.InsertScoringSheet(aDetailsID, aType);
-
             return id;
         }
     }

@@ -16,7 +16,7 @@ namespace ArcheryScoringApp
         static internal int ID { get; set; } //internal so it can be accessed from other classes
         static internal int dtlID { get; set; }
         string marking;
-        SfDataGrid dataGrid;
+        static SfDataGrid dataGrid;
         // SfDataPager sfPager = new SfDataPager();
         //   SfListView details;
         SfPopupLayout popupLayout;
@@ -169,7 +169,7 @@ namespace ArcheryScoringApp
             List<Data.End> ends = new List<Data.End>();
             int srch;//int variable for parsing string to int
             int.TryParse(search, out srch);
-            ends = App.Database.GetPreviousEnds(srch, "720Competition");
+            ends = Model.EndModel.GetPrev(srch, "720Competition");
             prevPop.PopupView.ContentTemplate = new DataTemplate(() =>
             {
                 prevPop.PopupView.HeaderTitle = "Previous 720 Competition sheet";
@@ -208,7 +208,7 @@ namespace ArcheryScoringApp
             dataGrid.EditTapAction = TapAction.OnTap; //Enter edit mode in single tap instead of default double tap.
             dataGrid.EditorSelectionBehavior = EditorSelectionBehavior.SelectAll;
             dataGrid.NotificationSubscriptionMode = NotificationSubscriptionMode.PropertyChange;
-          //  dataGrid.View.LiveDataUpdateMode = LiveDataUpdateMode.AllowDataShaping;
+            dataGrid.SelectionMode = SelectionMode.Single;
 
             dataGrid.QueryCellStyle += DataGrid_QueryCellStyle;
 
@@ -361,8 +361,9 @@ namespace ArcheryScoringApp
             return dataGrid;
         }
 
+
         //need an OnAppearing for Scoring sheet to be set up in database and ID returned.
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
             DateTime tdy = DateTime.Today;
             date = tdy.ToString("d");
@@ -373,7 +374,7 @@ namespace ArcheryScoringApp
 
                 Model.DetailsModel details = new Model.DetailsModel();
                 dtlID = details.SetDetails(date);
-                // dtlID = App.Database.InsertDetails(date);
+                
 
                 Model.ScoringSheetModel scoringSheet = new Model.ScoringSheetModel();
                 // ID = App.Database.InsertScoringSheet(dtlID, type); // sets ID to the scoring sheet ID

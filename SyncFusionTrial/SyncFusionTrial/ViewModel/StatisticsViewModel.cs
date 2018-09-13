@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ArcheryScoringApp.ViewModel
 {
@@ -14,6 +15,7 @@ namespace ArcheryScoringApp.ViewModel
         public string GetSightMarkings(string bow)
         {
             List<Data.Bow> bowList = new List<Data.Bow>();
+            bowList = App.Database.GetSightMarkings(bow);
             string markings = " ";
             foreach (Data.Bow bw in bowList)
             {
@@ -40,7 +42,7 @@ namespace ArcheryScoringApp.ViewModel
         public string GetLastBst()
         {
             string lastBest = " ";
-            list = App.Database.GetLastBest(id);
+            var list = App.Database.GetLastBest(id);
             foreach (Data.ScoringSheet sheet in list)
             {
                 var ft = sheet.FinalTotal;
@@ -53,7 +55,7 @@ namespace ArcheryScoringApp.ViewModel
     public string GetLast()
         {
             string lastScore = " ";
-            list = App.Database.GetLastScore();
+            var list= App.Database.GetLastScore();
             foreach (Data.ScoringSheet sheet in list)
             {
                 var ft = sheet.FinalTotal;

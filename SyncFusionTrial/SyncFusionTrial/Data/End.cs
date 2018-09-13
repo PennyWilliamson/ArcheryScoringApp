@@ -26,5 +26,9 @@ namespace ArcheryScoringApp.Data
 
         [OneToOne]
         public WeatherConditions Weather { get; set; }
+
+        [ManyToOne]//held as ManyToOne due to null issues.
+        public ScoringSheet scoringSheet { get; set; }
+
     }
 }

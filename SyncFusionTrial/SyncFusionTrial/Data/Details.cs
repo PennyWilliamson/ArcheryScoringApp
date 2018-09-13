@@ -19,7 +19,10 @@ namespace ArcheryScoringApp.Data
         public string Club { get; set; }
         public string Date { get; set; }
         public int ArchNZNum { get; set; }
+        [Indexed]//as searched for stats
         public string Dist {get; set;}
 
+        [ManyToOne]
+        public Bow bow { get; set; }
     }
 }

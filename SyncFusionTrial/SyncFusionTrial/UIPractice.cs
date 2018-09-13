@@ -218,14 +218,14 @@ namespace ArcheryScoringApp
             search = e.NewTextValue;
         }
 
-        private void PrevButtonClicked(object sender, EventArgs e)
+        private async void PrevButtonClicked(object sender, EventArgs e)
         {
             HoldPracID = PracID;
             PracID = -1;//stops code firing in PracticeModel.
             List<Data.End> ends = new List<Data.End>();
             int srch;//int variable for parsing string to int
             int.TryParse(search, out srch);
-            ends = App.Database.GetPreviousEnds(srch, "Practice");
+            ends = Model.EndModel.GetPrev(srch, "Practice");
             prevPop.PopupView.ContentTemplate = new DataTemplate(() =>
             {
                 prevPop.PopupView.HeaderTitle = "Previous Practice sheet";
@@ -434,11 +434,11 @@ namespace ArcheryScoringApp
                 Model.PracticeModel.rT = 0; //resets running total
                 Model.DetailsModel details = new Model.DetailsModel();
                 dtlIDPrac = details.SetDetails(date);
-               // dtlIDPrac = App.Database.InsertDetails(date);
+
 
                 Model.ScoringSheetModel scoringSheet = new Model.ScoringSheetModel();
                 //PracID = App.Database.InsertScoringSheet(dtlIDPrac, type); 
-                PracID = scoringSheet.SetScoringSheet(dtlIDPrac, type);// sets ID to the scoring sheet ID
+                var PracIDTask = scoringSheet.SetScoringSheet(dtlIDPrac, type);// sets ID to the scoring sheet ID
                 int p = PracID; //seems to stop PracID being -1.
             }
         }
