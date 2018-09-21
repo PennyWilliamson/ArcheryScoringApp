@@ -48,30 +48,31 @@ namespace ArcheryScoringApp
             var weatherHead = new Label { Text = "Weather", TextColor = Color.Black, FontSize = 20 };
 
             var temp = new Label { Text = "Temperture", TextColor = Color.Black, FontSize = 20 };
-            var tempInput = new Entry { MaxLength = 5 };
+            var tempInput = new Entry { MaxLength = 5, FontSize = 20 };
             tempInput.TextChanged += TempChanged;
 
             var hum = new Label { Text = "Humidity", TextColor = Color.Black, FontSize = 20 };
-            var humInput = new Entry { MaxLength = 7 };
+            var humInput = new Entry { MaxLength = 7, FontSize = 20 };
             humInput.TextChanged += HumidChanged;
 
             var wSpeed = new Label { Text = "Windspeed", TextColor = Color.Black, FontSize = 20 };
-            var wSpeedInput = new Entry { MaxLength = 10 };
+            var wSpeedInput = new Entry { MaxLength = 10, FontSize = 20 };
             wSpeedInput.TextChanged += WindSpeedChanged;
 
             var wDir = new Label { Text = "Wind direction", TextColor = Color.Black, FontSize = 20 };
-            var wDirInput = new Entry { MaxLength = 8 };
+            var wDirInput = new Entry { MaxLength = 8, FontSize = 20 };
             wDirInput.TextChanged += WindDirChanged;
 
             var other = new Label { Text = "Other", TextColor = Color.Black, FontSize = 20 };
-            var otherInput = new Entry { MaxLength = 30 };
+            var otherInput = new Entry { MaxLength = 30, FontSize = 20 };
             otherInput.TextChanged += OtherChanged;
 
             var notes = new Label { Text = "Notes", TextColor = Color.Black, FontSize = 20 };
             var notesInput = new Editor
             {
                 MaxLength = 250,
-                AutoSize = EditorAutoSizeOption.TextChanges
+                AutoSize = EditorAutoSizeOption.TextChanges,
+                FontSize = 20
             };
            notesInput.TextChanged += NoteChanged;
 

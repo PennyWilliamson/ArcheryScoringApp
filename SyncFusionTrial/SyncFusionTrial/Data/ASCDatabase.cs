@@ -198,7 +198,7 @@ namespace ArcheryScoringApp.Data
 
         public List<End> GetPreviousEnds(int FinalScore, string Type)
         {
-            var a = dbConn.Query<End>("SELECT E.ID, EndNum, Score1, Score2, Score3, Score4, Score5, Score6, EndTotal from `End` AS E, ScoringSheet AS S where S.FinalTotal = ? AND S.Type = ? AND E.ID = S.ID ", FinalScore, Type);
+            var a = dbConn.Query<End>("SELECT E.ID, EndNum, Score1, Score2, Score3, Score4, Score5, Score6, EndTotal from `End` AS E, ScoringSheet AS S where S.FinalTotal = ? AND S.Type = ? AND E.ID = S.ID ORDER BY S.ID ASC", FinalScore, Type);
             return a;
         }
 
@@ -221,18 +221,6 @@ namespace ArcheryScoringApp.Data
         }
 
 
-
-        public List<Notes> ExportNotes()
-        {
-            var a = dbConn.Query<Notes>(" ");
-            return a;//can I reuse GetPrevNotes?
-        }
-
-        public List<WeatherConditions> ExportWeather()
-        {
-            var a = dbConn.Query<WeatherConditions>(" ");
-            return a;//can I reuse GetPrevEnd?
-        }
 
         public List<Bow> Exportbows()
         {

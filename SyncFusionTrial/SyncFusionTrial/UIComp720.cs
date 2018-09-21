@@ -70,10 +70,10 @@ namespace ArcheryScoringApp
 
 
             Label searchLabel = new Label { Text = "Search by score", TextColor = Color.FromHex("#010101"), FontSize = 10 };
-            var searchScore = new Entry { Text = " " };
+            var searchScore = new Entry { Text = " ", FontSize = 10 };
             searchScore.TextChanged += SearchChanged;
 
-            var newSightMarking = new Entry { ReturnType = ReturnType.Default };
+            var newSightMarking = new Entry { Text = " ", FontSize = 10 };
             newSightMarking.TextChanged += SightChanged;
             editSightButton.Clicked += EditSightClicked;
 
