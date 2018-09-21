@@ -18,6 +18,7 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Data\ASCDatabase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Bow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\DatabaseBackup.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Details.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\End.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Notes.cs" />

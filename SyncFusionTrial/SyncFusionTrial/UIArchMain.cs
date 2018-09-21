@@ -18,12 +18,13 @@ namespace ArcheryScoringApp
 
         public ArchMain ()
 		{
-            //resetting on return to main.
+            //resets values
             UIComp720.ID = -1;
             UIPractice.PracID = -1;
             Model.PracEndsHold.ResetHold();
 
             noBowOrDist = new SfPopupLayout();
+            var scroll = new ScrollView();
 
              StackLayout layout = new StackLayout()
              {
@@ -31,7 +32,7 @@ namespace ArcheryScoringApp
                   HorizontalOptions = LayoutOptions.Start,
                   Padding = new Thickness(50)
               };
-            var header = new Label { Text = "Archery Scoring Application ", TextColor = Color.FromHex("#010101"), FontSize = 30 };
+            
             var grid = new Grid { RowSpacing = 50};
 
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
@@ -41,7 +42,7 @@ namespace ArcheryScoringApp
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(120) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(20) });
 
 
             var label1 = new Label { Text = "Bow Type: ", TextColor = Color.FromHex("#010101"), FontSize = 20 };
@@ -106,7 +107,8 @@ namespace ArcheryScoringApp
             {
                 Text = "Competition",
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalOptions = LayoutOptions.Center
+                HorizontalOptions = LayoutOptions.Center,
+                BackgroundColor = Color.LightBlue
             };
             compButton.Clicked += CompButtonClicked;
 
@@ -114,7 +116,8 @@ namespace ArcheryScoringApp
             {
                 Text = "Practice",
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalOptions = LayoutOptions.Center
+                HorizontalOptions = LayoutOptions.Center,
+                BackgroundColor = Color.LightBlue
             };
             pracButton.Clicked += PracButtonClicked;
 
@@ -122,8 +125,10 @@ namespace ArcheryScoringApp
             {
                 Text = "Backup",
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalOptions = LayoutOptions.Center
+                HorizontalOptions = LayoutOptions.Center,
+                BackgroundColor = Color.LightBlue
             };
+            backupButton.Clicked += BackUpButtonClicked;
 
             grid.Children.Add(compButton, 0, 0);
             grid.Children.Add(pracButton, 1, 0);
@@ -134,16 +139,17 @@ namespace ArcheryScoringApp
             grid.Children.Add(label3, 0, 3);
             grid.Children.Add(comboBoxComp, 1, 3);
             grid.Children.Add(backupButton, 0, 4);
-            layout.Children.Add(header);
             layout.Children.Add(grid);
-            Content = layout;
+            scroll.Content = layout;
+            Content = scroll;
         }
 
         private async void CompButtonClicked(object sender, EventArgs e)
         {
             if (bowType != null && dist != null)
             {
-                await Navigation.PushAsync(new UIStats());
+                UIComp720.ID = -1;
+                await Navigation.PushAsync(new UIStats() { Title = "Competition Statistics" });
             }
             else
             {
@@ -155,7 +161,8 @@ namespace ArcheryScoringApp
         {
             if (bowType != null && dist != null)
             {
-                await Navigation.PushAsync(new UIPractice());
+                UIPractice.PracID = -1;
+                await Navigation.PushAsync(new UIPractice() { Title = "Practice Scoring"});
             }
             else
             {
@@ -172,6 +179,40 @@ namespace ArcheryScoringApp
                     noBowOrDist.PopupView.ShowFooter = false;
                     return content;
                 });
+            noBowOrDist.StaysOpen = true;
+            noBowOrDist.PopupView.ShowCloseButton = true;
+            noBowOrDist.IsOpen = true;
+            noBowOrDist.Show();
+        }
+
+        public void BackUpButtonClicked(object sender, EventArgs e)
+        {
+
+             Data.BowBackup bowBack = new Data.BowBackup();
+             Data.CompBackup compBack = new Data.CompBackup();
+             Data.PracBackup pracBack = new Data.PracBackup();
+             Data.DatabaseBackup email = new Data.DatabaseBackup();
+             bowBack.BowToCSV();
+             compBack.CompToCSV();
+             pracBack.PracToCSV();
+             email.EmailBow();
+
+            /*Data.ForDroid forDroid = new Data.ForDroid();
+            forDroid.BowToCSV();
+            forDroid.EmailBow();*/
+
+        }
+        
+        static internal void ErrorMess(string e)
+        {
+            SfPopupLayout noBowOrDist = new SfPopupLayout();
+            Label err = new Label { Text = e };
+            noBowOrDist.PopupView.ContentTemplate = new DataTemplate(() =>
+            {
+                noBowOrDist.PopupView.HeaderTitle = "Choose from dropdowns";
+                noBowOrDist.PopupView.ShowFooter = false;
+                return err;
+            });
             noBowOrDist.StaysOpen = true;
             noBowOrDist.PopupView.ShowCloseButton = true;
             noBowOrDist.IsOpen = true;

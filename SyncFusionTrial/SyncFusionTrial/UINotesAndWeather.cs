@@ -20,8 +20,14 @@ namespace ArcheryScoringApp
         public UINotesAndWeather(string aRef)
         {
             endRef = aRef;
-            StackLayout layout = new StackLayout();
-            var header = new Label { Text = " Notes and Statistics ", TextColor = Color.FromHex("#010101"), FontSize = 30 };
+            var scroll = new ScrollView();
+            StackLayout layout = new StackLayout()
+            {
+              //  VerticalOptions = LayoutOptions.Start,
+              //  HorizontalOptions = LayoutOptions.Start,
+                Padding = new Thickness(50)
+            }; 
+           
 
             Grid grid = new Grid();
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
@@ -31,35 +37,37 @@ namespace ArcheryScoringApp
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
 
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(200) });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(200) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(20) });
 
-            var weatherHead = new Label { Text = "Weather", TextColor = Color.Black, FontSize = 30 };
 
-            var temp = new Label { Text = "Temperture", TextColor = Color.Black, FontSize = 30 };
+            var weatherHead = new Label { Text = "Weather", TextColor = Color.Black, FontSize = 20 };
+
+            var temp = new Label { Text = "Temperture", TextColor = Color.Black, FontSize = 20 };
             var tempInput = new Entry { MaxLength = 5 };
             tempInput.TextChanged += TempChanged;
 
-            var hum = new Label { Text = "Humidity", TextColor = Color.Black, FontSize = 30 };
+            var hum = new Label { Text = "Humidity", TextColor = Color.Black, FontSize = 20 };
             var humInput = new Entry { MaxLength = 7 };
             humInput.TextChanged += HumidChanged;
 
-            var wSpeed = new Label { Text = "Windspeed", TextColor = Color.Black, FontSize = 30 };
+            var wSpeed = new Label { Text = "Windspeed", TextColor = Color.Black, FontSize = 20 };
             var wSpeedInput = new Entry { MaxLength = 10 };
             wSpeedInput.TextChanged += WindSpeedChanged;
 
-            var wDir = new Label { Text = "Wind direction", TextColor = Color.Black, FontSize = 30 };
+            var wDir = new Label { Text = "Wind direction", TextColor = Color.Black, FontSize = 20 };
             var wDirInput = new Entry { MaxLength = 8 };
             wDirInput.TextChanged += WindDirChanged;
 
-            var other = new Label { Text = "Other", TextColor = Color.Black, FontSize = 30 };
+            var other = new Label { Text = "Other", TextColor = Color.Black, FontSize = 20 };
             var otherInput = new Entry { MaxLength = 30 };
             otherInput.TextChanged += OtherChanged;
 
-            var notes = new Label { Text = "Notes", TextColor = Color.Black, FontSize = 30 };
+            var notes = new Label { Text = "Notes", TextColor = Color.Black, FontSize = 20 };
             var notesInput = new Editor
             {
                 MaxLength = 250,
@@ -84,16 +92,17 @@ namespace ArcheryScoringApp
             grid.Children.Add(wDirInput, 1, 4);
             grid.Children.Add(other, 0, 5);
             grid.Children.Add(otherInput, 1, 5);
-            grid.Children.Add(backButton, 0, 6);
-            grid.Children.Add(notes, 3, 0);
-            grid.Children.Add(notesInput, 2, 1);
+            grid.Children.Add(backButton, 0, 8);
+            grid.Children.Add(notes, 0, 6);
+            grid.Children.Add(notesInput, 0, 7);
             Grid.SetColumnSpan(notesInput, 2);
-            grid.Children.Add(saveButton, 3, 6);
+            grid.Children.Add(saveButton, 1, 8);
 
-            layout.Children.Add(header);
+
             layout.Children.Add(grid);
+            scroll.Content = layout;
 
-            Content = layout;
+            Content = scroll;
             }
 
         static Button CreateButton(string label)
@@ -102,7 +111,8 @@ namespace ArcheryScoringApp
             {
                 Text = label,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalOptions = LayoutOptions.Center
+                HorizontalOptions = LayoutOptions.Center,
+                BackgroundColor = Color.LightBlue
             };
             return button;
         }

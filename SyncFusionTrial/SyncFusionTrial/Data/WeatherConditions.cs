@@ -16,5 +16,8 @@ namespace ArcheryScoringApp.Data
         public string WindDir { get; set; } //Wind Direction
         public double Humidity { get; set; }
         public string Other { get; set; }
+
+        [OneToOne]
+        public End end { get; set; }
     }
 }

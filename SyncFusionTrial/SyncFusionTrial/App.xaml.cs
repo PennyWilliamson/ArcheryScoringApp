@@ -20,7 +20,7 @@ namespace ArcheryScoringApp
             UIComp720.ID = -1; //to trigger the database in 720 OnAppearing
             UIPractice.PracID = -1; //to trigger the databse in Practice Appearing
 
-            MainPage = new NavigationPage(new ArchMain());
+            MainPage = new NavigationPage(new ArchMain() { Title = "Archery Scoring App"});
         }
 
         internal static ASCDatabase Database
@@ -46,7 +46,7 @@ namespace ArcheryScoringApp
         protected override void OnSleep()
         {
             // Handle when your app sleeps
-            database.db.Close();//stops busy errors
+            database.dbConn.Close();//stops busy errors
         }
 
         protected override void OnResume()

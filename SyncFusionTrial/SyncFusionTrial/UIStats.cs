@@ -18,9 +18,15 @@ namespace ArcheryScoringApp
 		{
             
             getStats(); // gets the values for the stats variables
+            var scroll = new ScrollView();
 
-            StackLayout layout = new StackLayout();
-            var header = new Label { Text = " Competition Statistics ", TextColor = Color.FromHex("#010101"), FontSize = 30 };
+            StackLayout layout = new StackLayout()
+            {
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.Start,
+                Padding = new Thickness(20)
+            }; 
+            
 
             Grid grid = new Grid();
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
@@ -30,20 +36,20 @@ namespace ArcheryScoringApp
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
 
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(200) });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(200) });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(20) });
 
-            var lastMarkings = new Label { Text = "Last Sight Markings: ", TextColor = Color.FromHex("#010101"), FontSize = 30 };
-            var lsm = new Label { Text = sightMarking, TextColor = Color.FromHex("#010101"), FontSize = 30 };
+            var lastMarkings = new Label { Text = "Last Sight Markings: ", TextColor = Color.FromHex("#010101"), FontSize = 20 };
+            var lsm = new Label { Text = sightMarking, TextColor = Color.FromHex("#010101"), FontSize = 20 };
 
-            var perBest = new Label { Text = "P. B.:  ", TextColor = Color.FromHex("#010101"), FontSize = 30 };
-            var perB = new Label { Text = pb, TextColor = Color.FromHex("#010101"), FontSize = 30 };
+            var perBest = new Label { Text = "P. B.:  ", TextColor = Color.FromHex("#010101"), FontSize = 20 };
+            var perB = new Label { Text = pb, TextColor = Color.FromHex("#010101"), FontSize = 20 };
 
-            var lBest = new Label { Text = "Last Best: ", TextColor = Color.FromHex("#010101"), FontSize = 30 };
-            var lb = new Label { Text = lastBest, TextColor = Color.FromHex("#010101"), FontSize = 30 };
+            var lBest = new Label { Text = "Last Best: ", TextColor = Color.FromHex("#010101"), FontSize = 20 };
+            var lb = new Label { Text = lastBest, TextColor = Color.FromHex("#010101"), FontSize = 20 };
 
-            var lScore = new Label { Text = "Last Score: ", TextColor = Color.FromHex("#010101"), FontSize = 30 };
-            var ls = new Label { Text = lastScore, TextColor = Color.FromHex("#010101"), FontSize = 30 };
+            var lScore = new Label { Text = "Last Score: ", TextColor = Color.FromHex("#010101"), FontSize = 20 };
+            var ls = new Label { Text = lastScore, TextColor = Color.FromHex("#010101"), FontSize = 20 };
 
             Button backButton = CreateButton("Back");
             backButton.Clicked += BackClicked;
@@ -60,11 +66,11 @@ namespace ArcheryScoringApp
             grid.Children.Add(lScore, 0, 3);
             grid.Children.Add(ls, 1, 3);
             grid.Children.Add(backButton, 0, 4);
-            grid.Children.Add(contButton, 2, 4);
+            grid.Children.Add(contButton, 1, 4);
 
-            layout.Children.Add(header);
             layout.Children.Add(grid);
-            Content = layout;
+            scroll.Content = layout;
+            Content = scroll;
         }
 
         static Button CreateButton(string label)
@@ -73,14 +79,15 @@ namespace ArcheryScoringApp
             {
                 Text = label,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalOptions = LayoutOptions.Center
+                HorizontalOptions = LayoutOptions.Center,
+                BackgroundColor = Color.LightBlue
             };
             return button;
         }
 
         private async void ContClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new UIComp720());
+            await Navigation.PushAsync(new UIComp720() { Title = "720 Competition Scoring" });
 
         }
 

@@ -12,5 +12,8 @@ namespace ArcheryScoringApp.Data
         [PrimaryKey, ForeignKey(typeof(End))]
         public string EndNum { get; set; }
         public string EndNotes { get; set; }
+
+        [OneToOne]
+        public End end { get; set; }
     }
 }

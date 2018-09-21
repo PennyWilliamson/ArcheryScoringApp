@@ -71,5 +71,29 @@ namespace ArcheryScoringApp.Model
             int detailsID = App.Database.InsertDetails(date);           
             return detailsID;
         }
+
+        static public string GetPrevDetails(List<Data.End> ends)
+        {
+            List<Data.End> end = ends;
+            List<Data.Details> details = new List<Data.Details>();
+            int id = 0;
+            if (end.Count > 0)//catches wrong score entered, i.e. no ends.
+            {
+                for (int i = 0; i == 0; i++)
+                {
+                    id = end[i].ID;
+                }
+            }
+            string date = " ";
+            string dist = " ";
+            details = App.Database.GetPreviousDetails(id);
+            foreach(Data.Details d in details)
+            {
+                date = d.Date;
+                dist = d.Dist;
+            }
+            string dateDist = ". " + date + ". " + dist + "m.";
+            return dateDist;
+        }
     }
 }

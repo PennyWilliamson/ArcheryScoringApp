@@ -6,16 +6,18 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
-using ArcheryScoringApp.Droid;
-//using Android;
+using ArcheryScoring.Droid;//for Resource.Designer.cs 
+using System.IO;
 
 namespace ArcheryScoringApp.Droid
 {
-    [Activity(Label = "SyncFusionTrial", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, ScreenOrientation = ScreenOrientation.Sensor)]
+    [Activity(Label = "SyncFusionTrial", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, ScreenOrientation = ScreenOrientation.Portrait)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle bundle)
         {
+
+            //Do not use in Application
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
@@ -25,6 +27,7 @@ namespace ArcheryScoringApp.Droid
             Syncfusion.XForms.Android.PopupLayout.SfPopupLayoutRenderer.Init();
             LoadApplication(new App());
         }
+
     }
 }
 
