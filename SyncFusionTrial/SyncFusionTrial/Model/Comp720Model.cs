@@ -145,22 +145,19 @@ namespace ArcheryScoringApp.Model
                     {
                         if (score != "M")
                         {
+                            score = "0";
                             UIComp720.NotValid(score);
                         }
                     }
                     else
                     {
-                        if (curScr > 10)
+                        if (curScr > 10 || curScr < 0)
                         {
                             curScr = 0;
+                            score = "0";
                             UIComp720.NotValid(score);
                         }
                     }
-                }
-
-                if (curScr > 10) //handles scores over 10 which are invalid.
-                {
-                    curScr = 0;
                 }
             }
 
@@ -179,6 +176,10 @@ namespace ArcheryScoringApp.Model
             else
             {
                 int.TryParse(r, out prvScr); //returns 0 if not parsable, so M's are captured.
+                if (prvScr > 10 || prvScr < 0)
+                {
+                    prvScr = 0;
+                }
 
             }
             current = this.threeTotal + curScr - prvScr; // minus prvScr to allow scores to be changed in case of user error

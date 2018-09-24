@@ -194,23 +194,21 @@ namespace ArcheryScoringApp.Model
                     {
                         if (score != "M")
                         {
+                            score = "0";
                             UIPractice.NotValid(score);
                         }
                     }
                     else
                     {
-                        if (curScr > 10)
+                        if (curScr > 10 || curScr < 0)
                         {
                             curScr = 0;
+                            score = "0";
                             UIPractice.NotValid(score);
                         }
                     }
                 }
 
-                if(curScr > 10) //handles scores over 10 which are invalid.
-                {
-                    curScr = 0;
-                }
             }
 
             if (r == "X") //handles edits
@@ -220,6 +218,10 @@ namespace ArcheryScoringApp.Model
             else
             {
                 int.TryParse(r, out prvScr);
+                if(prvScr > 10 || prvScr < 0)
+                {
+                    prvScr = 0;
+                }
             }
 
             current = this.endTotal + curScr - prvScr; // adds new score and subtracts old score for accuracy
