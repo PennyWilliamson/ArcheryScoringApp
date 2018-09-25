@@ -49,7 +49,7 @@ namespace ArcheryScoringApp.Data
             {
                 FirstName = "Caitlin",
                 LastName = "Thomas-Riley",
-                BowType = "Recurve",
+                BowType = ArchMain.bowType,
                 Division = "JWR",
                 Club = "Randwick",
                 Date = date,
@@ -140,8 +140,7 @@ namespace ArcheryScoringApp.Data
             string type = "720Competition";//hard set as only 720 competition is in, will need passed as a variable
             string distance = ArchMain.dist;
             string bow = ArchMain.bowType;
-            var b = dbConn.Query<ScoringSheet>("SELECT DISTINCT ID, FinalTotal FROM ScoringSheet AS ss, DETAILS AS d WHERE ss.Type = ? AND d.BowType = ? AND d.Dist = ? ORDER BY FinalTotal DESC LIMIT 1", type, bow, distance);
-            // "Select MAX(FinalTotal) From ScoringSheet where Type = 720Competition" always returns first in list
+            var b = dbConn.Query<ScoringSheet>("SELECT DISTINCT ID, FinalTotal FROM ScoringSheet AS ss, Details AS d WHERE ss.Type = ? AND d.BowType = ? AND d.Dist = ? ORDER BY FinalTotal DESC LIMIT 1", type, bow, distance);
             
             return b;
         }

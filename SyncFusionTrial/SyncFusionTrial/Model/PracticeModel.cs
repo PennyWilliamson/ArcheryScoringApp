@@ -157,7 +157,7 @@ namespace ArcheryScoringApp.Model
             get { return runningTotal; }
             set
             {
-                this.runningTotal = rT;
+                this.runningTotal = value;
             }
         }
 
@@ -193,9 +193,9 @@ namespace ArcheryScoringApp.Model
                     if (valid == false)
                     {
                         if (score != "M")
-                        {
-                            score = "0";
+                        {                          
                             UIPractice.NotValid(score);
+                            score = "0";
                         }
                     }
                     else
@@ -225,11 +225,11 @@ namespace ArcheryScoringApp.Model
             }
 
             current = this.endTotal + curScr - prvScr; // adds new score and subtracts old score for accuracy
-            rT = calcRT.runningTotal(curScr, prvScr);
+            runningTotal = calcRT.runningTotal(curScr, prvScr);
             return current;
         }
 
-        public PracticeModel(string endNum, string arrow1, string arrow2, string arrow3, string arrow4, string arrow5, string arrow6, int endTotal) 
+        public PracticeModel(string endNum, string arrow1, string arrow2, string arrow3, string arrow4, string arrow5, string arrow6, int endTotal, int runningTotal) 
         {
             this.EndNum = endNum;
             this.Arrow1 = arrow1;
@@ -239,6 +239,7 @@ namespace ArcheryScoringApp.Model
             this.Arrow5 = arrow5;
             this.Arrow6 = arrow6;
             this.EndTotal = endTotal;
+            this.runningTotal = runningTotal;
             eR = EndRefPrac.SetRef();
         }
 

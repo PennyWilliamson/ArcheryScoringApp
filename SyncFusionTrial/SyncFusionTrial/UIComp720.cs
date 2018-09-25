@@ -97,7 +97,7 @@ namespace ArcheryScoringApp
         static public void NotValid(String score)
         {
             SfPopupLayout notValid = new SfPopupLayout();
-            Label content = new Label { Text = "Score '" + score + "' is not a valid score and will be recorded as a '0'. Please change your score.", TextColor = Color.FromHex("#010101"), BackgroundColor = Color.White, FontSize = 30 };
+            Label content = new Label { Text = "Entered score is not a valid score and will be recorded as a '0'. Please change your score.", TextColor = Color.FromHex("#010101"), BackgroundColor = Color.White, FontSize = 30 };
             notValid.PopupView.ContentTemplate = new DataTemplate(() =>
             {
                 notValid.PopupView.HeaderTitle = "Invalid Score";

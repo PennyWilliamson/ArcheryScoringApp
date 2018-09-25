@@ -34,7 +34,6 @@ namespace ArcheryScoringApp.Model
             set
             {
                 this.endNum = value;
-                OnPropertyChanged();
             }
         }
 
@@ -55,7 +54,7 @@ namespace ArcheryScoringApp.Model
                     SaveCompEnd();
                     threeTotal = tT;
                 }
-                OnPropertyChanged();
+                OnPropertyChanged("Arrow1");
             }
         }
 
@@ -69,7 +68,7 @@ namespace ArcheryScoringApp.Model
                 tT = Calc(arrow2, r);
                 threeTotal = tT;
                 SaveCompEnd();
-                OnPropertyChanged();
+                OnPropertyChanged("Arrow2");
             }
         }
 
@@ -83,7 +82,7 @@ namespace ArcheryScoringApp.Model
                 tT = Calc(arrow3, r);
                 threeTotal = tT;
                 SaveCompEnd();
-                OnPropertyChanged();
+                OnPropertyChanged("Arrow3");
             }
         }
 
@@ -95,7 +94,7 @@ namespace ArcheryScoringApp.Model
             set
             {
                 this.threeTotal = tT;
-                OnPropertyChanged();
+                OnPropertyChanged("ThreeTotal");
             }
         }
 
@@ -105,7 +104,7 @@ namespace ArcheryScoringApp.Model
             set
             {
                 this.endTotal = value;
-                OnPropertyChanged();
+                OnPropertyChanged("EndTotal");
             }
         }
 
@@ -114,8 +113,7 @@ namespace ArcheryScoringApp.Model
             get { return runningTotal; }
             set
             {
-                this.runningTotal = rT;
-                OnPropertyChanged();
+                this.runningTotal = value;
             }
         }
 
@@ -144,9 +142,9 @@ namespace ArcheryScoringApp.Model
                     if (valid == false)
                     {
                         if (score != "M")
-                        {
-                            score = "0";
+                        {                          
                             UIComp720.NotValid(score);
+                            score = "0";
                         }
                     }
                     else
@@ -183,7 +181,7 @@ namespace ArcheryScoringApp.Model
 
             }
             current = this.threeTotal + curScr - prvScr; // minus prvScr to allow scores to be changed in case of user error
-            rT = calcRTComp.runningTotal(curScr, prvScr);
+            runningTotal = calcRTComp.runningTotal(curScr, prvScr);
             endTotal = calcEndTotal.CalcEnd(curScr, prvScr, eR);
             return current;
         }
@@ -305,8 +303,8 @@ namespace ArcheryScoringApp.Model
 
     static class TensAndXs
     {
-        static int tens { get; set; }
-        static int xs { get; set; }
+        internal static int tens { get; set; }
+        internal static int xs { get; set; }
 
         static public string GetXs()
         {

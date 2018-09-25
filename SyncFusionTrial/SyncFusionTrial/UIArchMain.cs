@@ -149,6 +149,8 @@ namespace ArcheryScoringApp
             if (bowType != null && dist != null)
             {
                 UIComp720.ID = -1;
+                Model.TensAndXs.tens = 0;
+                Model.TensAndXs.xs = 0;
                 await Navigation.PushAsync(new UIStats() { Title = "Competition Statistics" });
             }
             else
