@@ -140,7 +140,7 @@ namespace ArcheryScoringApp.Data
             string type = "720Competition";//hard set as only 720 competition is in, will need passed as a variable
             string distance = ArchMain.dist;
             string bow = ArchMain.bowType;
-            var b = dbConn.Query<ScoringSheet>("SELECT DISTINCT ID, FinalTotal FROM ScoringSheet AS ss, Details AS d WHERE ss.Type = ? AND d.BowType = ? AND d.Dist = ? ORDER BY FinalTotal DESC LIMIT 1", type, bow, distance);
+            var b = dbConn.Query<ScoringSheet>("SELECT ID, FinalTotal FROM ScoringSheet AS ss JOIN Details AS d ON ss.DetailsID = d.DetailsID WHERE ss.Type = ? AND d.BowType = ? AND d.Dist = 70 Order BY FinalTotal DESC LIMIT 1", type, bow, distance);
             
             return b;
         }
@@ -150,7 +150,7 @@ namespace ArcheryScoringApp.Data
             string type = "720Competition";//hard set as only 720 competition is in, will need passed as a variable
             string distance = ArchMain.dist;
             string bow = ArchMain.bowType;
-            var b = dbConn.Query<ScoringSheet>("SELECT DISTINCT ID, FinalTotal FROM ScoringSheet AS ss, Details AS d WHERE ss.Type = ? AND d.BowType = ? AND d.Dist = ? ORDER BY ID DESC LIMIT 1", type, bow, distance);
+            var b = dbConn.Query<ScoringSheet>("SELECT DISTINCT ID, FinalTotal FROM ScoringSheet AS ss JOIN Details AS d ON ss.DetailsID = d.DetailsID WHERE ss.Type = ? AND d.BowType = ? AND d.Dist = ? ORDER BY ID DESC LIMIT 1", type, bow, distance);
             return b;
         }
 
@@ -159,7 +159,7 @@ namespace ArcheryScoringApp.Data
             string type = "720Competition";//hard set as only 720 competition is in, will need passed as a variable
             string distance = ArchMain.dist;
             string bow = ArchMain.bowType;
-            var b = dbConn.Query<ScoringSheet>("SELECT DISTINCT FinalTotal FROM ScoringSheet AS ss, Details as d WHERE ss.Type = ? AND ss.ID > ? AND d.BowType = ? AND d.Dist = ? ORDER BY FinalTotal DESC LIMIT 1", type, id, bow, distance);
+            var b = dbConn.Query<ScoringSheet>("SELECT DISTINCT FinalTotal FROM ScoringSheet AS ss JOIN Details as d ON ss.DetailsID = d.DetailsID WHERE ss.Type = ? AND ss.ID > ? AND d.BowType = ? AND d.Dist = ? ORDER BY FinalTotal DESC LIMIT 1", type, id, bow, distance);
             return b;
 
         }

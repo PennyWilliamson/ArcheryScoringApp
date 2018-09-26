@@ -301,7 +301,7 @@ namespace ArcheryScoringApp.Model
 
     static class calcRT
     {
-        static int curRT { get; set; } //static as this is independant of end objects.
+        internal static int curRT { get; set; } //static as this is independant of end objects.
 
         static public int runningTotal(int eT, int pvrScr)
         {

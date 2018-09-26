@@ -151,6 +151,7 @@ namespace ArcheryScoringApp
                 UIComp720.ID = -1;
                 Model.TensAndXs.tens = 0;
                 Model.TensAndXs.xs = 0;
+                Model.calcRTComp.curRT = 0;
                 await Navigation.PushAsync(new UIStats() { Title = "Competition Statistics" });
             }
             else
@@ -164,6 +165,7 @@ namespace ArcheryScoringApp
             if (bowType != null && dist != null)
             {
                 UIPractice.PracID = -1;
+                Model.calcRT.curRT = 0;
                 await Navigation.PushAsync(new UIPractice() { Title = "Practice Scoring"});
             }
             else
