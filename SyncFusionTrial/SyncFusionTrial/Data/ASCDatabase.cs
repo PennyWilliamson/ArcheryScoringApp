@@ -13,8 +13,8 @@ namespace ArcheryScoringApp.Data
     class ASCDatabase
     {
         internal readonly SQLiteConnection dbConn;//internal so it can be closed on sleep.
-        
-        
+
+
         public ASCDatabase(string dbFilePath)
         {
             dbConn = new SQLiteConnection(dbFilePath);//connection string code
@@ -26,7 +26,7 @@ namespace ArcheryScoringApp.Data
             dbConn.CreateTable<WeatherConditions>();
         }
 
-        
+
         public int InsertScoringSheet(int dtlsID, string typ)
         {
             var sheet = new ScoringSheet()
@@ -42,7 +42,7 @@ namespace ArcheryScoringApp.Data
             var scrShtID = sheet.ID;
             return scrShtID;
         }
-    
+
         public int InsertDetails(string date)
         {
             var details = new Details()
@@ -55,8 +55,10 @@ namespace ArcheryScoringApp.Data
                 Date = date,
                 ArchNZNum = 3044,
                 Dist = ArchMain.dist
-        };
+            };
+
             dbConn.Insert(details);
+
             var bow = dbConn.Get<Bow>(ArchMain.bowType);
             details.bow = bow;
             dbConn.UpdateWithChildren(details);
@@ -79,11 +81,11 @@ namespace ArcheryScoringApp.Data
                 Score4 = anEnd.score4,
                 Score5 = anEnd.score5,
                 Score6 = anEnd.score6
-            
+
             };
 
-                dbConn.InsertOrReplace(end);//handles the end already being there, ie, editing scores.
-                var sheet = dbConn.Get<ScoringSheet>(anEnd.id);//for ref integ
+            dbConn.InsertOrReplace(end);//handles the end already being there, ie, editing scores.
+            var sheet = dbConn.Get<ScoringSheet>(anEnd.id);//for ref integ
             end.scoringSheet = sheet;
             dbConn.UpdateWithChildren(end);
         }
@@ -99,7 +101,7 @@ namespace ArcheryScoringApp.Data
 
             };
             dbConn.Update(sheet);
-                
+
         }
 
         public void AddBow(string bow)
@@ -111,7 +113,8 @@ namespace ArcheryScoringApp.Data
             };
             try
             {
-               dbConn.Insert(newBow);
+                dbConn.Insert(newBow);
+                dbConn.Close();
             }
             catch (Exception ex)//as there is no Insert Or Ignore in TwinCoders Nuget
             { }
@@ -126,22 +129,22 @@ namespace ArcheryScoringApp.Data
                 SightMarkings = markings
             };
 
-           dbConn.Update(bow);
+            dbConn.Update(bow);
         }
 
         public List<Bow> GetSightMarkings(string bow)
         {
-            var b = dbConn.Query<Bow>("SELECT SightMarkings FROM Bow WHERE BowType = ?", bow);           
+            var b = dbConn.Query<Bow>("SELECT SightMarkings FROM Bow WHERE BowType = ?", bow);
             return b;
         }
 
         public List<ScoringSheet> getPB()
-        { 
+        {
             string type = "720Competition";//hard set as only 720 competition is in, will need passed as a variable
             string distance = ArchMain.dist;
             string bow = ArchMain.bowType;
             var b = dbConn.Query<ScoringSheet>("SELECT ID, FinalTotal FROM ScoringSheet AS ss JOIN Details AS d ON ss.DetailsID = d.DetailsID WHERE ss.Type = ? AND d.BowType = ? AND d.Dist = 70 Order BY FinalTotal DESC LIMIT 1", type, bow, distance);
-            
+
             return b;
         }
 
@@ -185,9 +188,9 @@ namespace ArcheryScoringApp.Data
                 EndNum = endRef,//sets the endNum to current end's eR
                 Temp = temp,
                 WindSpeed = speed,
-                WindDir = dir, 
+                WindDir = dir,
                 Humidity = hum,
-                Other = other, 
+                Other = other,
             };
             dbConn.InsertOrReplace(weather);
             var end = dbConn.Get<End>(endRef);

@@ -46,7 +46,14 @@ namespace ArcheryScoringApp
         protected override void OnSleep()
         {
             // Handle when your app sleeps
-            database.dbConn.Close();//stops busy errors
+            try//catches when conn does not exist
+            {
+                database.dbConn.Close();//stops busy errors
+            }
+            catch(Exception ex)
+            {
+                string e = ex.ToString();
+            }
         }
 
         protected override void OnResume()

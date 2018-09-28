@@ -355,7 +355,7 @@ namespace ArcheryScoringApp.Model
             foreach (var end in hold.Values)
             {
                 App.Database.InsertEnds(end);
-                App.Database.UpdateFinalScore(UIPractice.PracID, PracticeModel.rT, UIPractice.dtlIDPrac, "Practice");//adds final total to scoring sheet
+                App.Database.UpdateFinalScore(UIPractice.PracID, calcRT.curRT, UIPractice.dtlIDPrac, "Practice");//adds final total to scoring sheet
             }
         }
 
