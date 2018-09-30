@@ -318,7 +318,8 @@ namespace ArcheryScoringApp.Model
 
         static public string SetRef()
         { 
-            int ranNum = aNum.Next(1, 1000);
+            int ranNum = aNum.Next(1, 1000000);
+
             eR = "Prac" + ranNum + endCount.ToString();//Prac identifies it as practice, ranNum helps make it unique.
             endCount = endCount + 1;
 

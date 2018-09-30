@@ -41,19 +41,23 @@ namespace ArcheryScoringApp.ViewModel
 
         public string GetLastBst()
         {
+            int i = 0;
             string lastBest = " ";
             var list = App.Database.GetLastBest(id);
             foreach (Data.ScoringSheet sheet in list)
             {
                 var ft = sheet.FinalTotal;
                 lastBest = ft.ToString();
+                i = sheet.ID;
             }
+
 
             return lastBest;
         }
 
     public string GetLast()
         {
+            int i = 0;
             string lastScore = " ";
             var list= App.Database.GetLastScore();
             foreach (Data.ScoringSheet sheet in list)
@@ -61,6 +65,7 @@ namespace ArcheryScoringApp.ViewModel
                 var ft = sheet.FinalTotal;
                 lastScore = ft.ToString();
             }
+
 
             return lastScore;
         }

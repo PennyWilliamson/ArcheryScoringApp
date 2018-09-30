@@ -47,6 +47,28 @@ namespace ArcheryScoringApp.Model
             }
         }
 
+        static public Boolean WeatherExist(string aRef)
+        {
+            bool exists = false;
+            if(weatherHold.ContainsKey(aRef))
+            {
+                exists = true;
+            }
+            return exists;
+        }
+
+        static public WeatherModel GetWeather(string aRef)
+        {
+            WeatherModel prev = null;
+
+            if(weatherHold.ContainsKey(aRef))
+            {
+                prev = weatherHold[aRef];
+            }
+
+            return prev;
+        }
+
         static public void WeatherSaved()
         {
             foreach (var weather in weatherHold.Values)

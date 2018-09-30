@@ -69,7 +69,6 @@ namespace ArcheryScoringApp.Data
 
         public void InsertEnds(Model.EndModel anEnd)
         {
-
             var end = new End()
             {
                 EndNum = anEnd.endNum,
@@ -114,7 +113,6 @@ namespace ArcheryScoringApp.Data
             try
             {
                 dbConn.Insert(newBow);
-                dbConn.Close();
             }
             catch (Exception ex)//as there is no Insert Or Ignore in TwinCoders Nuget
             { }
@@ -150,39 +148,72 @@ namespace ArcheryScoringApp.Data
 
         public List<ScoringSheet> GetLastScore()
         {
+            int i = 0;
             string type = "720Competition";//hard set as only 720 competition is in, will need passed as a variable
             string distance = ArchMain.dist;
             string bow = ArchMain.bowType;
-            var b = dbConn.Query<ScoringSheet>("SELECT DISTINCT ID, FinalTotal FROM ScoringSheet AS ss JOIN Details AS d ON ss.DetailsID = d.DetailsID WHERE ss.Type = ? AND d.BowType = ? AND d.Dist = ? ORDER BY ID DESC LIMIT 1", type, bow, distance);
+            var b = dbConn.Query<ScoringSheet>("SELECT DISTINCT ID, FinalTotal FROM ScoringSheet AS ss JOIN Details AS d ON ss.DetailsID = d.DetailsID WHERE FinalTotal > ? AND ss.Type = ? AND d.BowType = ? AND d.Dist = ? ORDER BY ID DESC LIMIT 1", i, type, bow, distance);
             return b;
         }
 
         public List<ScoringSheet> GetLastBest(int id)
         {
+            int i = 0;
             string type = "720Competition";//hard set as only 720 competition is in, will need passed as a variable
             string distance = ArchMain.dist;
             string bow = ArchMain.bowType;
-            var b = dbConn.Query<ScoringSheet>("SELECT DISTINCT FinalTotal FROM ScoringSheet AS ss JOIN Details as d ON ss.DetailsID = d.DetailsID WHERE ss.Type = ? AND ss.ID > ? AND d.BowType = ? AND d.Dist = ? ORDER BY FinalTotal DESC LIMIT 1", type, id, bow, distance);
+            var b = dbConn.Query<ScoringSheet>("SELECT DISTINCT ID, FinalTotal FROM ScoringSheet AS ss JOIN Details as d ON ss.DetailsID = d.DetailsID WHERE FinalTotal > ? AND ss.Type = ? AND ss.ID > ? AND d.BowType = ? AND d.Dist = ? ORDER BY FinalTotal DESC LIMIT 1", i, type, id, bow, distance);
             return b;
 
         }
 
+
         public void AddNotes(string endRef, string note)
         {
-            var notes = new Notes()
+            //checks if end is in database
+            var a = dbConn.Query<End>("SELECT * FROM 'End' where EndNum = ?", endRef);
+            if(a.Count == 0)
             {
-                EndNum = endRef, //sets the endNum to current end's eR
-                EndNotes = note
-            };
+                var dummyEnd = new End()
+                {
+                    EndNum = endRef,
+                    ID = UIPractice.PracID,
+                    EndTotal = 0
+                };
+                dbConn.InsertOrReplace(dummyEnd);//handles end not being there
+            }
 
-            dbConn.InsertOrReplace(notes);
-            var end = dbConn.Get<End>(endRef);
-            notes.end = end;
-            dbConn.UpdateWithChildren(notes);
+                var notes = new Notes()
+                {
+                    EndNum = endRef,
+                    EndNotes = note
+                };
+
+                dbConn.InsertOrReplace(notes);
+
+                var end = dbConn.Get<End>(endRef);
+
+                notes.end = end;
+
+                dbConn.UpdateWithChildren(notes);
+
         }
 
         public void AddWeather(string endRef, double temp, double speed, string dir, double hum, string other)
         {
+            //checks if end is in database
+            var a = dbConn.Query<End>("SELECT * FROM 'End' where EndNum = ?", endRef);
+            if (a.Count == 0)
+            {
+                var dummyEnd = new End()
+                {
+                    EndNum = endRef,
+                    ID = UIPractice.PracID,
+                    EndTotal = 0
+                };
+                dbConn.InsertOrReplace(dummyEnd);//handles end not being there
+            }
+
             var weather = new WeatherConditions
             {
                 EndNum = endRef,//sets the endNum to current end's eR
@@ -193,8 +224,11 @@ namespace ArcheryScoringApp.Data
                 Other = other,
             };
             dbConn.InsertOrReplace(weather);
+
             var end = dbConn.Get<End>(endRef);
-            weather.end = end;
+            
+                weather.end = end;
+
             dbConn.UpdateWithChildren(weather);
         }
 

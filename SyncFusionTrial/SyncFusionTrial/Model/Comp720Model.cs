@@ -282,7 +282,7 @@ namespace ArcheryScoringApp.Model
 
         static public string SetRef()
         {
-            int ranNum = aNum.Next(1, 1000);
+            int ranNum = aNum.Next(1, 1000000);
 
             if (counter == 0) //allows two sets of three to have the same end reference
             {

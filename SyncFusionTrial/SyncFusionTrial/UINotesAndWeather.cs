@@ -9,17 +9,25 @@ namespace ArcheryScoringApp
 {
 	public class UINotesAndWeather : ContentPage
 	{
-        string note;
-        string other;
-        string windDir;
-        double windspeed;
-        double temp;
-        double humid;
+        string noteEntry;
+        string otherEntry;
+        string windDirEntry;
+        double windspeedEntry;
+        double tempEntry;
+        double humidEntry;
         string endRef;
+
+        ViewModel.NotesWeatherViewModel viewModel;
 
         public UINotesAndWeather(string aRef)
         {
+            viewModel = new ViewModel.NotesWeatherViewModel();
+            
+
             endRef = aRef;
+
+            GetPrevNotesAndWeather();
+
             var scroll = new ScrollView();
             StackLayout layout = new StackLayout()
             {
@@ -47,29 +55,30 @@ namespace ArcheryScoringApp
 
             var weatherHead = new Label { Text = "Weather", TextColor = Color.Black, FontSize = 20 };
 
-            var temp = new Label { Text = "Temperture", TextColor = Color.Black, FontSize = 20 };
-            var tempInput = new Entry { MaxLength = 10, FontSize = 20 };
+            var temp = new Label { Text = "Temperature", TextColor = Color.Black, FontSize = 20 };
+            var tempInput = new Entry { Text = tempEntry.ToString(), MaxLength = 10, FontSize = 20 };
             tempInput.TextChanged += TempChanged;
 
             var hum = new Label { Text = "Humidity", TextColor = Color.Black, FontSize = 20 };
-            var humInput = new Entry { MaxLength = 10, FontSize = 20 };
+            var humInput = new Entry { Text = humidEntry.ToString(), MaxLength = 10, FontSize = 20 };
             humInput.TextChanged += HumidChanged;
 
             var wSpeed = new Label { Text = "Windspeed", TextColor = Color.Black, FontSize = 20 };
-            var wSpeedInput = new Entry { MaxLength = 10, FontSize = 20 };
+            var wSpeedInput = new Entry { Text = windspeedEntry.ToString(), MaxLength = 10, FontSize = 20 };
             wSpeedInput.TextChanged += WindSpeedChanged;
 
             var wDir = new Label { Text = "Wind direction", TextColor = Color.Black, FontSize = 20 };
-            var wDirInput = new Entry { MaxLength = 10, FontSize = 20 };
+            var wDirInput = new Entry { Text = windDirEntry, MaxLength = 10, FontSize = 20 };
             wDirInput.TextChanged += WindDirChanged;
 
             var other = new Label { Text = "Other", TextColor = Color.Black, FontSize = 20 };
-            var otherInput = new Entry { MaxLength = 150, FontSize = 20 };
+            var otherInput = new Entry { Text = otherEntry, MaxLength = 150, FontSize = 20 };
             otherInput.TextChanged += OtherChanged;
 
             var notes = new Label { Text = "Notes", TextColor = Color.Black, FontSize = 20 };
             var notesInput = new Editor
             {
+                Text = noteEntry,
                 MaxLength = 250,
                 AutoSize = EditorAutoSizeOption.TextChanges,
                 FontSize = 20
@@ -123,52 +132,71 @@ namespace ArcheryScoringApp
         
         public void NoteChanged(object sender, TextChangedEventArgs e)
         {
-            note = e.NewTextValue;
+            noteEntry = e.NewTextValue;
         }
 
         public void TempChanged(object sender, TextChangedEventArgs e)
         {
             var a = e.NewTextValue;
-            double.TryParse(a, out temp);
+            double.TryParse(a, out tempEntry);
         }
 
         public void WindSpeedChanged(object sender, TextChangedEventArgs e)
         {
             var a = e.NewTextValue;
-            double.TryParse(a, out windspeed);
+            double.TryParse(a, out windspeedEntry);
         }
 
         public void WindDirChanged(object sender, TextChangedEventArgs e)
         {
-            windDir = e.NewTextValue;
+            windDirEntry = e.NewTextValue;
         }
 
         public void HumidChanged(object sender, TextChangedEventArgs e)
         {
             var a = e.NewTextValue;
-            double.TryParse(a, out humid);
+            double.TryParse(a, out humidEntry);
         }
 
         public void OtherChanged(object sender, TextChangedEventArgs e)
         {
-            other = e.NewTextValue;
+            otherEntry = e.NewTextValue;
+        }
+
+        public void GetPrevNotesAndWeather()
+        {
+            bool notesExist = viewModel.DoNotesExist(endRef);
+            bool weatherExist = viewModel.DoWeatherExist(endRef);
+            if (notesExist == true)
+            {
+               noteEntry = viewModel.PrevNotes(endRef);
+            }
+            if(weatherExist == true)
+            {
+                Model.WeatherModel prev = viewModel.PrevWeather(endRef);
+                otherEntry = prev.other;
+                windDirEntry = prev.dir;
+                windspeedEntry = prev.speed;
+                tempEntry = prev.temp;
+                humidEntry = prev.hum;
+            }
         }
 
         public async void SaveClicked(object sender, EventArgs e)
         {
-            ViewModel.NotesWeatherViewModel viewModel = new ViewModel.NotesWeatherViewModel();
-            if(note != null)
+           // ViewModel.NotesWeatherViewModel viewModel = new ViewModel.NotesWeatherViewModel();
+            if(noteEntry != null)
             {
                 //App.Database.AddNotes(endRef, note);
-                viewModel.NotesSaved(endRef, note);
+                viewModel.NotesSaved(endRef, noteEntry);
             }
             
             //windspeed not included as if windspeed = 0, then windDir will be null. 
             //Assumption made that practice will not happen in 0 degree conditions
-            if(temp != 0 || windDir != null || humid != 0 || other != null)
+            if(tempEntry != 0 || windDirEntry != null || humidEntry != 0 || otherEntry != null)
             {
                 // App.Database.AddWeather(endRef, temp, windspeed, windDir, humid, other);
-                viewModel.WeatherSaved(endRef, temp, windspeed, windDir, humid, other);
+                viewModel.WeatherSaved(endRef, tempEntry, windspeedEntry, windDirEntry, humidEntry, otherEntry);
             }
 
             await Navigation.PopAsync();

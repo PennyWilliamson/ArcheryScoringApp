@@ -41,6 +41,30 @@ namespace ArcheryScoringApp.Model
             }
         }
 
+        static public Boolean NotesExist(string aRef)
+        {
+            string key = aRef;
+            bool exist = false;
+            if(notesHold.ContainsKey(key))
+            {
+                exist = true;
+            }
+
+            return exist;
+        }
+
+        static public string GetNote(string aRef)
+        {
+            string prev = " ";
+            if(notesHold.ContainsKey(aRef))
+            {
+                NotesModel n = notesHold[aRef];
+                prev = n.note;
+            }
+
+            return prev;
+        }
+
         static public void NotesSaved()
         {
             foreach(var notes in notesHold.Values)
