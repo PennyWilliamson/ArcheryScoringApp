@@ -20,6 +20,8 @@ namespace ArcheryScoringApp.Model
         private string arrow6;
         private int endTotal;
         private int runningTotal;
+        private string weather;//for previous sheet
+        private string notes;//for previous sheet
 
         private int eT; //for holding new end total value
         static internal int rT; //for holding new running total value
@@ -135,7 +137,7 @@ namespace ArcheryScoringApp.Model
                 endTotal = eT;
                 ScoresToHold();
                 OnPropertyChanged("Arrow6");
-
+                
             } 
         }
 
@@ -155,9 +157,20 @@ namespace ArcheryScoringApp.Model
             get { return runningTotal; }
             set
             {
-                this.runningTotal = rT;
-               // OnPropertyChanged();
+                this.runningTotal = value;
             }
+        }
+
+        public string Weather
+        {
+            get { return weather; }
+            set { weather = value; }
+        }
+
+        public string Notes
+        {
+            get { return notes; }
+            set { notes = value; }
         }
 
         public int Calc(string score, string r)
@@ -165,44 +178,61 @@ namespace ArcheryScoringApp.Model
             int current = 0;//current end total
             int curScr = 0;// new score entered
             int prvScr = 0;// previous score
-            if (score == "X")
+            if (score == "X" || score == "x")
             {
                 curScr = 10;
             }
             else
             {
 
-                int.TryParse(score, out curScr);//gives value of 0 if unable to parse, which handles M's
-
+                bool valid = int.TryParse(score, out curScr);//gives value of 0 if unable to parse, which handles M's
+                int a = UIPractice.PracID;
+                int aa = a;
                 if (UIPractice.PracID != -1)//stops it firing on set-up
                 {
-                    if (score != "M" || score != "10" || curScr > 10)
+                    if (valid == false)
                     {
-                        UIPractice.NotValid(score);
+                        if (score != "M")
+                        {
+                            if (score != "m")
+                            {
+                                UIPractice.NotValid(score);
+                                score = "0";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (curScr > 10 || curScr < 0)
+                        {
+                            curScr = 0;
+                            score = "0";
+                            UIPractice.NotValid(score);
+                        }
                     }
                 }
 
-                if(curScr > 10) //handles scores over 10 which are invalid.
-                {
-                    curScr = 0;
-                }
             }
 
-            if (r == "X") //handles edits
+            if (r == "X" || r == "x") //handles edits
             {
                 prvScr = 10;
             }
             else
             {
                 int.TryParse(r, out prvScr);
+                if(prvScr > 10 || prvScr < 0)
+                {
+                    prvScr = 0;
+                }
             }
 
             current = this.endTotal + curScr - prvScr; // adds new score and subtracts old score for accuracy
-            rT = calcRT.runningTotal(curScr, prvScr);
+            runningTotal = calcRT.runningTotal(curScr, prvScr);
             return current;
         }
 
-        public PracticeModel(string endNum, string arrow1, string arrow2, string arrow3, string arrow4, string arrow5, string arrow6, int endTotal) 
+        public PracticeModel(string endNum, string arrow1, string arrow2, string arrow3, string arrow4, string arrow5, string arrow6, int endTotal, int runningTotal) 
         {
             this.EndNum = endNum;
             this.Arrow1 = arrow1;
@@ -212,6 +242,7 @@ namespace ArcheryScoringApp.Model
             this.Arrow5 = arrow5;
             this.Arrow6 = arrow6;
             this.EndTotal = endTotal;
+            this.runningTotal = runningTotal;
             eR = EndRefPrac.SetRef();
         }
 
@@ -219,12 +250,43 @@ namespace ArcheryScoringApp.Model
         {
             if (UIPractice.PracID != -1)
             {
+                int a = UIPractice.PracID;
+                int aa = a;
                 PracEndsHold.HoldEnds(eR, endTotal, arrow1, arrow2, arrow3, arrow4, arrow5, arrow6);
             }
         }
 
 
+        public void PrevWeather(string endRef)
+        {
+            string temp = "0";
+            string speed = "0";
+            string dir = ""; //Wind Direction
+            string humid = "0";
+            string other = "";
+            List<Data.WeatherConditions> cond = App.Database.GetPreviousWeather(endRef);
+            foreach(Data.WeatherConditions w in cond)
+            {
+                temp = w.Temp;
+                speed = w.WindSpeed;
+                dir = w.WindDir;
+                humid = w.Humidity;
+                other = w.Other;
+            }
+            string prevW = temp + "oC, "+ speed + "km/h, "+ dir + ", "+ humid + "%, " + other;
+            weather = prevW;
+        } 
 
+        public void PrevNotes(string endRef)
+        {
+            string endNote = "";
+            List<Data.Notes> note = App.Database.GetPreviousNote(endRef);
+            foreach(Data.Notes n in note)
+            {
+                endNote = n.EndNotes;
+            }
+            notes = endNote;
+        }
         
 
        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -242,7 +304,7 @@ namespace ArcheryScoringApp.Model
 
     static class calcRT
     {
-        static int curRT { get; set; } //static as this is independant of end objects.
+        internal static int curRT { get; set; } //static as this is independant of end objects.
 
         static public int runningTotal(int eT, int pvrScr)
         {
@@ -258,8 +320,9 @@ namespace ArcheryScoringApp.Model
         static string eR { get; set; }
 
         static public string SetRef()
-        {
-            int ranNum = aNum.Next(1, 1000);
+        { 
+            int ranNum = aNum.Next(1, 1000000);
+
             eR = "Prac" + ranNum + endCount.ToString();//Prac identifies it as practice, ranNum helps make it unique.
             endCount = endCount + 1;
 
@@ -296,8 +359,13 @@ namespace ArcheryScoringApp.Model
             foreach (var end in hold.Values)
             {
                 App.Database.InsertEnds(end);
-                App.Database.UpdateFinalScore(UIPractice.PracID, PracticeModel.rT, UIPractice.dtlIDPrac, "Practice");//adds final total to scoring sheet
+                App.Database.UpdateFinalScore(UIPractice.PracID, calcRT.curRT, UIPractice.dtlIDPrac, "Practice");//adds final total to scoring sheet
             }
+        }
+
+        static public void ResetHold()
+        {
+            hold = new Dictionary<string, EndModel>();
         }
     }
 }

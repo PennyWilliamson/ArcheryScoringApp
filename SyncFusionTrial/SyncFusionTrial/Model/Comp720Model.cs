@@ -7,7 +7,7 @@ using System.Text;
 namespace ArcheryScoringApp.Model
 {
     class Comp720Model : INotifyPropertyChanged
-    { 
+    {
         private string endNum;//needed for datamodel so end will display (end: 1 etc) and if it equals " " its the second set of 3
         private string arrow1;
         private string arrow2;
@@ -20,7 +20,7 @@ namespace ArcheryScoringApp.Model
         private int rT; //for holding new running total value
         private int tT; //for holding three total
         public string eR; //end reference
-        
+
 
         public string ER
         {
@@ -34,7 +34,6 @@ namespace ArcheryScoringApp.Model
             set
             {
                 this.endNum = value;
-                OnPropertyChanged();
             }
         }
 
@@ -55,7 +54,7 @@ namespace ArcheryScoringApp.Model
                     SaveCompEnd();
                     threeTotal = tT;
                 }
-                OnPropertyChanged();
+                OnPropertyChanged("Arrow1");
             }
         }
 
@@ -69,7 +68,7 @@ namespace ArcheryScoringApp.Model
                 tT = Calc(arrow2, r);
                 threeTotal = tT;
                 SaveCompEnd();
-                OnPropertyChanged();
+                OnPropertyChanged("Arrow2");
             }
         }
 
@@ -83,7 +82,7 @@ namespace ArcheryScoringApp.Model
                 tT = Calc(arrow3, r);
                 threeTotal = tT;
                 SaveCompEnd();
-                OnPropertyChanged();
+                OnPropertyChanged("Arrow3");
             }
         }
 
@@ -95,7 +94,7 @@ namespace ArcheryScoringApp.Model
             set
             {
                 this.threeTotal = tT;
-                OnPropertyChanged();
+                OnPropertyChanged("ThreeTotal");
             }
         }
 
@@ -105,7 +104,7 @@ namespace ArcheryScoringApp.Model
             set
             {
                 this.endTotal = value;
-                OnPropertyChanged();
+                OnPropertyChanged("EndTotal");
             }
         }
 
@@ -114,8 +113,7 @@ namespace ArcheryScoringApp.Model
             get { return runningTotal; }
             set
             {
-                this.runningTotal = rT;
-                OnPropertyChanged();
+                this.runningTotal = value;
             }
         }
 
@@ -124,10 +122,10 @@ namespace ArcheryScoringApp.Model
             int current = 0; //current score for three total
             int curScr = 0;// new arrow score
             int prvScr = 0;// previous arrow score
-            if (score == "X" || score == "10")
+            if (score == "X" || score == "x" || score == "10")
             {
                 curScr = 10;
-                if (score == "X")
+                if (score == "X" || score == "x")
                 {
                     TensAndXs.Xs();//increases count of Xs by one
                 }
@@ -138,25 +136,36 @@ namespace ArcheryScoringApp.Model
             }
             else
             {
-                int.TryParse(score, out curScr);
+                bool valid = int.TryParse(score, out curScr);
                 if (UIComp720.ID != -1)//stops it firing on set-up
                 {
-                    if (score != "M" || curScr > 10)
+                    if (valid == false)
                     {
-                        UIComp720.NotValid(score);
+                        if (score != "M")
+                        {
+                            if (score != "m")
+                            {
+                                UIComp720.NotValid(score);
+                                score = "0";
+                            }
+                        }
                     }
-                }
-
-                if (curScr > 10) //handles scores over 10 which are invalid.
-                {
-                    curScr = 0;
+                    else
+                    {
+                        if (curScr > 10 || curScr < 0)
+                        {
+                            curScr = 0;
+                            score = "0";
+                            UIComp720.NotValid(score);
+                        }
+                    }
                 }
             }
 
-            if (r == "X" || r == "10")
+            if (r == "X" || r == "x" || r == "10")
             {
                 prvScr = 10;
-                if (r == "X")
+                if (r == "X" || r == "x")
                 {
                     TensAndXs.RemoveXs();//decreases count of Xs by one
                 }
@@ -168,10 +177,14 @@ namespace ArcheryScoringApp.Model
             else
             {
                 int.TryParse(r, out prvScr); //returns 0 if not parsable, so M's are captured.
+                if (prvScr > 10 || prvScr < 0)
+                {
+                    prvScr = 0;
+                }
 
             }
             current = this.threeTotal + curScr - prvScr; // minus prvScr to allow scores to be changed in case of user error
-            rT = calcRTComp.runningTotal(curScr, prvScr);
+            runningTotal = calcRTComp.runningTotal(curScr, prvScr);
             endTotal = calcEndTotal.CalcEnd(curScr, prvScr, eR);
             return current;
         }
@@ -204,7 +217,7 @@ namespace ArcheryScoringApp.Model
 
         private void SaveCompEnd()
         {
-            if(eR != null) //stops CompHoldEnds firing on screen appearing.
+            if (eR != null) //stops CompHoldEnds firing on screen appearing.
             {
                 if (endNum.Contains("End") || endNum.Equals(" ")) // stops X's and 10's rows saving to database.
                 {
@@ -272,29 +285,29 @@ namespace ArcheryScoringApp.Model
 
         static public string SetRef()
         {
-            int ranNum = aNum.Next(1, 1000);
+            int ranNum = aNum.Next(1, 1000000);
 
-                if (counter == 0) //allows two sets of three to have the same end reference
-                {
-                    eR = "720" + ranNum + endCount.ToString(); //ranNum used as a way to make this a unique identifier, 720 identifies it as a 720 comp end
-                    counter = 1;
-                    endCount = endCount + 1;
-                    return eR;
-                }
-                else
-                {
-                    counter = 0;
-                    return eR;
-                }
-                
-            
+            if (counter == 0) //allows two sets of three to have the same end reference
+            {
+                eR = "720" + ranNum + endCount.ToString(); //ranNum used as a way to make this a unique identifier, 720 identifies it as a 720 comp end
+                counter = 1;
+                endCount = endCount + 1;
+                return eR;
+            }
+            else
+            {
+                counter = 0;
+                return eR;
+            }
+
+
         }
     }
 
     static class TensAndXs
     {
-        static int tens { get; set; }
-        static int xs { get; set; }
+        internal static int tens { get; set; }
+        internal static int xs { get; set; }
 
         static public string GetXs()
         {
@@ -354,11 +367,11 @@ namespace ArcheryScoringApp.Model
                     arrw5 = arrow2;
                     arrw6 = arrow3;
                     endTtl = endTotal;
-                    SaveEnd();                 
+                    SaveEnd();
 
                 }
                 else
-                {  
+                {
                     endRef = anEndRef;
                     arrw1 = arrow1;
                     arrw2 = arrow2;

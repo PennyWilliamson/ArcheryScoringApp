@@ -16,7 +16,7 @@ namespace ArcheryScoringApp
         static internal int ID { get; set; } //internal so it can be accessed from other classes
         static internal int dtlID { get; set; }
         string marking;
-        SfDataGrid dataGrid;
+        static SfDataGrid dataGrid;
         // SfDataPager sfPager = new SfDataPager();
         //   SfListView details;
         SfPopupLayout popupLayout;
@@ -32,6 +32,7 @@ namespace ArcheryScoringApp
             dataGrid = CreateDataGrid();
 
             notValid = new SfPopupLayout();
+            prevPop = new SfPopupLayout();
 
             StackLayout layout = new StackLayout()
             {
@@ -39,22 +40,20 @@ namespace ArcheryScoringApp
                 HorizontalOptions = LayoutOptions.Start,
                 Padding = new Thickness(50)
             };
-            var header = new Label { Text = "720 Competition Scoring ", TextColor = Color.FromHex("#010101"), FontSize = 30 };
+            
             var grid = new Grid { RowSpacing = 50 };
 
-            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
-            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
-            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
+            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(35) });
+            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(35) });
+            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(35) });
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-            // grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-            //  grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(140) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(70) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(140) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) });
 
             Button detailsButton = createButton("Details");
             popupLayout = new SfPopupLayout();
-            detailsButton.Clicked += ClickToShowPopup_Clicked;
+            detailsButton.Clicked += DetailsButtonClicked;
 
             Button backButton = createButton("Back");
             backButton.Clicked += BackButtonClicked;
@@ -63,38 +62,31 @@ namespace ArcheryScoringApp
             mainButton.Clicked += MainButtonClicked;
 
 
-            Button previousButton = createButton("Previous");
+            Button previousButton = createButton("Search");
             prevPop = new SfPopupLayout();
             previousButton.Clicked += PrevButtonClicked;
 
-            Button editSightButton = createButton("Edit Sight Marking");
+            Button editSightButton = createButton("Edit Sight");
 
 
-            Label searchLabel = new Label { Text = "Search by score", TextColor = Color.FromHex("#010101"), FontSize = 20 };
-            var searchScore = new Entry { Text = " " };
+            Label searchLabel = new Label { Text = "Search by score", TextColor = Color.FromHex("#010101"), FontSize = 10 };
+            var searchScore = new Entry { Text = " ", FontSize = 10 };
             searchScore.TextChanged += SearchChanged;
 
-            var newSightMarking = new Entry { ReturnType = ReturnType.Default };
+            var newSightMarking = new Entry { Text = " ", FontSize = 10 };
             newSightMarking.TextChanged += SightChanged;
             editSightButton.Clicked += EditSightClicked;
 
-           
 
-            layout.Children.Add(header);
-            // Grid gridDetails = CreateGrid();
-
-            //   Grid scoringGrid = CreateDataGrid(); 
-
-            // grid.Children.Add(gridDetails, 1, 3 );
-            // Grid.SetColumnSpan(gridDetails, 2);
-            grid.Children.Add(dataGrid, 1, 3);
+            grid.Children.Add(dataGrid, 0, 3);
+            Grid.SetColumnSpan(dataGrid, 3);
             grid.Children.Add(searchLabel, 0, 0);
-            grid.Children.Add(searchScore, 0, 1);
-          grid.Children.Add(previousButton, 0, 2);
-          grid.Children.Add(backButton, 1, 0);
-          grid.Children.Add(mainButton, 1, 1);
-            grid.Children.Add(newSightMarking, 2, 0);
-           grid.Children.Add(editSightButton, 2, 1);
+            grid.Children.Add(searchScore, 1, 0);
+            grid.Children.Add(previousButton, 2, 0);
+            grid.Children.Add(backButton, 0, 2);
+            grid.Children.Add(mainButton, 2, 2);
+            grid.Children.Add(newSightMarking, 0, 1);
+            grid.Children.Add(editSightButton, 1, 1);
             grid.Children.Add(detailsButton, 1, 2);
             layout.Children.Add(grid);
 
@@ -105,9 +97,10 @@ namespace ArcheryScoringApp
         static public void NotValid(String score)
         {
             SfPopupLayout notValid = new SfPopupLayout();
-            Label content = new Label { Text = "Score '" + score + "' is not a valid score and will be recorded as a '0'. Please change your score.", TextColor = Color.FromHex("#010101"), BackgroundColor = Color.White, FontSize = 30 };
+            Label content = new Label { Text = "Entered score is not a valid score and will be recorded as a '0'. Please change your score.", TextColor = Color.FromHex("#010101"), BackgroundColor = Color.White, FontSize = 30 };
             notValid.PopupView.ContentTemplate = new DataTemplate(() =>
             {
+                notValid.Padding = 10;
                 notValid.PopupView.HeaderTitle = "Invalid Score";
                 notValid.PopupView.ShowFooter = false;
                 return content;
@@ -118,13 +111,15 @@ namespace ArcheryScoringApp
             notValid.Show();
         }
 
-        private void ClickToShowPopup_Clicked(object sender, EventArgs e)
+        private void DetailsButtonClicked(object sender, EventArgs e)
         {
             popupLayout.PopupView.ContentTemplate = new DataTemplate(() =>
             {
+                popupLayout.Padding = 10;
                 popupLayout.PopupView.HeaderTitle = "Details";
                 popupLayout.PopupView.BackgroundColor = Color.White;
                 popupLayout.HorizontalOptions = LayoutOptions.FillAndExpand;
+                prevPop.PopupView.WidthRequest = 360;
                 popupLayout.PopupView.ShowFooter = false;
                 return CreateGrid();
             });
@@ -140,7 +135,8 @@ namespace ArcheryScoringApp
             {
                 Text = lbl,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalOptions = LayoutOptions.Center
+                HorizontalOptions = LayoutOptions.Center,
+                BackgroundColor = Color.LightBlue
             };
             return button;
         }
@@ -169,13 +165,17 @@ namespace ArcheryScoringApp
             List<Data.End> ends = new List<Data.End>();
             int srch;//int variable for parsing string to int
             int.TryParse(search, out srch);
-            ends = App.Database.GetPreviousEnds(srch, "720Competition");
+            ends = Model.EndModel.GetPrev(srch, "720Competition");
+            string distDate = Model.DetailsModel.GetPrevDetails(ends);
             prevPop.PopupView.ContentTemplate = new DataTemplate(() =>
             {
-                prevPop.PopupView.HeaderTitle = "Previous 720 Competition sheet";
+                prevPop.Padding = 10;
+                prevPop.PopupView.HeaderTitle = "720 Comp" + distDate;
                 prevPop.BackgroundColor = Color.White;
                 prevPop.HorizontalOptions = LayoutOptions.FillAndExpand;
+                prevPop.VerticalOptions = LayoutOptions.FillAndExpand;
                 prevPop.PopupView.ShowFooter = false;
+                prevPop.PopupView.WidthRequest = 360;
                 return CreateDataGridPrev(ends);
             });
             prevPop.StaysOpen = true;
@@ -192,6 +192,7 @@ namespace ArcheryScoringApp
 
         private async void MainButtonClicked(object sender, EventArgs e)
         {
+            ID = -1; //resets it.
             await Navigation.PopToRootAsync();
         }
 
@@ -202,13 +203,13 @@ namespace ArcheryScoringApp
             dataGrid.ItemsSource = viewModel.EndCollection;
             dataGrid.ColumnSizer = ColumnSizer.Auto; //so it scrolls horizontally
 
-           
+
 
             dataGrid.AllowEditing = true;
             dataGrid.EditTapAction = TapAction.OnTap; //Enter edit mode in single tap instead of default double tap.
             dataGrid.EditorSelectionBehavior = EditorSelectionBehavior.SelectAll;
-            dataGrid.NotificationSubscriptionMode = NotificationSubscriptionMode.PropertyChange;
-          //  dataGrid.View.LiveDataUpdateMode = LiveDataUpdateMode.AllowDataShaping;
+           // dataGrid.NotificationSubscriptionMode = NotificationSubscriptionMode.PropertyChange;
+            dataGrid.SelectionMode = SelectionMode.Single;
 
             dataGrid.QueryCellStyle += DataGrid_QueryCellStyle;
 
@@ -230,7 +231,7 @@ namespace ArcheryScoringApp
             arrow3.MappingName = "Arrow3";
             arrow3.HeaderText = "Arrow 3";
 
-           
+
 
             GridTextColumn threeTotal = new GridTextColumn();
             threeTotal.MappingName = "ThreeTotal";
@@ -281,20 +282,22 @@ namespace ArcheryScoringApp
 
             Grid gridDetails = new Grid() { RowSpacing = 0, ColumnSpacing = 0, BackgroundColor = Color.White };
 
-            gridDetails.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
-            gridDetails.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
-            gridDetails.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
-            gridDetails.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
+            gridDetails.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            gridDetails.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            gridDetails.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            gridDetails.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            gridDetails.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            gridDetails.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(10) });//Acts as a spacer
             gridDetails.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
 
 
             gridDetails.Children.Add(new Label { Text = "Name: Caitlin Thomas-Riley", TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 0, 0);
-            gridDetails.Children.Add(new Label { Text = "Bow Type: Recurve", TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 1, 0);
+            gridDetails.Children.Add(new Label { Text = "Bow Type: " + ArchMain.bowType, TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 2, 0);
             gridDetails.Children.Add(new Label { Text = "Division: JWR", TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 0, 1);
-            gridDetails.Children.Add(new Label { Text = "Club: Randwick", TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 1, 1);
+            gridDetails.Children.Add(new Label { Text = "Club: Randwick", TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 2, 1);
             gridDetails.Children.Add(new Label { Text = "Date: " + date, TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 0, 2);
-            gridDetails.Children.Add(new Label { Text = "Archery NZ No.: 3044", TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 1, 2);
-
+            gridDetails.Children.Add(new Label { Text = "Archery NZ No.: 3044", TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 2, 2);
+            gridDetails.Children.Add(new Label { Text = "Distance: " + ArchMain.dist + "m", TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 0, 3);
 
             return gridDetails;
         }
@@ -306,13 +309,10 @@ namespace ArcheryScoringApp
             dataGrid.ItemsSource = viewModel.EndCollection;
             dataGrid.ColumnSizer = ColumnSizer.Auto; //so it scrolls horizontally
 
-
-
             dataGrid.AllowEditing = true;
             dataGrid.EditTapAction = TapAction.OnTap; //Enter edit mode in single tap instead of default double tap.
             dataGrid.EditorSelectionBehavior = EditorSelectionBehavior.SelectAll;
             dataGrid.NotificationSubscriptionMode = NotificationSubscriptionMode.PropertyChange;
-            //  dataGrid.View.LiveDataUpdateMode = LiveDataUpdateMode.AllowDataShaping;
 
             dataGrid.QueryCellStyle += DataGrid_QueryCellStyle;
 
@@ -361,6 +361,7 @@ namespace ArcheryScoringApp
             return dataGrid;
         }
 
+
         //need an OnAppearing for Scoring sheet to be set up in database and ID returned.
         protected override void OnAppearing()
         {
@@ -370,9 +371,15 @@ namespace ArcheryScoringApp
             if (ID == -1) //set to -1 in App constructor so that this does not refire on a back or refresh
             {
                 Model.calcRTComp.curRT = 0; //resets running total
-                dtlID = App.Database.InsertDetails(date);
-                ID = App.Database.InsertScoringSheet(dtlID, type); // sets ID to the scoring sheet ID
+
+                Model.DetailsModel details = new Model.DetailsModel();
+                dtlID = details.SetDetails(date);
+
+
+                Model.ScoringSheetModel scoringSheet = new Model.ScoringSheetModel();
+                // ID = App.Database.InsertScoringSheet(dtlID, type); // sets ID to the scoring sheet ID
+                ID = scoringSheet.SetScoringSheet(dtlID, type);// sets ID to the scoring sheet ID
             }
         }
     }
-    }
+}

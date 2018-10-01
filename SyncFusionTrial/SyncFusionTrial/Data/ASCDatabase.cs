@@ -4,26 +4,29 @@ using System.Text;
 using SQLiteNetExtensions;
 using SQLite;
 using System.Linq;
+using SQLiteNetExtensions.Extensions;
+using System.Threading.Tasks;
+using System.Data;
 
 namespace ArcheryScoringApp.Data
 {
     class ASCDatabase
     {
-        public readonly SQLiteConnection db;
-        
+        internal readonly SQLiteConnection dbConn;//internal so it can be closed on sleep.
+
 
         public ASCDatabase(string dbFilePath)
         {
-            db = new SQLiteConnection(dbFilePath);//connection string code
-            db.CreateTable<ScoringSheet>();
-            db.CreateTable<End>();
-            db.CreateTable<Details>();
-            db.CreateTable<Bow>();
-            db.CreateTable<Notes>();
-            db.CreateTable<WeatherConditions>();
+            dbConn = new SQLiteConnection(dbFilePath);//connection string code
+            dbConn.CreateTable<ScoringSheet>();
+            dbConn.CreateTable<End>();
+            dbConn.CreateTable<Details>();
+            dbConn.CreateTable<Bow>();
+            dbConn.CreateTable<Notes>();
+            dbConn.CreateTable<WeatherConditions>();
         }
 
-        
+
         public int InsertScoringSheet(int dtlsID, string typ)
         {
             var sheet = new ScoringSheet()
@@ -32,25 +35,33 @@ namespace ArcheryScoringApp.Data
                 DetailsID = dtlsID
             };
 
-            db.Insert(sheet);
+            dbConn.Insert(sheet);
+            var detail = dbConn.Get<Details>(dtlsID);
+            sheet.details = detail; //for ref integ
+            dbConn.UpdateWithChildren(sheet);
             var scrShtID = sheet.ID;
             return scrShtID;
         }
-    
+
         public int InsertDetails(string date)
         {
             var details = new Details()
             {
                 FirstName = "Caitlin",
                 LastName = "Thomas-Riley",
-                BowType = "Recurve",
+                BowType = ArchMain.bowType,
                 Division = "JWR",
                 Club = "Randwick",
                 Date = date,
-                ArchNZNum = 3044
+                ArchNZNum = 3044,
+                Dist = ArchMain.dist
+            };
 
-        };
-            db.Insert(details);
+            dbConn.Insert(details);
+
+            var bow = dbConn.Get<Bow>(ArchMain.bowType);
+            details.bow = bow;
+            dbConn.UpdateWithChildren(details);
             var dtlID = details.DetailsID;
             return dtlID;
 
@@ -58,7 +69,6 @@ namespace ArcheryScoringApp.Data
 
         public void InsertEnds(Model.EndModel anEnd)
         {
-
             var end = new End()
             {
                 EndNum = anEnd.endNum,
@@ -70,11 +80,13 @@ namespace ArcheryScoringApp.Data
                 Score4 = anEnd.score4,
                 Score5 = anEnd.score5,
                 Score6 = anEnd.score6
-            
+
             };
 
-                db.InsertOrReplace(end);//handles the end already being there, ie, editing scores.
-
+            dbConn.InsertOrReplace(end);//handles the end already being there, ie, editing scores.
+            var sheet = dbConn.Get<ScoringSheet>(anEnd.id);//for ref integ
+            end.scoringSheet = sheet;
+            dbConn.UpdateWithChildren(end);
         }
 
         public void UpdateFinalScore(int id, int fnlTtl, int dtlsID, string typ)
@@ -87,21 +99,22 @@ namespace ArcheryScoringApp.Data
                 Type = typ
 
             };
-            db.Update(sheet);
-                
+            dbConn.Update(sheet);
+
         }
 
         public void AddBow(string bow)
         {
             var newBow = new Bow()
             {
-                BowType = bow
+                BowType = bow,
+                SightMarkings = 0
             };
             try
             {
-                db.Insert(newBow);
+                dbConn.Insert(newBow);
             }
-            catch (Exception ex)
+            catch (Exception ex)//as there is no Insert Or Ignore in TwinCoders Nuget
             { }
             finally { }
         }
@@ -114,61 +127,156 @@ namespace ArcheryScoringApp.Data
                 SightMarkings = markings
             };
 
-            db.Update(bow);
+            dbConn.Update(bow);
+        }
+
+        public List<Bow> GetSightMarkings(string bow)
+        {
+            var b = dbConn.Query<Bow>("SELECT SightMarkings FROM Bow WHERE BowType = ?", bow);
+            return b;
         }
 
         public List<ScoringSheet> getPB()
-        { 
-            string type = "720Competition";
-            var b = db.Query<ScoringSheet>("SELECT ID, FinalTotal from ScoringSheet WHERE Type = ? ORDER BY FinalTotal DESC LIMIT 1", type);
-            // "Select MAX(FinalTotal) From ScoringSheet where Type = 720Competition" always returns first in list
-            
+        {
+            string type = "720Competition";//hard set as only 720 competition is in, will need passed as a variable
+            string distance = ArchMain.dist;
+            string bow = ArchMain.bowType;
+            var b = dbConn.Query<ScoringSheet>("SELECT ID, FinalTotal FROM ScoringSheet AS ss JOIN Details AS d ON ss.DetailsID = d.DetailsID WHERE ss.Type = ? AND d.BowType = ? AND d.Dist = 70 Order BY FinalTotal DESC LIMIT 1", type, bow, distance);
+
             return b;
         }
 
         public List<ScoringSheet> GetLastScore()
         {
-            var b = db.Query<ScoringSheet>("SELECT FinalTotal from ScoringSheet ORDER BY ID DESC LIMIT 1");
+            int i = 0;
+            string type = "720Competition";//hard set as only 720 competition is in, will need passed as a variable
+            string distance = ArchMain.dist;
+            string bow = ArchMain.bowType;
+            var b = dbConn.Query<ScoringSheet>("SELECT DISTINCT ID, FinalTotal FROM ScoringSheet AS ss JOIN Details AS d ON ss.DetailsID = d.DetailsID WHERE FinalTotal > ? AND ss.Type = ? AND d.BowType = ? AND d.Dist = ? ORDER BY ID DESC LIMIT 1", i, type, bow, distance);
             return b;
         }
 
         public List<ScoringSheet> GetLastBest(int id)
-        { 
-            var b = db.Query<ScoringSheet>("SELECT FinalTotal from ScoringSheet WHERE ID > ? ORDER BY FinalTotal DESC LIMIT 1", id);
+        {
+            int i = 0;
+            string type = "720Competition";//hard set as only 720 competition is in, will need passed as a variable
+            string distance = ArchMain.dist;
+            string bow = ArchMain.bowType;
+            var b = dbConn.Query<ScoringSheet>("SELECT DISTINCT ID, FinalTotal FROM ScoringSheet AS ss JOIN Details as d ON ss.DetailsID = d.DetailsID WHERE FinalTotal > ? AND ss.Type = ? AND ss.ID > ? AND d.BowType = ? AND d.Dist = ? ORDER BY FinalTotal DESC LIMIT 1", i, type, id, bow, distance);
             return b;
 
         }
 
+
         public void AddNotes(string endRef, string note)
         {
-            var notes = new Notes()
+            //checks if end is in database
+            var a = dbConn.Query<End>("SELECT * FROM 'End' where EndNum = ?", endRef);
+            if(a.Count == 0)
             {
-                EndNum = endRef, //sets the endNum to current end's eR
-                EndNotes = note
-            };
+                var dummyEnd = new End()
+                {
+                    EndNum = endRef,
+                    ID = UIPractice.PracID,
+                    EndTotal = 0
+                };
+                dbConn.InsertOrReplace(dummyEnd);//handles end not being there
+            }
 
-            db.InsertOrReplace(notes);
+                var notes = new Notes()
+                {
+                    EndNum = endRef,
+                    EndNotes = note
+                };
+
+                dbConn.InsertOrReplace(notes);
+
+                var end = dbConn.Get<End>(endRef);
+
+                notes.end = end;
+
+                dbConn.UpdateWithChildren(notes);
+
         }
 
-        public void AddWeather(string endRef, double temp, double speed, string dir, double hum, string other)
+        public void AddWeather(string endRef, string temp, string speed, string dir, string hum, string other)
         {
+            //checks if end is in database
+            var a = dbConn.Query<End>("SELECT * FROM 'End' where EndNum = ?", endRef);
+            if (a.Count == 0)
+            {
+                var dummyEnd = new End()
+                {
+                    EndNum = endRef,
+                    ID = UIPractice.PracID,
+                    EndTotal = 0
+                };
+                dbConn.InsertOrReplace(dummyEnd);//handles end not being there
+            }
+
             var weather = new WeatherConditions
             {
                 EndNum = endRef,//sets the endNum to current end's eR
                 Temp = temp,
                 WindSpeed = speed,
-                WindDir = dir, 
+                WindDir = dir,
                 Humidity = hum,
-                Other = other, 
+                Other = other,
             };
-            db.InsertOrReplace(weather);
+            dbConn.InsertOrReplace(weather);
+
+            var end = dbConn.Get<End>(endRef);
+            
+                weather.end = end;
+
+            dbConn.UpdateWithChildren(weather);
         }
 
         public List<End> GetPreviousEnds(int FinalScore, string Type)
         {
-            var a = db.Query<End>("select EndNum, Score1, Score2, Score3, Score4, Score5, Score6, EndTotal from `End` AS E, ScoringSheet AS S where S.FinalTotal = ? AND S.Type = ? AND S.ID = E.ID ", FinalScore, Type);
-
+            var a = dbConn.Query<End>("SELECT E.ID, EndNum, Score1, Score2, Score3, Score4, Score5, Score6, EndTotal from `End` AS E, ScoringSheet AS S where S.FinalTotal = ? AND S.Type = ? AND E.ID = S.ID ORDER BY S.ID ASC", FinalScore, Type);
             return a;
+        }
+
+        public List<Details> GetPreviousDetails(int id)
+        {
+            var a = dbConn.Query<Details>("SELECT Date, Dist FROM Details AS d, ScoringSheet AS s WHERE s.ID = ? AND d.DetailsID = s.DetailsID", id);
+            return a;
+        }
+
+        public List<WeatherConditions> GetPreviousWeather(string endRef)
+        {
+            var a = dbConn.Query<WeatherConditions>("SELECT Temp, WindSpeed, WindDir, Humidity, Other FROM WeatherConditions WHERE EndNum = ?", endRef);
+            return a;
+        }
+
+        public List<Notes> GetPreviousNote(string endRef)
+        {
+            var a = dbConn.Query<Notes>("SELECT EndNotes FROM Notes WHERE EndNum = ?", endRef);
+            return a;
+        }
+
+
+
+        public List<Bow> Exportbows()
+        {
+            var a = dbConn.Query<Bow>("SELECT * FROM Bow");
+            return a;
+        }
+
+        public List<CompBackup> CompBackup()
+        {
+            string type = "720Competition";
+            var a = dbConn.Query<CompBackup>("SELECT  d.'Date', d.Dist, d.BowType, e.*, s.FinalTotal FROM Details as d, ScoringSheet AS s, 'End' AS E WHERE d.DetailsID = s.DetailsID AND s.Type = ? AND s.ID = e.ID", type);
+            //works in Db browser. No notes or ends as they can be not there, allows this to be used for Comp and Prac.
+            return a;
+        }
+
+        public List<PracBackup> PracBackUp()//need to change typing for set
+        {
+            string type = "Practice";
+            var a = dbConn.Query<PracBackup>("SELECT  d.'Date', d.Dist, d.BowType, e.*, s.FinalTotal, n.EndNotes, w.* FROM  'End' AS e JOIN ScoringSheet AS s ON e.ID = s.ID JOIN Details as d ON s.DetailsID = d.DetailsID LEFT OUTER JOIN Notes n ON e.EndNum = n.EndNum LEFT OUTER JOIN WeatherConditions w ON e.EndNum = w.EndNum WHERE s.Type = ?", type);
+            return a;//returns nulls as PracBackUP
         }
     }
 }
