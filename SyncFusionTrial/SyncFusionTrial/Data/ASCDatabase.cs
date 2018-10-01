@@ -199,7 +199,7 @@ namespace ArcheryScoringApp.Data
 
         }
 
-        public void AddWeather(string endRef, double temp, double speed, string dir, double hum, string other)
+        public void AddWeather(string endRef, string temp, string speed, string dir, string hum, string other)
         {
             //checks if end is in database
             var a = dbConn.Query<End>("SELECT * FROM 'End' where EndNum = ?", endRef);

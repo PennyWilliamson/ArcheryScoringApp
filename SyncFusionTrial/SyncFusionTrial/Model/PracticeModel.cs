@@ -178,7 +178,7 @@ namespace ArcheryScoringApp.Model
             int current = 0;//current end total
             int curScr = 0;// new score entered
             int prvScr = 0;// previous score
-            if (score == "X")
+            if (score == "X" || score == "x")
             {
                 curScr = 10;
             }
@@ -193,9 +193,12 @@ namespace ArcheryScoringApp.Model
                     if (valid == false)
                     {
                         if (score != "M")
-                        {                          
-                            UIPractice.NotValid(score);
-                            score = "0";
+                        {
+                            if (score != "m")
+                            {
+                                UIPractice.NotValid(score);
+                                score = "0";
+                            }
                         }
                     }
                     else
@@ -211,7 +214,7 @@ namespace ArcheryScoringApp.Model
 
             }
 
-            if (r == "X") //handles edits
+            if (r == "X" || r == "x") //handles edits
             {
                 prvScr = 10;
             }
@@ -256,10 +259,10 @@ namespace ArcheryScoringApp.Model
 
         public void PrevWeather(string endRef)
         {
-            double temp = 0;
-            double speed = 0;
+            string temp = "0";
+            string speed = "0";
             string dir = ""; //Wind Direction
-            double humid = 0;
+            string humid = "0";
             string other = "";
             List<Data.WeatherConditions> cond = App.Database.GetPreviousWeather(endRef);
             foreach(Data.WeatherConditions w in cond)

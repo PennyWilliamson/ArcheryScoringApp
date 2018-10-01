@@ -12,9 +12,9 @@ namespace ArcheryScoringApp
         string noteEntry;
         string otherEntry;
         string windDirEntry;
-        double windspeedEntry;
-        double tempEntry;
-        double humidEntry;
+        string windspeedEntry;//change to string
+        string tempEntry;//change to string
+        string humidEntry;//change to string
         string endRef;
 
         ViewModel.NotesWeatherViewModel viewModel;
@@ -56,15 +56,15 @@ namespace ArcheryScoringApp
             var weatherHead = new Label { Text = "Weather", TextColor = Color.Black, FontSize = 20 };
 
             var temp = new Label { Text = "Temperature", TextColor = Color.Black, FontSize = 20 };
-            var tempInput = new Entry { Text = tempEntry.ToString(), MaxLength = 10, FontSize = 20 };
+            var tempInput = new Entry { Text = tempEntry, MaxLength = 10, FontSize = 20 };
             tempInput.TextChanged += TempChanged;
 
             var hum = new Label { Text = "Humidity", TextColor = Color.Black, FontSize = 20 };
-            var humInput = new Entry { Text = humidEntry.ToString(), MaxLength = 10, FontSize = 20 };
+            var humInput = new Entry { Text = humidEntry, MaxLength = 10, FontSize = 20 };
             humInput.TextChanged += HumidChanged;
 
             var wSpeed = new Label { Text = "Windspeed", TextColor = Color.Black, FontSize = 20 };
-            var wSpeedInput = new Entry { Text = windspeedEntry.ToString(), MaxLength = 10, FontSize = 20 };
+            var wSpeedInput = new Entry { Text = windspeedEntry, MaxLength = 10, FontSize = 20 };
             wSpeedInput.TextChanged += WindSpeedChanged;
 
             var wDir = new Label { Text = "Wind direction", TextColor = Color.Black, FontSize = 20 };
@@ -137,14 +137,12 @@ namespace ArcheryScoringApp
 
         public void TempChanged(object sender, TextChangedEventArgs e)
         {
-            var a = e.NewTextValue;
-            double.TryParse(a, out tempEntry);
+            tempEntry = e.NewTextValue;
         }
 
         public void WindSpeedChanged(object sender, TextChangedEventArgs e)
         {
-            var a = e.NewTextValue;
-            double.TryParse(a, out windspeedEntry);
+            windspeedEntry = e.NewTextValue;
         }
 
         public void WindDirChanged(object sender, TextChangedEventArgs e)
@@ -154,8 +152,7 @@ namespace ArcheryScoringApp
 
         public void HumidChanged(object sender, TextChangedEventArgs e)
         {
-            var a = e.NewTextValue;
-            double.TryParse(a, out humidEntry);
+            humidEntry = e.NewTextValue;
         }
 
         public void OtherChanged(object sender, TextChangedEventArgs e)
@@ -193,7 +190,7 @@ namespace ArcheryScoringApp
             
             //windspeed not included as if windspeed = 0, then windDir will be null. 
             //Assumption made that practice will not happen in 0 degree conditions
-            if(tempEntry != 0 || windDirEntry != null || humidEntry != 0 || otherEntry != null)
+            if(tempEntry != null || windDirEntry != null || humidEntry != null || otherEntry != null)
             {
                 // App.Database.AddWeather(endRef, temp, windspeed, windDir, humid, other);
                 viewModel.WeatherSaved(endRef, tempEntry, windspeedEntry, windDirEntry, humidEntry, otherEntry);

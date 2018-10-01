@@ -100,6 +100,7 @@ namespace ArcheryScoringApp
             Label content = new Label { Text = "Entered score is not a valid score and will be recorded as a '0'. Please change your score.", TextColor = Color.FromHex("#010101"), BackgroundColor = Color.White, FontSize = 30 };
             notValid.PopupView.ContentTemplate = new DataTemplate(() =>
             {
+                notValid.Padding = 10;
                 notValid.PopupView.HeaderTitle = "Invalid Score";
                 notValid.PopupView.ShowFooter = false;
                 return content;
@@ -114,6 +115,7 @@ namespace ArcheryScoringApp
         {
             popupLayout.PopupView.ContentTemplate = new DataTemplate(() =>
             {
+                popupLayout.Padding = 10;
                 popupLayout.PopupView.HeaderTitle = "Details";
                 popupLayout.PopupView.BackgroundColor = Color.White;
                 popupLayout.HorizontalOptions = LayoutOptions.FillAndExpand;
@@ -167,6 +169,7 @@ namespace ArcheryScoringApp
             string distDate = Model.DetailsModel.GetPrevDetails(ends);
             prevPop.PopupView.ContentTemplate = new DataTemplate(() =>
             {
+                prevPop.Padding = 10;
                 prevPop.PopupView.HeaderTitle = "720 Comp" + distDate;
                 prevPop.BackgroundColor = Color.White;
                 prevPop.HorizontalOptions = LayoutOptions.FillAndExpand;

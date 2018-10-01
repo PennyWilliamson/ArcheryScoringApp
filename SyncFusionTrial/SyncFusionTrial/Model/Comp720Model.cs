@@ -122,10 +122,10 @@ namespace ArcheryScoringApp.Model
             int current = 0; //current score for three total
             int curScr = 0;// new arrow score
             int prvScr = 0;// previous arrow score
-            if (score == "X" || score == "10")
+            if (score == "X" || score == "x" || score == "10")
             {
                 curScr = 10;
-                if (score == "X")
+                if (score == "X" || score == "x")
                 {
                     TensAndXs.Xs();//increases count of Xs by one
                 }
@@ -142,9 +142,12 @@ namespace ArcheryScoringApp.Model
                     if (valid == false)
                     {
                         if (score != "M")
-                        {                          
-                            UIComp720.NotValid(score);
-                            score = "0";
+                        {
+                            if (score != "m")
+                            {
+                                UIComp720.NotValid(score);
+                                score = "0";
+                            }
                         }
                     }
                     else
@@ -159,10 +162,10 @@ namespace ArcheryScoringApp.Model
                 }
             }
 
-            if (r == "X" || r == "10")
+            if (r == "X" || r == "x" || r == "10")
             {
                 prvScr = 10;
-                if (r == "X")
+                if (r == "X" || r == "x")
                 {
                     TensAndXs.RemoveXs();//decreases count of Xs by one
                 }

@@ -40,7 +40,8 @@ namespace ArcheryScoringApp.Data
             }
             catch (Exception ex)
             {
-                string err = ex.ToString();
+                string e = ex.ToString();
+                string err = "Sorry e-mail could not be opened";
                 ArchMain.ErrorMess(err);
             }
         }

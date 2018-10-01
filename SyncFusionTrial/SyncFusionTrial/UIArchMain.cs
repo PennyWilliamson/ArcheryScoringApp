@@ -130,15 +130,17 @@ namespace ArcheryScoringApp
             };
             backupButton.Clicked += BackUpButtonClicked;
 
-            grid.Children.Add(compButton, 0, 0);
-            grid.Children.Add(pracButton, 1, 0);
-            grid.Children.Add(label1, 0, 1);
-            grid.Children.Add(comboBoxBow, 1, 1);
-            grid.Children.Add(label2, 0, 2);
-            grid.Children.Add(comboBoxDist, 1, 2);
-            grid.Children.Add(label3, 0, 3);
-            grid.Children.Add(comboBoxComp, 1, 3);
+
+            grid.Children.Add(label1, 0, 0);
+            grid.Children.Add(comboBoxBow, 1, 0);
+            grid.Children.Add(label2, 0, 1);
+            grid.Children.Add(comboBoxDist, 1, 1);
+            grid.Children.Add(label3, 0, 2);
+            grid.Children.Add(comboBoxComp, 1, 2);
+            grid.Children.Add(compButton, 0, 3);
+            grid.Children.Add(pracButton, 1, 3);
             grid.Children.Add(backupButton, 0, 4);
+
             layout.Children.Add(grid);
             scroll.Content = layout;
             Content = scroll;
@@ -179,6 +181,7 @@ namespace ArcheryScoringApp
             Label content = new Label { Text = "Please select a Bow Type and Distance from the drop down menus and try again.", TextColor = Color.FromHex("#010101"), BackgroundColor = Color.White, FontSize = 30 };
             noBowOrDist.PopupView.ContentTemplate = new DataTemplate(() =>
                 {
+                    noBowOrDist.Padding = 10;
                     noBowOrDist.PopupView.HeaderTitle = "Choose from dropdowns";
                     noBowOrDist.PopupView.ShowFooter = false;
                     return content;
@@ -213,6 +216,7 @@ namespace ArcheryScoringApp
             Label err = new Label { Text = e };
             noBowOrDist.PopupView.ContentTemplate = new DataTemplate(() =>
             {
+                noBowOrDist.Padding = 10;
                 noBowOrDist.PopupView.HeaderTitle = "Choose from dropdowns";
                 noBowOrDist.PopupView.ShowFooter = false;
                 return err;

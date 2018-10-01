@@ -7,13 +7,13 @@ namespace ArcheryScoringApp.Model
     class WeatherModel
     {
         public string endRef { get; set; }
-        public double temp { get; set; }
-        public double speed { get; set; }
+        public string temp { get; set; }
+        public string speed { get; set; }
         public string dir { get; set; }
-        public double hum { get; set; }
+        public string hum { get; set; }
         public string other { get; set; }
 
-        public WeatherModel(string anEndRef, double aTemp, double aSpeed, string aDir, double aHum, string anOther)
+        public WeatherModel(string anEndRef, string aTemp, string aSpeed, string aDir, string aHum, string anOther)
         {
             endRef = anEndRef;
             temp = aTemp;
