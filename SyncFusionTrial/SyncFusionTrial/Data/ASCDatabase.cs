@@ -10,14 +10,29 @@ using System.Data;
 
 namespace ArcheryScoringApp.Data
 {
+    /// <summary>
+    /// Class for the database creation and database tools.
+    /// code modified from NuGet documentation for SQLite.Extensions
+    /// and NuGet documentation for dependant SQLite-net-PCL NuGet.
+    /// as well as Microsoft documentation
+    /// Twincoders. (2018, August 13). SQLite-Net Extensions. Retrieved August 29, 2018, from Bitbucket: https://bitbucket.org/twincoders/sqlite-net-extensions
+    /// praeclarum. (n/d). GettingStarted. Retrieved August 2018, from GitHub praeclarum/sqlite-net/wiki: https://github.com/praeclarum/sqlite-net/wiki/GettingStarted
+    /// David Britch, C. D. (2018, June 21). Xamarin.Forms Local Databases. Retrieved August 28, 2018, from Microsoft: https://docs.microsoft.com/en-us/xamarin/xamarin-forms/app-fundamentals/database
+    /// </summary>
     class ASCDatabase
     {
-        internal readonly SQLiteConnection dbConn;//internal so it can be closed on sleep.
+        //database connection.
+        internal readonly SQLiteConnection dbConn;
 
-
+        /// <summary>
+        /// Constructor for database class.
+        /// Takes in database file path as param.
+        /// </summary>
+        /// <param name="dbFilePath"></param>
         public ASCDatabase(string dbFilePath)
         {
             dbConn = new SQLiteConnection(dbFilePath);//connection string code
+            //creates tables if they do not already exist.
             dbConn.CreateTable<ScoringSheet>();
             dbConn.CreateTable<End>();
             dbConn.CreateTable<Details>();
@@ -26,7 +41,14 @@ namespace ArcheryScoringApp.Data
             dbConn.CreateTable<WeatherConditions>();
         }
 
-
+        /// <summary>
+        /// Method for inserting the scoring sheet into database.
+        /// As it takes in details ID, details need to be inserted first.
+        /// Returns sheet ID.
+        /// </summary>
+        /// <param name="dtlsID"></param>
+        /// <param name="typ"></param>
+        /// <returns></returns>
         public int InsertScoringSheet(int dtlsID, string typ)
         {
             var sheet = new ScoringSheet()
@@ -43,6 +65,13 @@ namespace ArcheryScoringApp.Data
             return scrShtID;
         }
 
+        /// <summary>
+        /// Mehtod for inserting details into database.
+        /// Takes in param of date.
+        /// Returns details ID.
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
         public int InsertDetails(string date)
         {
             var details = new Details()
@@ -64,9 +93,13 @@ namespace ArcheryScoringApp.Data
             dbConn.UpdateWithChildren(details);
             var dtlID = details.DetailsID;
             return dtlID;
-
         }
 
+        /// <summary>
+        /// Method for inserting end into database.
+        /// Takes in end object as param.
+        /// </summary>
+        /// <param name="anEnd"></param>
         public void InsertEnds(Model.EndModel anEnd)
         {
             var end = new End()
@@ -89,6 +122,14 @@ namespace ArcheryScoringApp.Data
             dbConn.UpdateWithChildren(end);
         }
 
+        /// <summary>
+        /// Method for updating final total for end.
+        /// Takes in all fields as update updates all feild in tuple.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="fnlTtl"></param>
+        /// <param name="dtlsID"></param>
+        /// <param name="typ"></param>
         public void UpdateFinalScore(int id, int fnlTtl, int dtlsID, string typ)
         {
             var sheet = new ScoringSheet()
@@ -100,9 +141,13 @@ namespace ArcheryScoringApp.Data
 
             };
             dbConn.Update(sheet);
-
         }
 
+        /// <summary>
+        /// Method for adding bow to database.
+        /// Uses a try catch finally due to lack of InsertOrIgnore in NuGet used.
+        /// </summary>
+        /// <param name="bow"></param>
         public void AddBow(string bow)
         {
             var newBow = new Bow()
@@ -119,10 +164,14 @@ namespace ArcheryScoringApp.Data
             finally { }
         }
 
+        /// <summary>
+        /// Adds sight marking for bow seected on main page.
+        /// </summary>
+        /// <param name="markings"></param>
         public void EditSight(double markings)
         {
             var bow = new Bow()
-            {
+            {//as update replaces tuple
                 BowType = ArchMain.bowType,
                 SightMarkings = markings
             };
@@ -130,12 +179,23 @@ namespace ArcheryScoringApp.Data
             dbConn.Update(bow);
         }
 
+        /// <summary>
+        /// Queries database for sight markings
+        /// for current selected bow.
+        /// </summary>
+        /// <param name="bow"></param>
+        /// <returns></returns>
         public List<Bow> GetSightMarkings(string bow)
         {
             var b = dbConn.Query<Bow>("SELECT SightMarkings FROM Bow WHERE BowType = ?", bow);
             return b;
         }
 
+        /// <summary>
+        /// Queries database for personal best score for combination of competition type, bow and distance.
+        /// Returns list of scoring sheet type containing ID and Final total.
+        /// </summary>
+        /// <returns></returns>
         public List<ScoringSheet> getPB()
         {
             string type = "720Competition";//hard set as only 720 competition is in, will need passed as a variable
@@ -146,6 +206,11 @@ namespace ArcheryScoringApp.Data
             return b;
         }
 
+        /// <summary>
+        /// Queries database for last score score for combination of competition type, bow and distance.
+        /// Returns list of scoring sheet type containing ID and Final total.
+        /// </summary>
+        /// <returns></returns>
         public List<ScoringSheet> GetLastScore()
         {
             int i = 0;
@@ -156,6 +221,12 @@ namespace ArcheryScoringApp.Data
             return b;
         }
 
+        /// <summary>
+        /// Queries database for personal best score for combination of competition type, bow and distance.
+        /// Returns list of scoring sheet type containing ID and Final total.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public List<ScoringSheet> GetLastBest(int id)
         {
             int i = 0;
@@ -164,10 +235,13 @@ namespace ArcheryScoringApp.Data
             string bow = ArchMain.bowType;
             var b = dbConn.Query<ScoringSheet>("SELECT DISTINCT ID, FinalTotal FROM ScoringSheet AS ss JOIN Details as d ON ss.DetailsID = d.DetailsID WHERE FinalTotal > ? AND ss.Type = ? AND ss.ID > ? AND d.BowType = ? AND d.Dist = ? ORDER BY FinalTotal DESC LIMIT 1", i, type, id, bow, distance);
             return b;
-
         }
 
-
+        /// <summary>
+        /// Method for adding notes and associated end reference to database.
+        /// </summary>
+        /// <param name="endRef"></param>
+        /// <param name="note"></param>
         public void AddNotes(string endRef, string note)
         {
             //checks if end is in database
@@ -199,6 +273,15 @@ namespace ArcheryScoringApp.Data
 
         }
 
+        /// <summary>
+        /// Method for adding weather conditions and associated endRef to the database.
+        /// </summary>
+        /// <param name="endRef"></param>
+        /// <param name="temp"></param>
+        /// <param name="speed"></param>
+        /// <param name="dir"></param>
+        /// <param name="hum"></param>
+        /// <param name="other"></param>
         public void AddWeather(string endRef, string temp, string speed, string dir, string hum, string other)
         {
             //checks if end is in database
@@ -232,24 +315,45 @@ namespace ArcheryScoringApp.Data
             dbConn.UpdateWithChildren(weather);
         }
 
+        /// <summary>
+        /// Method for returning previous ends associated with a scoring sheet, identified by final total.
+        /// </summary>
+        /// <param name="FinalScore"></param>
+        /// <param name="Type"></param>
+        /// <returns></returns>
         public List<End> GetPreviousEnds(int FinalScore, string Type)
         {
             var a = dbConn.Query<End>("SELECT E.ID, EndNum, Score1, Score2, Score3, Score4, Score5, Score6, EndTotal from `End` AS E, ScoringSheet AS S where S.FinalTotal = ? AND S.Type = ? AND E.ID = S.ID ORDER BY S.ID ASC", FinalScore, Type);
             return a;
         }
 
+        /// <summary>
+        /// Method for returning details associated with a scoring sheet.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public List<Details> GetPreviousDetails(int id)
         {
             var a = dbConn.Query<Details>("SELECT Date, Dist FROM Details AS d, ScoringSheet AS s WHERE s.ID = ? AND d.DetailsID = s.DetailsID", id);
             return a;
         }
 
+        /// <summary>
+        /// Method for returning weather conditions associated with an end.
+        /// </summary>
+        /// <param name="endRef"></param>
+        /// <returns></returns>
         public List<WeatherConditions> GetPreviousWeather(string endRef)
         {
             var a = dbConn.Query<WeatherConditions>("SELECT Temp, WindSpeed, WindDir, Humidity, Other FROM WeatherConditions WHERE EndNum = ?", endRef);
             return a;
         }
 
+        /// <summary>
+        /// Method for returning notes associated with an end.
+        /// </summary>
+        /// <param name="endRef"></param>
+        /// <returns></returns>
         public List<Notes> GetPreviousNote(string endRef)
         {
             var a = dbConn.Query<Notes>("SELECT EndNotes FROM Notes WHERE EndNum = ?", endRef);
@@ -257,13 +361,20 @@ namespace ArcheryScoringApp.Data
         }
 
 
-
+        /// <summary>
+        /// Method for backing up bows in database.
+        /// </summary>
+        /// <returns></returns>
         public List<Bow> Exportbows()
         {
             var a = dbConn.Query<Bow>("SELECT * FROM Bow");
             return a;
         }
 
+        /// <summary>
+        /// Method for backing up competition data in database.
+        /// </summary>
+        /// <returns></returns>
         public List<CompBackup> CompBackup()
         {
             string type = "720Competition";
@@ -272,6 +383,10 @@ namespace ArcheryScoringApp.Data
             return a;
         }
 
+        /// <summary>
+        /// Method for backing up practice data in database.
+        /// </summary>
+        /// <returns></returns>
         public List<PracBackup> PracBackUp()//need to change typing for set
         {
             string type = "Practice";

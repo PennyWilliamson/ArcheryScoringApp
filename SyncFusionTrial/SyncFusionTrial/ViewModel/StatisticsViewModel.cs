@@ -5,13 +5,26 @@ using System.Threading.Tasks;
 
 namespace ArcheryScoringApp.ViewModel
 {
+    /// <summary>
+    /// View model class for the Statistics page.
+    /// </summary>
     class StatisticsViewModel
     {
+        //List for holding method returns.
         List<Data.ScoringSheet> list = new List<Data.ScoringSheet>();
-        int id = 0;
+        int id = 0;//for holding returns sheet ID
 
-        public StatisticsViewModel() { }//constructor
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public StatisticsViewModel() { }
 
+        /// <summary>
+        /// Calls the database method for getting sight markings for selected bow, 
+        /// and returns them to UI.
+        /// </summary>
+        /// <param name="bow"></param>
+        /// <returns></returns>
         public string GetSightMarkings(string bow)
         {
             List<Data.Bow> bowList = new List<Data.Bow>();
@@ -25,6 +38,12 @@ namespace ArcheryScoringApp.ViewModel
             return markings;
         }
 
+        /// <summary>
+        /// Calls the database method for personal best for selected
+        /// bow and distance.
+        /// Returns to UI.
+        /// </summary>
+        /// <returns></returns>   
         public string GetPB()
         {
             string pb = " ";
@@ -39,6 +58,12 @@ namespace ArcheryScoringApp.ViewModel
             return pb;
         }
 
+        /// <summary>
+        /// Calls databse for last best for selected bow and distance
+        /// combination.
+        /// Then returns this to UI.
+        /// </summary>
+        /// <returns></returns>
         public string GetLastBst()
         {
             int i = 0;
@@ -51,21 +76,24 @@ namespace ArcheryScoringApp.ViewModel
                 i = sheet.ID;
             }
 
-
             return lastBest;
         }
 
-    public string GetLast()
+
+        /// <summary>
+        /// Calls database method for last score and returns
+        /// to UI.
+        /// </summary>
+        /// <returns></returns>
+        public string GetLast()
         {
-            int i = 0;
             string lastScore = " ";
-            var list= App.Database.GetLastScore();
+            var list = App.Database.GetLastScore();
             foreach (Data.ScoringSheet sheet in list)
             {
                 var ft = sheet.FinalTotal;
                 lastScore = ft.ToString();
             }
-
 
             return lastScore;
         }

@@ -6,28 +6,41 @@ using System.Text;
 
 namespace ArcheryScoringApp.Model
 {
+    /// <summary>
+    /// Model for the dataGrids to use for
+    /// the 720 Competition screens.
+    /// Displayed in sets of 3, so
+    /// each end consists of two of these objects.
+    /// EndRef class ensures they both have the same endRef,
+    /// and CompEnd stiches the two ends together.
+    /// </summary>
     class Comp720Model : INotifyPropertyChanged
     {
         private string endNum;//needed for datamodel so end will display (end: 1 etc) and if it equals " " its the second set of 3
-        private string arrow1;
-        private string arrow2;
-        private string arrow3;
-        private int threeTotal;
-        private int endTotal;
-        private int runningTotal;
+        private string arrow1;//First score in set of three
+        private string arrow2;//Second sccore in set of three
+        private string arrow3;//Third score in set of three
+        private int threeTotal;//Total for set of three
+        private int endTotal;//endTotal.
+        private int runningTotal;//running total.
 
         private int eT; //for holding new end total value
         private int rT; //for holding new running total value
         private int tT; //for holding three total
         public string eR; //end reference
 
-
+        /// <summary>
+        /// Get, set.
+        /// </summary>
         public string ER
         {
             get { return eR; }
-            set { eR = EndRef.SetRef(); }
+            set { eR = value; }
         }
 
+        /// <summary>
+        /// Get, set.
+        /// </summary>
         public string EndNum
         {
             get { return endNum; }
@@ -37,6 +50,12 @@ namespace ArcheryScoringApp.Model
             }
         }
 
+        /// <summary>
+        /// Get, set.
+        /// Set also handles adding total method calls for adding the
+        /// score to totals and stiching together the two sets of three.
+        /// Set also handles x's and 10's after each 6 rows.
+        /// </summary>
         public string Arrow1
         {
             get { return arrow1; }
@@ -58,6 +77,11 @@ namespace ArcheryScoringApp.Model
             }
         }
 
+        /// <summary>
+        /// Get, set.
+        /// Set also handles adding total method calls for adding the
+        /// score to totals and stiching together the two sets of three.
+        /// </summary>
         public string Arrow2
         {
             get { return arrow2; }
@@ -72,6 +96,11 @@ namespace ArcheryScoringApp.Model
             }
         }
 
+        /// <summary>
+        /// Get, set.
+        /// Set also handles adding total method calls for adding the
+        /// score to totals and stiching together the two sets of three.
+        /// </summary>
         public string Arrow3
         {
             get { return this.arrow3; }
@@ -87,7 +116,9 @@ namespace ArcheryScoringApp.Model
         }
 
 
-
+        /// <summary>
+        /// Get, set.
+        /// </summary>
         public int ThreeTotal
         {
             get { return threeTotal; }
@@ -98,16 +129,21 @@ namespace ArcheryScoringApp.Model
             }
         }
 
+        /// <summary>
+        /// Get, set.
+        /// </summary>
         public int EndTotal
         {
             get { return endTotal; }
             set
             {
                 this.endTotal = value;
-                OnPropertyChanged("EndTotal");
             }
         }
 
+        /// <summary>
+        /// Get, set.
+        /// </summary>
         public int RunningTotal
         {
             get { return runningTotal; }
@@ -117,6 +153,12 @@ namespace ArcheryScoringApp.Model
             }
         }
 
+        /// <summary>
+        /// Parses the totals and calls the calculation methods.
+        /// </summary>
+        /// <param name="score"></param>
+        /// <param name="r"></param>
+        /// <returns></returns>
         public int Calc(string score, string r)
         {
             int current = 0; //current score for three total
@@ -184,11 +226,15 @@ namespace ArcheryScoringApp.Model
 
             }
             current = this.threeTotal + curScr - prvScr; // minus prvScr to allow scores to be changed in case of user error
-            runningTotal = calcRTComp.runningTotal(curScr, prvScr);
-            endTotal = calcEndTotal.CalcEnd(curScr, prvScr, eR);
+            runningTotal = CalcRT.runningTotal(curScr, prvScr);
+            endTotal = CalcEndTotal.CalcEnd(curScr, prvScr, eR);
             return current;
         }
 
+        /// <summary>
+        /// Gets the number of tens and x's for display on dataGrid.
+        /// </summary>
+        /// <param name="endNum"></param>
         public void getTensAndXs(string endNum)
         {
             if (endNum == "Xs: ")
@@ -201,9 +247,16 @@ namespace ArcheryScoringApp.Model
                 arrow1 = TensAndXs.GetTens();
 
             }
-
         }
 
+        /// <summary>
+        /// Constructor for object.
+        /// </summary>
+        /// <param name="endNum"></param>
+        /// <param name="arrow1"></param>
+        /// <param name="arrow2"></param>
+        /// <param name="arrow3"></param>
+        /// <param name="endTotal"></param>
         public Comp720Model(string endNum, string arrow1, string arrow2, string arrow3, int endTotal)
         {
             this.EndNum = endNum;
@@ -211,10 +264,12 @@ namespace ArcheryScoringApp.Model
             this.Arrow2 = arrow2;
             this.Arrow3 = arrow3;
             this.EndTotal = endTotal;
-            eR = EndRef.SetRef();
-
+            eR = EndRef.SetRefComp("720Comp");
         }
 
+        /// <summary>
+        /// Calls method to stich two sets of three into an end.
+        /// </summary>
         private void SaveCompEnd()
         {
             if (eR != null) //stops CompHoldEnds firing on screen appearing.
@@ -226,8 +281,13 @@ namespace ArcheryScoringApp.Model
             }
         }
 
+        //Needed for INotifyPropertyChanged.
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// OnPropertyChanged method for INotifyPropertyChanged.
+        /// </summary>
+        /// <param name="propertyName"></param>
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
@@ -239,7 +299,7 @@ namespace ArcheryScoringApp.Model
 
     }
 
-    static class calcRTComp
+  /*  static class calcRTComp
     {
         static internal int curRT { get; set; }
 
@@ -248,8 +308,8 @@ namespace ArcheryScoringApp.Model
             curRT = curRT + eT - prvScr; // minus prvScr to allow scores to be changed in case of user error
             return curRT;
         }
-    }
-
+    }*/
+    /*
     static class calcEndTotal
     {
         static int endTotal { get; set; } // holds endTotal as an end is two sets of three
@@ -273,9 +333,9 @@ namespace ArcheryScoringApp.Model
             }
 
         }
-    }
+    } */
 
-    static class EndRef
+   /* static class EndRef
     {
         static int counter = 0;
         // static DateTime date = DateTime.Today;
@@ -302,9 +362,9 @@ namespace ArcheryScoringApp.Model
 
 
         }
-    }
+    } */
 
-    static class TensAndXs
+  /*  static class TensAndXs
     {
         internal static int tens { get; set; }
         internal static int xs { get; set; }
@@ -344,9 +404,9 @@ namespace ArcheryScoringApp.Model
             xs = xs - 1;
             return xs;
         }
-    }
+    }*/
 
-    static class CompEnd
+   /* static class CompEnd
     {
         static string endRef;
         static string arrw1;
@@ -386,9 +446,9 @@ namespace ArcheryScoringApp.Model
             {
                 EndModel end = new EndModel(endRef, UIComp720.ID, endTtl, arrw1, arrw2, arrw3, arrw4, arrw5, arrw6);
                 App.Database.InsertEnds(end);
-                App.Database.UpdateFinalScore(UIComp720.ID, calcRTComp.curRT, UIComp720.dtlID, "720Competition");
+                App.Database.UpdateFinalScore(UIComp720.ID, CalcRT.curRT, UIComp720.dtlID, "720Competition");
             }
         }
 
-    }
+    }*/
 }

@@ -11,21 +11,30 @@ using Syncfusion.XForms.PopupLayout;
 
 namespace ArcheryScoringApp
 {
+    /// <summary>
+    /// The content page for the 720 Competition scoring page of the application.
+    /// Uses SyncFusion commponets, and code for components are modelled 
+    /// on SynFusion documentation and Miroscoft Xamarin.Forms documentation.
+    /// Syncfusion. (2001 - 2018). Xamarin.Forms. Retrieved August 2018, from Syncfusion Documentation: https://help.syncfusion.com/xamarin/introduction/overview#how-to-best-read-this-user-guide
+    /// David Britch, C. D. (2017, July 12). Xamarin.Forms User Interface Views. Retrieved August 2018, from Microsoft: https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/index
+    /// </summary>
     public class UIComp720 : ContentPage
     {
-        static internal int ID { get; set; } //internal so it can be accessed from other classes
-        static internal int dtlID { get; set; }
-        string marking;
-        static SfDataGrid dataGrid;
-        // SfDataPager sfPager = new SfDataPager();
-        //   SfListView details;
-        SfPopupLayout popupLayout;
-        SfPopupLayout prevPop;
-        SfPopupLayout notValid;
-        static string date;
-        string search;
-        int HoldID;
+        internal static int ID { get; set; } // Scoring sheet ID from database, internal so it can be accessed from other classes.
+        internal static int dtlID { get; set; } //Details ID from database, internal so it can be accessed from other classes.
+        private string marking; //holds new sight marking for update.
+        private static SfDataGrid dataGrid;//datagrid element, static as method static.
+        private SfPopupLayout popupDetails;//pop up for details
+        private SfPopupLayout prevPop;//pop up for previous results
+        private SfPopupLayout notValid;//popup for invalid scores
+        private static string date;//holds todays date
+        private string search;//value for previous search
+        private int HoldID;//holds ID when being reset to prevent code in other classes firing.
 
+        /// <summary>
+        /// Constructor.
+        /// Sets components and layout for page.
+        /// </summary>
         public UIComp720()
         {
 
@@ -52,7 +61,7 @@ namespace ArcheryScoringApp
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) });
 
             Button detailsButton = createButton("Details");
-            popupLayout = new SfPopupLayout();
+            popupDetails = new SfPopupLayout();
             detailsButton.Clicked += DetailsButtonClicked;
 
             Button backButton = createButton("Back");
@@ -94,7 +103,12 @@ namespace ArcheryScoringApp
             Content = layout;
         }
 
-        static public void NotValid(String score)
+        /// <summary>
+        /// Method for popup when score is not a valid score
+        /// public as it is called from Comp720Model.
+        /// </summary>
+        /// <param name="score"></param>
+        public static void NotValid(String score)
         {
             SfPopupLayout notValid = new SfPopupLayout();
             Label content = new Label { Text = "Entered score is not a valid score and will be recorded as a '0'. Please change your score.", TextColor = Color.FromHex("#010101"), BackgroundColor = Color.White, FontSize = 30 };
@@ -111,25 +125,36 @@ namespace ArcheryScoringApp
             notValid.Show();
         }
 
+        /// <summary>
+        /// Displays details when details button clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DetailsButtonClicked(object sender, EventArgs e)
         {
-            popupLayout.PopupView.ContentTemplate = new DataTemplate(() =>
+            popupDetails.PopupView.ContentTemplate = new DataTemplate(() =>
             {
-                popupLayout.Padding = 10;
-                popupLayout.PopupView.HeaderTitle = "Details";
-                popupLayout.PopupView.BackgroundColor = Color.White;
-                popupLayout.HorizontalOptions = LayoutOptions.FillAndExpand;
+                popupDetails.Padding = 10;
+                popupDetails.PopupView.HeaderTitle = "Details";
+                popupDetails.PopupView.BackgroundColor = Color.White;
+                popupDetails.HorizontalOptions = LayoutOptions.FillAndExpand;
                 prevPop.PopupView.WidthRequest = 360;
-                popupLayout.PopupView.ShowFooter = false;
-                return CreateGrid();
+                popupDetails.PopupView.ShowFooter = false;
+                return CreateDetailsGrid();
             });
-            popupLayout.StaysOpen = true;
-            popupLayout.PopupView.ShowCloseButton = true;
-            popupLayout.IsOpen = true;
-            popupLayout.Show();
+            popupDetails.StaysOpen = true;
+            popupDetails.PopupView.ShowCloseButton = true;
+            popupDetails.IsOpen = true;
+            popupDetails.Show();
         }
 
-        static Button createButton(string lbl)
+        /// <summary>
+        /// method for creating a new button with
+        /// text suplied by lbl param.
+        /// </summary>
+        /// <param name="lbl"></param>
+        /// <returns></returns>
+        private static Button createButton(string lbl)
         {
             Button button = new Button
             {
@@ -141,32 +166,53 @@ namespace ArcheryScoringApp
             return button;
         }
 
-        public void SightChanged(object sender, TextChangedEventArgs e)
+        /// <summary>
+        /// Handles when text in sight entry box changes.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SightChanged(object sender, TextChangedEventArgs e)
         {
             marking = e.NewTextValue;
         }
 
+        /// <summary>
+        /// Handles when button for editing sight is clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EditSightClicked(object sender, EventArgs e)
         {
-            double nsm;
+            double nsm;//for hloding double after text is parsed.
             double.TryParse(marking, out nsm);
-            App.Database.EditSight(nsm);
+            App.Database.EditSight(nsm);//database insert call.
         }
 
-        public void SearchChanged(object sender, TextChangedEventArgs e)
+        /// <summary>
+        /// Handles text being changed in search entry field
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SearchChanged(object sender, TextChangedEventArgs e)
         {
             search = e.NewTextValue;
         }
 
+        /// <summary>
+        /// Handles prev scoring sheet pop-up.
+        /// Pop-up is modal.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PrevButtonClicked(object sender, EventArgs e)
         {
             HoldID = ID;
-            ID = -1;//stops code firing in PracticeModel.
-            List<Data.End> ends = new List<Data.End>();
+            ID = -1;//stops code firing in Comp720Model.
+            List<Data.End> ends = new List<Data.End>(); // for holding return from method call.
             int srch;//int variable for parsing string to int
             int.TryParse(search, out srch);
             ends = Model.EndModel.GetPrev(srch, "720Competition");
-            string distDate = Model.DetailsModel.GetPrevDetails(ends);
+            string distDate = Model.DetailsModel.GetPrevDetails(ends); //gets the distance and date for header.
             prevPop.PopupView.ContentTemplate = new DataTemplate(() =>
             {
                 prevPop.Padding = 10;
@@ -185,25 +231,37 @@ namespace ArcheryScoringApp
             ID = HoldID;
         }
 
+        /// <summary>
+        /// Navigation method for back.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void BackButtonClicked(object sender, EventArgs e)
         {
             await Navigation.PopAsync();
         }
 
+        /// <summary>
+        /// Naviagtion method for root page.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void MainButtonClicked(object sender, EventArgs e)
         {
             ID = -1; //resets it.
             await Navigation.PopToRootAsync();
         }
 
-        static SfDataGrid CreateDataGrid()
+        /// <summary>
+        /// Creates the datgrid for scoring.
+        /// </summary>
+        /// <returns></returns>
+        private static SfDataGrid CreateDataGrid()
         {
-            SfDataGrid dataGrid = new SfDataGrid();
-            Model.Comp720ViewModel viewModel = new Model.Comp720ViewModel();
-            dataGrid.ItemsSource = viewModel.EndCollection;
+            SfDataGrid dataGrid = new SfDataGrid();//object for grid.
+            Model.Comp720ViewModel viewModel = new Model.Comp720ViewModel();//object for method calls
+            dataGrid.ItemsSource = viewModel.EndCollection;//item source for data binding.
             dataGrid.ColumnSizer = ColumnSizer.Auto; //so it scrolls horizontally
-
-
 
             dataGrid.AllowEditing = true;
             dataGrid.EditTapAction = TapAction.OnTap; //Enter edit mode in single tap instead of default double tap.
@@ -211,7 +269,7 @@ namespace ArcheryScoringApp
            // dataGrid.NotificationSubscriptionMode = NotificationSubscriptionMode.PropertyChange;
             dataGrid.SelectionMode = SelectionMode.Single;
 
-            dataGrid.QueryCellStyle += DataGrid_QueryCellStyle;
+            dataGrid.QueryCellStyle += DataGrid_QueryCellStyle;//method for setting the datagrid style of some fields black.
 
             //so end number column cannot be edited
             GridTextColumn endNo = new GridTextColumn();
@@ -231,8 +289,6 @@ namespace ArcheryScoringApp
             arrow3.MappingName = "Arrow3";
             arrow3.HeaderText = "Arrow 3";
 
-
-
             GridTextColumn threeTotal = new GridTextColumn();
             threeTotal.MappingName = "ThreeTotal";
             threeTotal.HeaderText = "3s";
@@ -241,12 +297,12 @@ namespace ArcheryScoringApp
             endTotal.MappingName = "EndTotal";
             endTotal.HeaderText = "End Total";
 
-
             //for running total column
             GridTextColumn runningTotal = new GridTextColumn();
             runningTotal.MappingName = "RunningTotal";
             runningTotal.HeaderText = "Running Total";
 
+            //sets datagrid.
             dataGrid.Columns.Add(endNo);
             dataGrid.Columns.Add(arrow1);
             dataGrid.Columns.Add(arrow2);
@@ -258,7 +314,12 @@ namespace ArcheryScoringApp
             return dataGrid;
         }
 
-        static private void DataGrid_QueryCellStyle(object sender, QueryCellStyleEventArgs e)
+        /// <summary>
+        /// Sets style for scoring and previous datagrids.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private static void DataGrid_QueryCellStyle(object sender, QueryCellStyleEventArgs e)
         {
             if (e.ColumnIndex == 5 && e.RowIndex % 2 == 1) //black for every other end total
             {
@@ -277,7 +338,11 @@ namespace ArcheryScoringApp
             e.Handled = true;
         }
 
-        static Grid CreateGrid()
+        /// <summary>
+        /// Creates grid for details pop-up.
+        /// </summary>
+        /// <returns></returns>
+        private static Grid CreateDetailsGrid()
         {
 
             Grid gridDetails = new Grid() { RowSpacing = 0, ColumnSpacing = 0, BackgroundColor = Color.White };
@@ -290,7 +355,7 @@ namespace ArcheryScoringApp
             gridDetails.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(10) });//Acts as a spacer
             gridDetails.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
 
-
+            //Bowtype and distance set to ArchMain class variables.
             gridDetails.Children.Add(new Label { Text = "Name: Caitlin Thomas-Riley", TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 0, 0);
             gridDetails.Children.Add(new Label { Text = "Bow Type: " + ArchMain.bowType, TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 2, 0);
             gridDetails.Children.Add(new Label { Text = "Division: JWR", TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 0, 1);
@@ -302,7 +367,13 @@ namespace ArcheryScoringApp
             return gridDetails;
         }
 
-        static SfDataGrid CreateDataGridPrev(List<Data.End> ends)
+        /// <summary>
+        /// Creates dataGrid for previous pop-up.
+        /// Seperate datagrid due to issues with having the same dataGrid displaying twice.
+        /// </summary>
+        /// <param name="ends"></param>
+        /// <returns></returns>
+        private static SfDataGrid CreateDataGridPrev(List<Data.End> ends)
         {
             SfDataGrid dataGrid = new SfDataGrid();
             Model.Comp720ViewModel viewModel = new Model.Comp720ViewModel(ends);
@@ -314,7 +385,7 @@ namespace ArcheryScoringApp
             dataGrid.EditorSelectionBehavior = EditorSelectionBehavior.SelectAll;
             dataGrid.NotificationSubscriptionMode = NotificationSubscriptionMode.PropertyChange;
 
-            dataGrid.QueryCellStyle += DataGrid_QueryCellStyle;
+            dataGrid.QueryCellStyle += DataGrid_QueryCellStyle;//method call for style.
 
             //so end number column cannot be edited
             GridTextColumn endNo = new GridTextColumn();
@@ -334,8 +405,6 @@ namespace ArcheryScoringApp
             arrow3.MappingName = "Arrow3";
             arrow3.HeaderText = "Arrow 3";
 
-
-
             GridTextColumn threeTotal = new GridTextColumn();
             threeTotal.MappingName = "ThreeTotal";
             threeTotal.HeaderText = "3s";
@@ -344,12 +413,12 @@ namespace ArcheryScoringApp
             endTotal.MappingName = "EndTotal";
             endTotal.HeaderText = "End Total";
 
-
             //for running total column
             GridTextColumn runningTotal = new GridTextColumn();
             runningTotal.MappingName = "RunningTotal";
             runningTotal.HeaderText = "Running Total";
 
+            //sets datagrid.
             dataGrid.Columns.Add(endNo);
             dataGrid.Columns.Add(arrow1);
             dataGrid.Columns.Add(arrow2);
@@ -362,7 +431,9 @@ namespace ArcheryScoringApp
         }
 
 
-        //need an OnAppearing for Scoring sheet to be set up in database and ID returned.
+        /// <summary>
+        /// For Scoring sheet and Details to be set up in database and ID's returned.
+        /// </summary>
         protected override void OnAppearing()
         {
             DateTime tdy = DateTime.Today;
@@ -370,14 +441,13 @@ namespace ArcheryScoringApp
             string type = "720Competition";
             if (ID == -1) //set to -1 in App constructor so that this does not refire on a back or refresh
             {
-                Model.calcRTComp.curRT = 0; //resets running total
+                Model.CalcRT.curRT = 0; //resets running total
 
                 Model.DetailsModel details = new Model.DetailsModel();
                 dtlID = details.SetDetails(date);
 
 
                 Model.ScoringSheetModel scoringSheet = new Model.ScoringSheetModel();
-                // ID = App.Database.InsertScoringSheet(dtlID, type); // sets ID to the scoring sheet ID
                 ID = scoringSheet.SetScoringSheet(dtlID, type);// sets ID to the scoring sheet ID
             }
         }

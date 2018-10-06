@@ -4,3 +4,9 @@
   <root-path name = "root" path ="." />
   <cache-path name="cache_path" path="." />
 </paths>
+<!--The paths code is modified from NuGet documentation code 
+    from the NuGet Plugin.Messaging documentation.
+    cjlotz, j. (n/d). Xamarin.Plugins/Messaging. Retrieved September 17, 2018, from GitHub cjlotz: https://github.com/cjlotz/Xamarin.Plugins/blob/master/Messaging/Details.md 
+    the cache path code is from CommonsWare. (2017, May 25). IllegalArgumentException: Failed to find configured root that contains filePath. Retrieved September 21, 2018, from stackoverflow: https://stackoverflow.com/questions/44184653/illegalargumentexception-failed-to-find-configured-root-that-contains-filepath
+    the root path code is from zynnthen. (2018, June 12). Android: FileProvider Issue: Failed to find configured root that contains ... #218. Retrieved September 21, 2018, from GitHub react-native-community/react-native-share: https://github.com/react-native-community/react-native-share/issues/218 
+    -->

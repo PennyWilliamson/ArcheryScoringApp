@@ -10,3 +10,6 @@
 		</provider>
 	</application>
 </manifest>
+<!--The provider tag is for file provider and e-mail. The code is modified from NuGet documentation code 
+    from the NuGet Plugin.Messaging documentation.
+    cjlotz, j. (n/d). Xamarin.Plugins/Messaging. Retrieved September 17, 2018, from GitHub cjlotz: https://github.com/cjlotz/Xamarin.Plugins/blob/master/Messaging/Details.md -->

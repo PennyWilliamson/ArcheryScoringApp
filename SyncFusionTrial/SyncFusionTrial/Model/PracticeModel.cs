@@ -9,17 +9,22 @@ using System.Text;
 
 namespace ArcheryScoringApp.Model
 {
+    /// <summary>
+    /// Class for handling the practice model object
+    /// used by the dataGrid.
+    /// Uses INotifyProperyChanged.
+    /// </summary>
     class PracticeModel : INotifyPropertyChanged
     {
         private string endNum; //needed for datamodel so end will display (end: 1 etc)
-        private string arrow1;
-        private string arrow2;
-        private string arrow3;
-        private string arrow4;
-        private string arrow5;
-        private string arrow6;
-        private int endTotal;
-        private int runningTotal;
+        private string arrow1;//score for first arrow in end.
+        private string arrow2;//score for second arrow in end.
+        private string arrow3;//score for third arrow in end.
+        private string arrow4;//score for fourth arrow in end.
+        private string arrow5;//score for fifth arrow in end.
+        private string arrow6;//score for sixth arrow in end.
+        private int endTotal;//Total of all arrows shot in an end.
+        private int runningTotal;//displayed on the dataGrid. Part of Scoring sheet in database.
         private string weather;//for previous sheet
         private string notes;//for previous sheet
 
@@ -27,18 +32,17 @@ namespace ArcheryScoringApp.Model
         static internal int rT; //for holding new running total value
         private string eR; //end reference
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;//needed for INotifyPropertyChanged.
 
+        /// <summary>
+        /// Get, set.
+        /// </summary>
         public string ER
         {
             get { return eR; }
-            set
-            {
-                eR = EndRefPrac.SetRef();
-                var a = eR;
-            }
+            set { eR = value; }
         }
-
+        /*
         public string GeteR()
         {
             return eR;
@@ -47,8 +51,12 @@ namespace ArcheryScoringApp.Model
         public void SeteR(string anEr)
         {
             eR = anEr;
-        }
+        }*/
 
+
+        /// <summary>
+        /// Get, set
+        /// </summary>
         public string EndNum
         {
             get { return endNum; }
@@ -56,6 +64,11 @@ namespace ArcheryScoringApp.Model
             { this.endNum = value; }
         }
 
+        /// <summary>
+        /// Get, set.
+        /// Calls calc, and hold (dataset) methods.
+        /// Uses OnPropertyChanged.
+        /// </summary>
         public string Arrow1
         {
             get { return arrow1; }
@@ -70,6 +83,11 @@ namespace ArcheryScoringApp.Model
             }
         }
 
+        /// <summary>
+        /// Get, set.
+        /// Calls calc, and hold (dataset) methods.
+        /// Uses OnPropertyChanged.
+        /// </summary>
         public string Arrow2
         {
             get { return arrow2; }
@@ -84,6 +102,11 @@ namespace ArcheryScoringApp.Model
             }
         }
 
+        /// <summary>
+        /// Get, set.
+        /// Calls calc, and hold (dataset) methods.
+        /// Uses OnPropertyChanged.
+        /// </summary>
         public string Arrow3
         {
             get { return this.arrow3; }
@@ -98,6 +121,11 @@ namespace ArcheryScoringApp.Model
             }
         }
 
+        /// <summary>
+        /// Get, set.
+        /// Calls calc, and hold (dataset) methods.
+        /// Uses OnPropertyChanged.
+        /// </summary>
         public string Arrow4
         {
             get { return arrow4; }
@@ -112,6 +140,11 @@ namespace ArcheryScoringApp.Model
             }
         }
 
+        /// <summary>
+        /// Get, set.
+        /// Calls calc, and hold (dataset) methods.
+        /// Uses OnPropertyChanged.
+        /// </summary>
         public string Arrow5
         {
             get { return arrow5; }
@@ -126,6 +159,11 @@ namespace ArcheryScoringApp.Model
             }
         }
 
+        /// <summary>
+        /// Get, set.
+        /// Calls calc, and hold (dataset) methods.
+        /// Uses OnPropertyChanged.
+        /// </summary>
         public string Arrow6
         {
             get { return arrow6; }
@@ -137,21 +175,24 @@ namespace ArcheryScoringApp.Model
                 endTotal = eT;
                 ScoresToHold();
                 OnPropertyChanged("Arrow6");
-                
-            } 
+            }
         }
 
-
+        /// <summary>
+        /// Get, set.
+        /// </summary>
         public int EndTotal
         {
             get { return endTotal; }
             set
             {
                 this.endTotal = eT;
-                OnPropertyChanged("EndTotal");
             }
         }
 
+        /// <summary>
+        /// Get, set.
+        /// </summary>
         public int RunningTotal
         {
             get { return runningTotal; }
@@ -161,26 +202,41 @@ namespace ArcheryScoringApp.Model
             }
         }
 
+        /// <summary>
+        /// Get, set.
+        /// Used for Previous scoring sheets.
+        /// </summary>
         public string Weather
         {
             get { return weather; }
             set { weather = value; }
         }
 
+        /// <summary>
+        /// Get, set.
+        /// Used for Previous scoring sheets.
+        /// </summary>
         public string Notes
         {
             get { return notes; }
             set { notes = value; }
         }
 
-        public int Calc(string score, string r)
+        /// <summary>
+        /// Method to handle score calculations.
+        /// Calls the invalid score pop-up.
+        /// </summary>
+        /// <param name="score"></param>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        private int Calc(string score, string r)
         {
             int current = 0;//current end total
             int curScr = 0;// new score entered
             int prvScr = 0;// previous score
             if (score == "X" || score == "x")
             {
-                curScr = 10;
+                curScr = 10;//An X is scored as a 10.
             }
             else
             {
@@ -192,7 +248,7 @@ namespace ArcheryScoringApp.Model
                 {
                     if (valid == false)
                     {
-                        if (score != "M")
+                        if (score != "M")//M and m are valid scores, scored as a 0.
                         {
                             if (score != "m")
                             {
@@ -203,7 +259,7 @@ namespace ArcheryScoringApp.Model
                     }
                     else
                     {
-                        if (curScr > 10 || curScr < 0)
+                        if (curScr > 10 || curScr < 0)//catches scores over 10 and negative scores.
                         {
                             curScr = 0;
                             score = "0";
@@ -221,18 +277,30 @@ namespace ArcheryScoringApp.Model
             else
             {
                 int.TryParse(r, out prvScr);
-                if(prvScr > 10 || prvScr < 0)
+                if (prvScr > 10 || prvScr < 0)
                 {
                     prvScr = 0;
                 }
             }
 
             current = this.endTotal + curScr - prvScr; // adds new score and subtracts old score for accuracy
-            runningTotal = calcRT.runningTotal(curScr, prvScr);
+            runningTotal = CalcRT.runningTotal(curScr, prvScr);
             return current;
         }
 
-        public PracticeModel(string endNum, string arrow1, string arrow2, string arrow3, string arrow4, string arrow5, string arrow6, int endTotal, int runningTotal) 
+        /// <summary>
+        /// Constructor for practice model object.
+        /// </summary>
+        /// <param name="endNum"></param>
+        /// <param name="arrow1"></param>
+        /// <param name="arrow2"></param>
+        /// <param name="arrow3"></param>
+        /// <param name="arrow4"></param>
+        /// <param name="arrow5"></param>
+        /// <param name="arrow6"></param>
+        /// <param name="endTotal"></param>
+        /// <param name="runningTotal"></param>
+        public PracticeModel(string endNum, string arrow1, string arrow2, string arrow3, string arrow4, string arrow5, string arrow6, int endTotal, int runningTotal)
         {
             this.EndNum = endNum;
             this.Arrow1 = arrow1;
@@ -243,20 +311,26 @@ namespace ArcheryScoringApp.Model
             this.Arrow6 = arrow6;
             this.EndTotal = endTotal;
             this.runningTotal = runningTotal;
-            eR = EndRefPrac.SetRef();
+            eR = EndRef.SetRefPrac("Prac");//endRef set as part of constructor. Means each end object has a seperate, unique reference.
         }
 
+        /// <summary>
+        /// calls the HoldEnds method in static helper class,
+        /// PracEndsHold. Passes current end to method.
+        /// </summary>
         private void ScoresToHold()
         {
             if (UIPractice.PracID != -1)
             {
-                int a = UIPractice.PracID;
-                int aa = a;
                 PracEndsHold.HoldEnds(eR, endTotal, arrow1, arrow2, arrow3, arrow4, arrow5, arrow6);
             }
         }
 
-
+        /// <summary>
+        /// Gets the previous weather conditions for end.
+        /// Used by PracticeViewModel for previous ends.
+        /// </summary>
+        /// <param name="endRef"></param>
         public void PrevWeather(string endRef)
         {
             string temp = "0";
@@ -265,7 +339,7 @@ namespace ArcheryScoringApp.Model
             string humid = "0";
             string other = "";
             List<Data.WeatherConditions> cond = App.Database.GetPreviousWeather(endRef);
-            foreach(Data.WeatherConditions w in cond)
+            foreach (Data.WeatherConditions w in cond)
             {
                 temp = w.Temp;
                 speed = w.WindSpeed;
@@ -273,54 +347,62 @@ namespace ArcheryScoringApp.Model
                 humid = w.Humidity;
                 other = w.Other;
             }
-            string prevW = temp + "oC, "+ speed + "km/h, "+ dir + ", "+ humid + "%, " + other;
+            string prevW = temp + "oC, " + speed + "km/h, " + dir + ", " + humid + "%, " + other;
             weather = prevW;
-        } 
+        }
 
+        /// <summary>
+        /// Gets the previous weather conditions for end.
+        /// Used by PracticeViewModel for previous ends.
+        /// </summary>
+        /// <param name="endRef"></param>
         public void PrevNotes(string endRef)
         {
             string endNote = "";
             List<Data.Notes> note = App.Database.GetPreviousNote(endRef);
-            foreach(Data.Notes n in note)
+            foreach (Data.Notes n in note)
             {
                 endNote = n.EndNotes;
             }
             notes = endNote;
         }
-        
 
-       protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        /// <summary>
+        /// OnPropertyChange method.
+        /// </summary>
+        /// <param name="propertyName"></param>
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
-        } 
-
-    }
-
-
-
-    static class calcRT
-    {
-        internal static int curRT { get; set; } //static as this is independant of end objects.
-
-        static public int runningTotal(int eT, int pvrScr)
-        {
-            curRT = curRT + eT - pvrScr; //adds new score and subtracts old score for accuracy.
-            return curRT;
         }
+
     }
 
-    static class EndRefPrac
+
+
+    /*  static class CalcRT
+      {
+          internal static int curRT { get; set; } //static as this is independant of end objects.
+
+          static public int runningTotal(int eT, int pvrScr)
+          {
+              curRT = curRT + eT - pvrScr; //adds new score and subtracts old score for accuracy.
+              return curRT;
+          }
+      }
+      */
+   /* static class EndRefPrac
     {
         static Random aNum = new Random();
         static int endCount = 1;
         static string eR { get; set; }
 
         static public string SetRef()
-        { 
+        {
             int ranNum = aNum.Next(1, 1000000);
 
             eR = "Prac" + ranNum + endCount.ToString();//Prac identifies it as practice, ranNum helps make it unique.
@@ -328,9 +410,9 @@ namespace ArcheryScoringApp.Model
 
             return eR;
         }
-    }
+    }*/
 
-    static class PracEndsHold
+   /* static class PracEndsHold
     {
         static Dictionary<string, EndModel> hold = new Dictionary<string, EndModel>();
 
@@ -346,10 +428,10 @@ namespace ArcheryScoringApp.Model
             }
             else
             {
-                
-                    hold.Remove(anEndRef);
-                    hold.Add(anEndRef, end);
-                
+
+                hold.Remove(anEndRef);
+                hold.Add(anEndRef, end);
+
             }
 
         }
@@ -359,7 +441,7 @@ namespace ArcheryScoringApp.Model
             foreach (var end in hold.Values)
             {
                 App.Database.InsertEnds(end);
-                App.Database.UpdateFinalScore(UIPractice.PracID, calcRT.curRT, UIPractice.dtlIDPrac, "Practice");//adds final total to scoring sheet
+                App.Database.UpdateFinalScore(UIPractice.PracID, CalcRT.curRT, UIPractice.dtlIDPrac, "Practice");//adds final total to scoring sheet
             }
         }
 
@@ -367,5 +449,5 @@ namespace ArcheryScoringApp.Model
         {
             hold = new Dictionary<string, EndModel>();
         }
-    }
+    }*/
 }

@@ -53,6 +53,7 @@
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <AndroidEnableMultiDex>true</AndroidEnableMultiDex>
+    <DocumentationFile>bin\Release\ArcheryScoringApp.Android.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />

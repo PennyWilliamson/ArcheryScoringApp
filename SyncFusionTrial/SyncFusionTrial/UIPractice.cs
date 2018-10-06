@@ -7,32 +7,44 @@ using Xamarin.Forms;
 
 namespace ArcheryScoringApp
 {
+    /// <summary>
+    /// The content page for the Practice scoring page of the application.
+    /// Uses SyncFusion commponets, and code for components are modelled 
+    /// on SynFusion documentation and Miroscoft Xamarin.Forms documentation.
+    /// Syncfusion. (2001 - 2018). Xamarin.Forms. Retrieved August 2018, from Syncfusion Documentation: https://help.syncfusion.com/xamarin/introduction/overview#how-to-best-read-this-user-guide
+    /// David Britch, C. D. (2017, July 12). Xamarin.Forms User Interface Views. Retrieved August 2018, from Microsoft: https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/index
+    /// </summary>
     public class UIPractice : ContentPage
     {
-        static internal int PracID { get; set; } //internal so it can be accessed from other classes
-        static internal int dtlIDPrac { get; set; }
-        static internal int HoldPracID { get; set; }//holds PracID while previous fired. 
-        string marking;//holds new sight marking for edit sight marking
-        string search; //holds search text from textchanged
-        static Model.PracticeViewModel viewModel;
-        static SfDataGrid dataGrid;
-        SfPopupLayout popupLayout;
-        SfPopupLayout prevPop;
-        SfPopupLayout notValid;
-        SfPopupLayout selectEndRow;
-        static string date;
+        internal static int PracID { get; set; } ///internal so it can be accessed from other classes
+        internal static int dtlIDPrac { get; set; } ///internal so it can be accessed from other classes
+        internal static int HoldPracID { get; set; }///holds PracID while previous fired. 
+        private string marking;//holds new sight marking for edit sight marking
+        private string search; //holds search text from textchanged
+        //components for display.
+        private static Model.PracticeViewModel viewModel;
+        private static SfDataGrid dataGrid;
+        private SfPopupLayout popupDetails;
+        private SfPopupLayout prevPop;
+        private SfPopupLayout notValid;
+        private SfPopupLayout selectEndRow;
+        private static string date;//holds todays date.
 
-
+        /// <summary>
+        /// Constructor.
+        /// Sets components and layout for Practice page.
+        /// </summary>
         public UIPractice()
         {
-
+            //creates datgrid for scoring
             dataGrid = CreateDataGrid();
 
-            viewModel = new Model.PracticeViewModel();
+            viewModel = new Model.PracticeViewModel();//viewModel for method calls
 
-            notValid = new SfPopupLayout();
+            notValid = new SfPopupLayout();//sets pop-ups used in methods
             selectEndRow = new SfPopupLayout();
 
+            //layout for vertical
             StackLayout layout = new StackLayout()
             {
                 VerticalOptions = LayoutOptions.Start,
@@ -40,7 +52,7 @@ namespace ArcheryScoringApp
                 Padding = new Thickness(50)
             };
 
-
+            //allows components to be diplayed in a grid
             var grid = new Grid { RowSpacing = 50 };
 
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(35) });
@@ -52,42 +64,38 @@ namespace ArcheryScoringApp
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) });
 
-            prevPop = new SfPopupLayout();
+            prevPop = new SfPopupLayout();//pop-up for use in method.
 
             Button previousButton = createButton("Search"); //displays previous practice score sheet, searched on score
-            previousButton.Clicked += PrevButtonClicked;
+            previousButton.Clicked += PrevButtonClicked;//method call
 
             Button mainButton = createButton("Main"); //back to main screen
-            mainButton.Clicked += MainButtonClicked;
+            mainButton.Clicked += MainButtonClicked;//method call
 
             Button ntswthrButton = createButton("Notes Weather"); //notes and weather button
-            ntswthrButton.Clicked += NotesAndWeatherClicked;
+            ntswthrButton.Clicked += NotesAndWeatherClicked;//method call
 
             Button editSightButton = createButton("Edit Sight"); //for editing sight markings
-            editSightButton.Clicked += EditSightClicked;
+            editSightButton.Clicked += EditSightClicked;//method call
 
             Button saveButton = createButton("Save"); //saves current sheet and associated notes and weather entries
-            saveButton.Clicked += SaveClicked;
+            saveButton.Clicked += SaveClicked;//method call
 
             Button detailsButton = createButton("Details");
-
-
+            detailsButton.Clicked += DetailsButtonClicked;//method call
 
             Label searchLabel = new Label { Text = "Search by score", TextColor = Color.FromHex("#010101"), FontSize = 10 };
             var searchScore = new Entry { Text = " ", FontSize = 10 };
-            searchScore.TextChanged += SearchChanged;
+            searchScore.TextChanged += SearchChanged;//method call
 
             var newSightMarking = new Entry { Text = " ", FontSize = 10 };
-            newSightMarking.TextChanged += SightChanged;
+            newSightMarking.TextChanged += SightChanged;//method call
 
+            popupDetails = new SfPopupLayout();//pop-up object for method.
 
-            popupLayout = new SfPopupLayout();
-
-            detailsButton.Clicked += DetailsButtonClicked;
-
-
+            //Sets grid for display
             grid.Children.Add(dataGrid, 0, 3);
-            Grid.SetColumnSpan(dataGrid, 3);
+            Grid.SetColumnSpan(dataGrid, 3);//allows grid to be 3 columns wide.
             grid.Children.Add(searchLabel, 0, 0);
             grid.Children.Add(searchScore, 1, 0);
             grid.Children.Add(previousButton, 2, 0);
@@ -97,14 +105,18 @@ namespace ArcheryScoringApp
             grid.Children.Add(editSightButton, 1, 1);
             grid.Children.Add(detailsButton, 2, 1);
             grid.Children.Add(saveButton, 2, 2);
-            layout.Children.Add(grid);
 
-            Content = layout;
+            layout.Children.Add(grid);//adds grid to layout
 
-
+            Content = layout;//sets content to layout
         }
 
-        static public void NotValid(String score)
+        /// <summary>
+        /// Displays pop-up for invalid score.
+        /// Called from PracticeModel.
+        /// </summary>
+        /// <param name="score"></param>
+        public static void NotValid(String score)
         {
             SfPopupLayout notValid = new SfPopupLayout();
             Label content = new Label { Text = "Entered score is not a valid score and will be recorded as a '0'. Please change your score.", TextColor = Color.FromHex("#010101"), BackgroundColor = Color.White, FontSize = 30 };
@@ -121,6 +133,11 @@ namespace ArcheryScoringApp
             notValid.Show();
         }
 
+        /// <summary>
+        /// Handles navigation to root page.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void MainButtonClicked(object sender, EventArgs e)
         {
             PracID = -1;//resets it
@@ -128,26 +145,34 @@ namespace ArcheryScoringApp
             await Navigation.PopToRootAsync();
         }
 
+        /// <summary>
+        /// Handles navigation to notes and weather page.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void NotesAndWeatherClicked(object sender, EventArgs e)
         {
             string endRef = null;
-            Model.PracticeModel curEnd = (Model.PracticeModel)dataGrid.SelectedItem;
-            if (curEnd != null)
+            Model.PracticeModel curEnd = (Model.PracticeModel)dataGrid.SelectedItem; //uses selected item to set curEnd
+            if (curEnd != null)//checks curEnd has been set
             {
-                endRef = curEnd.ER;
+                endRef = curEnd.ER;//sets endRef to that is curEnd object
             }
 
-            if (endRef != null)
+            if (endRef != null) //navigates to new page.
             {
                 await Navigation.PushAsync(new UINotesAndWeather(endRef) { Title = "Notes and Weather" });
             }
             else
             {
-                SelectEndRow();
+                SelectEndRow();//error message
             }
-
         }
 
+        /// <summary>
+        /// Pop-up for when a row is not selected and notes weather button pushed.
+        /// Pop-up modal.
+        /// </summary>
         private void SelectEndRow()
         {
             Label content = new Label { Text = "Please Select a Row and try again.", TextColor = Color.Black, BackgroundColor = Color.White, FontSize = 30 };
@@ -166,44 +191,71 @@ namespace ArcheryScoringApp
             selectEndRow.Show();
         }
 
+        /// <summary>
+        /// Gives details pop-up when details button pressed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DetailsButtonClicked(object sender, EventArgs e)
         {
-            popupLayout.PopupView.ContentTemplate = new DataTemplate(() =>
+            popupDetails.PopupView.ContentTemplate = new DataTemplate(() =>
             {
-                popupLayout.Padding = 10;
-                popupLayout.PopupView.HeaderTitle = "Details";
-                popupLayout.PopupView.BackgroundColor = Color.White;
-                popupLayout.HorizontalOptions = LayoutOptions.FillAndExpand;
+                popupDetails.Padding = 10;
+                popupDetails.PopupView.HeaderTitle = "Details";
+                popupDetails.PopupView.BackgroundColor = Color.White;
+                popupDetails.HorizontalOptions = LayoutOptions.FillAndExpand;
                 prevPop.PopupView.WidthRequest = 360;
-                popupLayout.PopupView.ShowFooter = false;
-                return CreateGrid();
+                popupDetails.PopupView.ShowFooter = false;
+                return CreateDetailsGrid();
             });
-            popupLayout.StaysOpen = true;
-            popupLayout.PopupView.ShowCloseButton = true;
-            popupLayout.IsOpen = true;
-            popupLayout.Show();
+            popupDetails.StaysOpen = true;
+            popupDetails.PopupView.ShowCloseButton = true;
+            popupDetails.IsOpen = true;
+            popupDetails.Show();
         }
 
-        public void SightChanged(object sender, TextChangedEventArgs e)
+        /// <summary>
+        /// Handles text changing in sight marking entry box.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SightChanged(object sender, TextChangedEventArgs e)
         {
             marking = e.NewTextValue;
         }
 
+        /// <summary>
+        /// Method for when Editsight clicked.
+        /// Calls database.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EditSightClicked(object sender, EventArgs e)
         {
-            double nsm;
+            double nsm;//for holding parsed value
             double.TryParse(marking, out nsm);
-            App.Database.EditSight(nsm);
+            App.Database.EditSight(nsm);//database call
         }
 
-        public void SearchChanged(object sender, TextChangedEventArgs e)
+        /// <summary>
+        /// handles texted changed in search entry box.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SearchChanged(object sender, TextChangedEventArgs e)
         {
             search = e.NewTextValue;
         }
 
+        /// <summary>
+        /// Handle pop-up of previous scoring sheet.
+        /// Pop-up modal.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PrevButtonClicked(object sender, EventArgs e)
         {
-            HoldPracID = PracID;
+            HoldPracID = PracID;//maintains a copy of sheet ID
             PracID = -1;//stops code firing in PracticeModel.
             List<Data.End> ends = new List<Data.End>();
             int srch;//int variable for parsing string to int
@@ -227,9 +279,13 @@ namespace ArcheryScoringApp
             prevPop.IsOpen = true;
             prevPop.Show();
             PracID = HoldPracID;
-
         }
 
+        /// <summary>
+        /// Mthod calls saving ends, notes and weather conditions when button pressed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SaveClicked(object sender, EventArgs e)
         {
 
@@ -238,7 +294,12 @@ namespace ArcheryScoringApp
             Model.WeatherHold.WeatherSaved();
         }
 
-        static Button createButton(string lbl)
+        /// <summary>
+        /// creates new buttons with text of lbl param.
+        /// </summary>
+        /// <param name="lbl"></param>
+        /// <returns></returns>
+        private static Button createButton(string lbl)
         {
             Button button = new Button
             {
@@ -251,7 +312,11 @@ namespace ArcheryScoringApp
             return button;
         }
 
-        static SfDataGrid CreateDataGrid()
+        /// <summary>
+        /// Creates dataGrid for scoring sheet.
+        /// </summary>
+        /// <returns></returns>
+        private static SfDataGrid CreateDataGrid()
         {
             SfDataGrid dataGrid = new SfDataGrid();
 
@@ -262,7 +327,7 @@ namespace ArcheryScoringApp
             dataGrid.AllowEditing = true;
             dataGrid.EditTapAction = TapAction.OnTap; //Enter edit mode in single tap instead of default double tap.
             dataGrid.EditorSelectionBehavior = EditorSelectionBehavior.SelectAll;
-            dataGrid.NotificationSubscriptionMode = NotificationSubscriptionMode.PropertyChange;
+            dataGrid.NotificationSubscriptionMode = NotificationSubscriptionMode.PropertyChange;//for updates. Makes no difference.
             dataGrid.SelectionMode = SelectionMode.Single;
 
 
@@ -320,8 +385,13 @@ namespace ArcheryScoringApp
         }
 
 
-
-        static SfDataGrid CreateDataGridPrev(List<Data.End> ends)
+        /// <summary>
+        /// Creates dataGrid for displaying previous sheet.
+        /// Seperate dataGrid as it contains extra columns.
+        /// </summary>
+        /// <param name="ends"></param>
+        /// <returns></returns>
+        private static SfDataGrid CreateDataGridPrev(List<Data.End> ends)
         {
             SfDataGrid dataGrid = new SfDataGrid();
 
@@ -386,6 +456,7 @@ namespace ArcheryScoringApp
             notes.MappingName = "Notes";
             notes.HeaderText = "End Notes";
 
+            //sets datagrid.
             dataGrid.Columns.Add(endNo);
             dataGrid.Columns.Add(arrow1);
             dataGrid.Columns.Add(arrow2);
@@ -401,8 +472,11 @@ namespace ArcheryScoringApp
             return dataGrid;
         }
 
-
-        static Grid CreateGrid()
+        /// <summary>
+        /// Creates grid for details pop-up.
+        /// </summary>
+        /// <returns></returns>
+        private static Grid CreateDetailsGrid()
         {
             Grid gridDetails = new Grid() { RowSpacing = 0, ColumnSpacing = 0, BackgroundColor = Color.White };
 
@@ -415,7 +489,8 @@ namespace ArcheryScoringApp
             gridDetails.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
 
 
-
+            //Date class variable.
+            //BowType and Dist ArchMain class variables.
             gridDetails.Children.Add(new Label { Text = "Name: Caitlin Thomas-Riley", TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 0, 0);
             gridDetails.Children.Add(new Label { Text = "Bow Type: " + ArchMain.bowType, TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 2, 0);
             gridDetails.Children.Add(new Label { Text = "Division: JWR", TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 0, 1);
@@ -424,17 +499,13 @@ namespace ArcheryScoringApp
             gridDetails.Children.Add(new Label { Text = "Archery NZ No.: 3044", TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 2, 2);
             gridDetails.Children.Add(new Label { Text = "Distance: " + ArchMain.dist + "m", TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 0, 3);
 
-
-
-
             return gridDetails;
         }
 
 
-
-
-
-        //need an OnAppearing for Scoring sheet to be set up in database and ID returned.
+        /// <summary>
+        /// For Scoring sheet and Details to be set up in database and ID's returned.
+        /// </summary>
         protected override void OnAppearing()
         {
             DateTime tdy = DateTime.Today;
@@ -445,7 +516,6 @@ namespace ArcheryScoringApp
                 Model.PracticeModel.rT = 0; //resets running total
                 Model.DetailsModel details = new Model.DetailsModel();
                 dtlIDPrac = details.SetDetails(date);
-
 
                 Model.ScoringSheetModel scoringSheet = new Model.ScoringSheetModel();
 
