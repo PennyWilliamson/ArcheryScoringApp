@@ -1,0 +1,1570 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SyncFusionTrial.UWP</name>
+    </assembly>
+    <members>
+        <member name="T:ArcheryScoringApp.UWP.App">
+            <summary>
+            Provides application-specific behavior to supplement the default Application class.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.UWP.App.#ctor">
+            <summary>
+            Initializes the singleton application object.  This is the first line of authored code
+            executed, and as such is the logical equivalent of main() or WinMain().
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.UWP.App.OnLaunched(Windows.ApplicationModel.Activation.LaunchActivatedEventArgs)">
+            <summary>
+            Invoked when the application is launched normally by the end user.  Other entry points
+            will be used such as when the application is launched to open a specific file.
+            </summary>
+            <param name="e">Details about the launch request and process.</param>
+        </member>
+        <member name="M:ArcheryScoringApp.UWP.App.OnNavigationFailed(System.Object,Windows.UI.Xaml.Navigation.NavigationFailedEventArgs)">
+            <summary>
+            Invoked when Navigation to a certain page fails
+            </summary>
+            <param name="sender">The Frame which failed navigation</param>
+            <param name="e">Details about the navigation failure</param>
+        </member>
+        <member name="M:ArcheryScoringApp.UWP.App.OnSuspending(System.Object,Windows.ApplicationModel.SuspendingEventArgs)">
+            <summary>
+            Invoked when application execution is being suspended.  Application state is saved
+            without knowing whether the application will be terminated or resumed with the contents
+            of memory still intact.
+            </summary>
+            <param name="sender">The source of the suspend request.</param>
+            <param name="e">Details about the suspend request.</param>
+        </member>
+        <member name="M:ArcheryScoringApp.UWP.App.InitializeComponent">
+            <summary>
+            InitializeComponent()
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.UWP.App.GetXamlType(System.Type)">
+            <summary>
+            GetXamlType(Type)
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.UWP.App.GetXamlType(System.String)">
+            <summary>
+            GetXamlType(String)
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.UWP.App.GetXmlnsDefinitions">
+            <summary>
+            GetXmlnsDefinitions()
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.UWP.MainPage.InitializeComponent">
+            <summary>
+            InitializeComponent()
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.UWP.MainPage.Connect(System.Int32,System.Object)">
+            <summary>
+            Connect()
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.UWP.MainPage.GetBindingConnector(System.Int32,System.Object)">
+            <summary>
+            GetBindingConnector(int connectionId, object target)
+            </summary>
+        </member>
+        <member name="T:ArcheryScoringApp.UWP.Program">
+            <summary>
+            Program class
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.App.Database">
+            <summary>
+            Method for getting database path, or triggering creation of
+            database if need be.
+            Code modified from Microsoft documentation 
+            David Britch, C. D. (2018, June 21). Xamarin.Forms Local Databases. Retrieved July 18, 2018, from Microsoft: https://docs.microsoft.com/en-us/xamarin/xamarin-forms/app-fundamentals/databases
+            </summary>
+        </member>
+        <member name="T:ArcheryScoringApp.Data.ASCDatabase">
+            <summary>
+            Class for the database creation and database tools.
+            code modified from NuGet documentation for SQLite.Extensions
+            and NuGet documentation for dependant SQLite-net-PCL NuGet.
+            as well as Microsoft documentation
+            Twincoders. (2018, August 13). SQLite-Net Extensions. Retrieved August 29, 2018, from Bitbucket: https://bitbucket.org/twincoders/sqlite-net-extensions
+            praeclarum. (n/d). GettingStarted. Retrieved August 2018, from GitHub praeclarum/sqlite-net/wiki: https://github.com/praeclarum/sqlite-net/wiki/GettingStarted
+            David Britch, C. D. (2018, June 21). Xamarin.Forms Local Databases. Retrieved August 28, 2018, from Microsoft: https://docs.microsoft.com/en-us/xamarin/xamarin-forms/app-fundamentals/database
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.ASCDatabase.#ctor(System.String)">
+            <summary>
+            Constructor for database class.
+            Takes in database file path as param.
+            </summary>
+            <param name="dbFilePath"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.ASCDatabase.InsertScoringSheet(System.Int32,System.String)">
+            <summary>
+            Method for inserting the scoring sheet into database.
+            As it takes in details ID, details need to be inserted first.
+            Returns sheet ID.
+            </summary>
+            <param name="dtlsID"></param>
+            <param name="typ"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.ASCDatabase.InsertDetails(System.String)">
+            <summary>
+            Mehtod for inserting details into database.
+            Takes in param of date.
+            Returns details ID.
+            </summary>
+            <param name="date"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.ASCDatabase.InsertEnds(ArcheryScoringApp.Model.EndModel)">
+            <summary>
+            Method for inserting end into database.
+            Takes in end object as param.
+            </summary>
+            <param name="anEnd"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.ASCDatabase.UpdateFinalScore(System.Int32,System.Int32,System.Int32,System.String)">
+            <summary>
+            Method for updating final total for end.
+            Takes in all fields as update updates all feild in tuple.
+            </summary>
+            <param name="id"></param>
+            <param name="fnlTtl"></param>
+            <param name="dtlsID"></param>
+            <param name="typ"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.ASCDatabase.AddBow(System.String)">
+            <summary>
+            Method for adding bow to database.
+            Uses a try catch finally due to lack of InsertOrIgnore in NuGet used.
+            </summary>
+            <param name="bow"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.ASCDatabase.EditSight(System.Double)">
+            <summary>
+            Adds sight marking for bow seected on main page.
+            </summary>
+            <param name="markings"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.ASCDatabase.GetSightMarkings(System.String)">
+            <summary>
+            Queries database for sight markings
+            for current selected bow.
+            </summary>
+            <param name="bow"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.ASCDatabase.getPB">
+            <summary>
+            Queries database for personal best score for combination of competition type, bow and distance.
+            Returns list of scoring sheet type containing ID and Final total.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.ASCDatabase.GetLastScore">
+            <summary>
+            Queries database for last score score for combination of competition type, bow and distance.
+            Returns list of scoring sheet type containing ID and Final total.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.ASCDatabase.GetLastBest(System.Int32)">
+            <summary>
+            Queries database for personal best score for combination of competition type, bow and distance.
+            Returns list of scoring sheet type containing ID and Final total.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.ASCDatabase.AddNotes(System.String,System.String)">
+            <summary>
+            Method for adding notes and associated end reference to database.
+            </summary>
+            <param name="endRef"></param>
+            <param name="note"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.ASCDatabase.AddWeather(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Method for adding weather conditions and associated endRef to the database.
+            </summary>
+            <param name="endRef"></param>
+            <param name="temp"></param>
+            <param name="speed"></param>
+            <param name="dir"></param>
+            <param name="hum"></param>
+            <param name="other"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.ASCDatabase.GetPreviousEnds(System.Int32,System.String)">
+            <summary>
+            Method for returning previous ends associated with a scoring sheet, identified by final total.
+            </summary>
+            <param name="FinalScore"></param>
+            <param name="Type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.ASCDatabase.GetPreviousDetails(System.Int32)">
+            <summary>
+            Method for returning details associated with a scoring sheet.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.ASCDatabase.GetPreviousWeather(System.String)">
+            <summary>
+            Method for returning weather conditions associated with an end.
+            </summary>
+            <param name="endRef"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.ASCDatabase.GetPreviousNote(System.String)">
+            <summary>
+            Method for returning notes associated with an end.
+            </summary>
+            <param name="endRef"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.ASCDatabase.Exportbows">
+            <summary>
+            Method for backing up bows in database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.ASCDatabase.CompBackup">
+            <summary>
+            Method for backing up competition data in database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.ASCDatabase.PracBackUp">
+            <summary>
+            Method for backing up practice data in database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:ArcheryScoringApp.Data.Bow">
+            <summary>
+            Class for Bow table.
+            Code modified from NuGet documentation.
+            Twincoders. (2018, August 13). SQLite-Net Extensions. Retrieved August 29, 2018, from Bitbucket: https://bitbucket.org/twincoders/sqlite-net-extensions
+            </summary>
+        </member>
+        <member name="T:ArcheryScoringApp.Data.DatabaseBackup">
+            <summary>
+            Class for handling e-mailing of csv backup files.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.DatabaseBackup.EmailBackup">
+            <summary>
+            Method for e-mailing files.
+            Based on the code from the NuGet Plugin.Messaging documentation
+            cjlotz, j. (n/d). Xamarin.Plugins/Messaging. Retrieved September 17, 2018, from GitHub cjlotz: https://github.com/cjlotz/Xamarin.Plugins/blob/master/Messaging/Details.md
+            </summary>
+        </member>
+        <member name="T:ArcheryScoringApp.Data.PracBackup">
+            <summary>
+            Class for use in getting PracBackup query from database
+            and writing output to a csv file.
+            Code for csv query modified from NuGet csvHelper documentation
+            Close, J. (n/d). CSVHelper. Retrieved September 15, 2018, from CSVHelper GitHub: https://joshclose.github.io/CsvHelper/
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.PracBackup.#ctor">
+            <summary>
+            Constructor, parameterless as needed by databse query
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.PracBackup.PracToCSV">
+            <summary>
+            Method that calls databse query, writes the returned output to csv,
+            then writes the csv file to device.
+            </summary>
+        </member>
+        <member name="T:ArcheryScoringApp.Data.CompBackup">
+            <summary>
+            Class for use in getting CompBackup query from database
+            and writing output to a csv file.
+            Does not have any note or weather conditions output.
+            Code for csv query modified from NuGet csvHelper documentation
+            Close, J. (n/d). CSVHelper. Retrieved September 15, 2018, from CSVHelper GitHub: https://joshclose.github.io/CsvHelper/
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.CompBackup.#ctor">
+            <summary>
+            Parameterless constructor, required by for database Query
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.CompBackup.CompToCSV">
+            <summary>
+            Calls database and writes return to a csv file on the device.
+            For line comment detail see PracBackup.
+            </summary>
+        </member>
+        <member name="T:ArcheryScoringApp.Data.BowBackup">
+            <summary>
+            For the Bow backup. Uses the paramertless constructer
+            for database table class Bow for the list type. 
+            Code for writing csv modified from NuGet csvHelper documentation
+            Close, J. (n/d). CSVHelper. Retrieved September 15, 2018, from CSVHelper GitHub: https://joshclose.github.io/CsvHelper/
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Data.BowBackup.BowToCSV">
+            <summary>
+            Calls database query method, and writes return to 
+            a csv file stored on device.
+            For line comment level detail, see PracBackup.
+            </summary>
+        </member>
+        <member name="T:ArcheryScoringApp.Data.Details">
+            <summary>
+            Class for Details table.
+            Code modified from NuGet documentation.
+            Twincoders. (2018, August 13). SQLite-Net Extensions. Retrieved August 29, 2018, from Bitbucket: https://bitbucket.org/twincoders/sqlite-net-extensions
+            </summary>
+        </member>
+        <member name="T:ArcheryScoringApp.Data.End">
+            <summary>
+            Class for End table.
+            Code modified from NuGet documentation.
+            Twincoders. (2018, August 13). SQLite-Net Extensions. Retrieved August 29, 2018, from Bitbucket: https://bitbucket.org/twincoders/sqlite-net-extensions
+            </summary>
+        </member>
+        <member name="T:ArcheryScoringApp.Data.Notes">
+            <summary>
+            Class for Notes table.
+            Code modified from NuGet documentation.
+            Twincoders. (2018, August 13). SQLite-Net Extensions. Retrieved August 29, 2018, from Bitbucket: https://bitbucket.org/twincoders/sqlite-net-extensions
+            </summary>
+        </member>
+        <member name="T:ArcheryScoringApp.Data.ScoringSheet">
+            <summary>
+            Class for Scoring sheet table.
+            Code modified from NuGet documentation.
+            Twincoders. (2018, August 13). SQLite-Net Extensions. Retrieved August 29, 2018, from Bitbucket: https://bitbucket.org/twincoders/sqlite-net-extensions
+            </summary>
+        </member>
+        <member name="T:ArcheryScoringApp.Data.WeatherConditions">
+            <summary>
+            Class for Weather Conditions table.
+            Code modified from NuGet documentation.
+            Twincoders. (2018, August 13). SQLite-Net Extensions. Retrieved August 29, 2018, from Bitbucket: https://bitbucket.org/twincoders/sqlite-net-extensions
+            </summary>
+        </member>
+        <member name="T:ArcheryScoringApp.Model.CalcCompEndTotal">
+            <summary>
+            Static helper class for calculating the end total for competition.
+            Seperate from Competition object as a comptition end is scored
+            in two sets of three.
+            Also used for for holding a competition scoring sheets
+            10s and Xs total for display. Used in case of a count back for a tie.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.CalcCompEndTotal.CalcEnd(System.Int32,System.Int32,System.String)">
+            <summary>
+            Method for calculating end total for competition.
+            </summary>
+            <param name="score"></param>
+            <param name="prvScr"></param>
+            <param name="aER"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.CalcCompEndTotal.GetXs">
+            <summary>
+            Get method. Returns value of xs.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.CalcCompEndTotal.GetTens">
+            <summary>
+            Get method. Returns value of tens. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.CalcCompEndTotal.Tens">
+            <summary>
+            Adds one to the value of tens.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.CalcCompEndTotal.Xs">
+            <summary>
+            Adds one to the value of xs.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.CalcCompEndTotal.RemoveTens">
+            <summary>
+            Subtracts 1 off the value of tens.
+            Used for when scores are edited.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.CalcCompEndTotal.RemoveXs">
+            <summary>
+            Subtracts 1 off the value of xs.
+            Used for when scores are edited.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:ArcheryScoringApp.Model.CalcRT">
+            <summary>
+            Helper class for calculating running total for Pratice and competition.
+            Holds the static variable curRT.
+            Static as it is independant of any object.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.CalcRT.runningTotal(System.Int32,System.Int32)">
+            <summary>
+            Adds new score to running total and removes any previous scores.
+            End total (eT) and previous score (pvrScr) are params.
+            </summary>
+            <param name="eT"></param>
+            <param name="pvrScr"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ArcheryScoringApp.Model.Comp720Model">
+            <summary>
+            Model for the dataGrids to use for
+            the 720 Competition screens.
+            Displayed in sets of 3, so
+            each end consists of two of these objects.
+            EndRef class ensures they both have the same endRef,
+            and CompEnd stiches the two ends together.
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.Comp720Model.ER">
+            <summary>
+            Get, set.
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.Comp720Model.EndNum">
+            <summary>
+            Get, set.
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.Comp720Model.Arrow1">
+            <summary>
+            Get, set.
+            Set also handles adding total method calls for adding the
+            score to totals and stiching together the two sets of three.
+            Set also handles x's and 10's after each 6 rows.
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.Comp720Model.Arrow2">
+            <summary>
+            Get, set.
+            Set also handles adding total method calls for adding the
+            score to totals and stiching together the two sets of three.
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.Comp720Model.Arrow3">
+            <summary>
+            Get, set.
+            Set also handles adding total method calls for adding the
+            score to totals and stiching together the two sets of three.
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.Comp720Model.ThreeTotal">
+            <summary>
+            Get, set.
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.Comp720Model.EndTotal">
+            <summary>
+            Get, set.
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.Comp720Model.RunningTotal">
+            <summary>
+            Get, set.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.Comp720Model.Calc(System.String,System.String)">
+            <summary>
+            Parses the totals and calls the calculation methods.
+            </summary>
+            <param name="score"></param>
+            <param name="r"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.Comp720Model.getTensAndXs(System.String)">
+            <summary>
+            Gets the number of tens and x's for display on dataGrid.
+            </summary>
+            <param name="endNum"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.Comp720Model.#ctor(System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            Constructor for object.
+            </summary>
+            <param name="endNum"></param>
+            <param name="arrow1"></param>
+            <param name="arrow2"></param>
+            <param name="arrow3"></param>
+            <param name="endTotal"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.Comp720Model.SaveCompEnd">
+            <summary>
+            Calls method to stich two sets of three into an end.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.Comp720Model.OnPropertyChanged(System.String)">
+            <summary>
+            OnPropertyChanged method for INotifyPropertyChanged.
+            </summary>
+            <param name="propertyName"></param>
+        </member>
+        <member name="T:ArcheryScoringApp.Model.CompEnd">
+            <summary>
+            Static helper class for combining the two sets of
+            three into one end for Competition scoring.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.CompEnd.CompHoldEnd(System.String,System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            Method for combining two sets of three into an end.
+            </summary>
+            <param name="endNum"></param>
+            <param name="anEndRef"></param>
+            <param name="arrow1"></param>
+            <param name="arrow2"></param>
+            <param name="arrow3"></param>
+            <param name="endTotal"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.CompEnd.SaveEnd">
+            <summary>
+            Calls the database method for adding an end to the database.
+            </summary>
+        </member>
+        <member name="T:ArcheryScoringApp.Model.DetailsModel">
+            <summary>
+            Class for setting details object.
+            This is where you would be handling the logic
+            for getting user details from preferences in a multi-user system.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.DetailsModel.#ctor(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Constructor for object.
+            </summary>
+            <param name="aName"></param>
+            <param name="aBowType"></param>
+            <param name="aDiv"></param>
+            <param name="aClub"></param>
+            <param name="aDate"></param>
+            <param name="aArchNZNo"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.DetailsModel.#ctor">
+            <summary>
+            second parameterless constructor
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.DetailsModel.Name">
+            <summary>
+            get, set
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.DetailsModel.BowType">
+            <summary>
+            get, set
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.DetailsModel.Division">
+            <summary>
+            get, set
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.DetailsModel.Club">
+            <summary>
+            get, set
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.DetailsModel.Date">
+            <summary>
+            get, set
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.DetailsModel.ArchNZNo">
+            <summary>
+            get, set
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.DetailsModel.SetDetails(System.String)">
+            <summary>
+            Get, set
+            </summary>
+            <param name="date"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.DetailsModel.GetPrevDetails(System.Collections.Generic.List{ArcheryScoringApp.Data.End})">
+            <summary>
+            static so it can be called without a constructor being set.
+            Gets previous details from database for display in header
+            of previous scoring sheet pop-ups.
+            </summary>
+            <param name="ends"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ArcheryScoringApp.Model.EndRef">
+            <summary>
+            Helper class for assigning end references (endRef)
+            for practice and competition ends.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.EndRef.SetRefComp(System.String)">
+            <summary>
+            Sets End ref for comp.
+            Handles the fact that an end is two sets of three with an if loop.
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.EndRef.SetRefPrac(System.String)">
+            <summary>
+            Sets end Ref for prac.
+            Seperate method as practice ends are not displayed as two sets of three.
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ArcheryScoringApp.Model.NotesHold">
+            <summary>
+            Static class for holding the dataset
+            for the practice scoring sheet, independant of any onbject.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.NotesHold.ToCollection(ArcheryScoringApp.Model.NotesModel)">
+            <summary>
+            Adds the notes to the dataset with
+            the endRef as the key.
+            Checks to see if the notes all ready exist using 
+            the key. If so, removes, then replaces the notes.
+            </summary>
+            <param name="note"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.NotesHold.NotesExist(System.String)">
+            <summary>
+            Checks to see if dataset contains
+            endRef as a key.
+            </summary>
+            <param name="aRef"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.NotesHold.GetNote(System.String)">
+            <summary>
+            Method for getting a note value
+            associated with a endRef key.
+            </summary>
+            <param name="aRef"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.NotesHold.NotesSaved">
+            <summary>
+            Method for database call to add
+            contents of dataset to the database.
+            </summary>
+        </member>
+        <member name="T:ArcheryScoringApp.Model.NotesModel">
+            <summary>
+            Class for notes model.
+            Creates object and calls method for adding it 
+            to the static dataset.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.NotesModel.#ctor(System.String,System.String)">
+            <summary>
+            Constructor for object.
+            </summary>
+            <param name="anEndRef"></param>
+            <param name="aNote"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.NotesModel.SaveToCollection(ArcheryScoringApp.Model.NotesModel)">
+            <summary>
+            Method to add the notes object to the dataset.
+            </summary>
+            <param name="endNotes"></param>
+        </member>
+        <member name="T:ArcheryScoringApp.Model.PracEndsHold">
+            <summary>
+            Helper class.
+            Static class for holding the ends for a practice sheet
+            independant of an object.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.PracEndsHold.HoldEnds(System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Checks if endRef already a key in dataset, and is so removes end, then readds it.
+            Otherwise, adds the end, with endRef as key.
+            </summary>
+            <param name="anEndRef"></param>
+            <param name="anEndTotal"></param>
+            <param name="aScore1"></param>
+            <param name="aScore2"></param>
+            <param name="aScore3"></param>
+            <param name="aScore4"></param>
+            <param name="aScore5"></param>
+            <param name="aScore6"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.PracEndsHold.Save">
+            <summary>
+            Saves dataset to the database.
+            Triggered on save button press.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.PracEndsHold.ResetHold">
+            <summary>
+            Resets dataset to new set.
+            </summary>
+        </member>
+        <member name="T:ArcheryScoringApp.Model.PracticeModel">
+            <summary>
+            Class for handling the practice model object
+            used by the dataGrid.
+            Uses INotifyProperyChanged.
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.PracticeModel.ER">
+            <summary>
+            Get, set.
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.PracticeModel.EndNum">
+            <summary>
+            Get, set
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.PracticeModel.Arrow1">
+            <summary>
+            Get, set.
+            Calls calc, and hold (dataset) methods.
+            Uses OnPropertyChanged.
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.PracticeModel.Arrow2">
+            <summary>
+            Get, set.
+            Calls calc, and hold (dataset) methods.
+            Uses OnPropertyChanged.
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.PracticeModel.Arrow3">
+            <summary>
+            Get, set.
+            Calls calc, and hold (dataset) methods.
+            Uses OnPropertyChanged.
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.PracticeModel.Arrow4">
+            <summary>
+            Get, set.
+            Calls calc, and hold (dataset) methods.
+            Uses OnPropertyChanged.
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.PracticeModel.Arrow5">
+            <summary>
+            Get, set.
+            Calls calc, and hold (dataset) methods.
+            Uses OnPropertyChanged.
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.PracticeModel.Arrow6">
+            <summary>
+            Get, set.
+            Calls calc, and hold (dataset) methods.
+            Uses OnPropertyChanged.
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.PracticeModel.EndTotal">
+            <summary>
+            Get, set.
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.PracticeModel.RunningTotal">
+            <summary>
+            Get, set.
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.PracticeModel.Weather">
+            <summary>
+            Get, set.
+            Used for Previous scoring sheets.
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.Model.PracticeModel.Notes">
+            <summary>
+            Get, set.
+            Used for Previous scoring sheets.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.PracticeModel.Calc(System.String,System.String)">
+            <summary>
+            Method to handle score calculations.
+            Calls the invalid score pop-up.
+            </summary>
+            <param name="score"></param>
+            <param name="r"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.PracticeModel.#ctor(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Constructor for practice model object.
+            </summary>
+            <param name="endNum"></param>
+            <param name="arrow1"></param>
+            <param name="arrow2"></param>
+            <param name="arrow3"></param>
+            <param name="arrow4"></param>
+            <param name="arrow5"></param>
+            <param name="arrow6"></param>
+            <param name="endTotal"></param>
+            <param name="runningTotal"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.PracticeModel.ScoresToHold">
+            <summary>
+            calls the HoldEnds method in static helper class,
+            PracEndsHold. Passes current end to method.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.PracticeModel.PrevWeather(System.String)">
+            <summary>
+            Gets the previous weather conditions for end.
+            Used by PracticeViewModel for previous ends.
+            </summary>
+            <param name="endRef"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.PracticeModel.PrevNotes(System.String)">
+            <summary>
+            Gets the previous weather conditions for end.
+            Used by PracticeViewModel for previous ends.
+            </summary>
+            <param name="endRef"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.PracticeModel.OnPropertyChanged(System.String)">
+            <summary>
+            OnPropertyChange method.
+            </summary>
+            <param name="propertyName"></param>
+        </member>
+        <member name="T:ArcheryScoringApp.Model.ScoringSheetModel">
+            <summary>
+            Class for creating non database scorinf sheet model, and adding to database.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.ScoringSheetModel.#ctor(System.Int32,System.String)">
+            <summary>
+            Constructor for scoring sheet object.
+            </summary>
+            <param name="aDetailsID"></param>
+            <param name="aType"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.ScoringSheetModel.#ctor">
+            <summary>
+            Second constructor without param.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.ScoringSheetModel.SetScoringSheet(System.Int32,System.String)">
+            <summary>
+            Calls database method to add scoring sheet.
+            </summary>
+            <param name="aDetailsID"></param>
+            <param name="aType"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ArcheryScoringApp.Model.WeatherHold">
+            <summary>
+            Helper class.
+            Holds code for dataset practice scoring.
+            Static so it does not depend on end on weather object.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.WeatherHold.ToCollection(ArcheryScoringApp.Model.WeatherModel)">
+            <summary>
+            Adds param object to dataset.
+            Removes and replaces with new object if it already exists.
+            </summary>
+            <param name="weather"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.WeatherHold.WeatherExist(System.String)">
+            <summary>
+            Checks to see if dataset contains an object associated with an end.
+            </summary>
+            <param name="aRef"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.WeatherHold.GetWeather(System.String)">
+            <summary>
+            Returns the weather object associated with an end.
+            </summary>
+            <param name="aRef"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.WeatherHold.WeatherSaved">
+            <summary>
+            Saves the ends in the dataset to the database.
+            </summary>
+        </member>
+        <member name="T:ArcheryScoringApp.Model.WeatherModel">
+            <summary>
+            Class for Weather. Creates non-database object, and handles
+            business logic.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.WeatherModel.#ctor(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Constructor.
+            Creates weather object.
+            </summary>
+            <param name="anEndRef"></param>
+            <param name="aTemp"></param>
+            <param name="aSpeed"></param>
+            <param name="aDir"></param>
+            <param name="aHum"></param>
+            <param name="anOther"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.WeatherModel.WeatherToCollection(ArcheryScoringApp.Model.WeatherModel)">
+            <summary>
+            Method for sending object to dataset.
+            </summary>
+            <param name="endWeather"></param>
+        </member>
+        <member name="T:ArcheryScoringApp.Model.Comp720ViewModel">
+            <summary>
+            Viewmodel class for Comp720 screen.
+            Used by the dataGrids for dataset binding.
+            Code modified from Syncfusion. (2001 - 2018). Xamarin.Forms. Retrieved August 2018, from Syncfusion Documentation: https://help.syncfusion.com/xamarin/introduction/overview#how-to-best-read-this-user-guide
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.Comp720ViewModel.#ctor">
+            <summary>
+            Constructor for scoring sheet dataGrid
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.Comp720ViewModel.#ctor(System.Collections.Generic.List{ArcheryScoringApp.Data.End})">
+            <summary>
+            Constructor for previous dataGrid pop-up.
+            </summary>
+            <param name="ends"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.Comp720ViewModel.GenerateEnds">
+            <summary>
+            Generates ends for scoring sheet dataGrid dataset
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.Comp720ViewModel.GeneratePrevEnds(System.Collections.Generic.List{ArcheryScoringApp.Data.End})">
+            <summary>
+            Generates ends for previous dataGrid dataset
+            </summary>
+            <param name="prevEnd"></param>
+        </member>
+        <member name="T:ArcheryScoringApp.Model.EndModel">
+            <summary>
+            Class for a generic end model.
+            Used for getting the previous ends for a scoring sheet.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.EndModel.#ctor(System.String,System.Int32,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Constructor for object.
+            </summary>
+            <param name="anEndNum"></param>
+            <param name="anID"></param>
+            <param name="anEndTotal"></param>
+            <param name="aScore1"></param>
+            <param name="aScore2"></param>
+            <param name="aScore3"></param>
+            <param name="aScore4"></param>
+            <param name="aScore5"></param>
+            <param name="aScore6"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.EndModel.#ctor">
+            <summary>
+            Second constructor for calling GetPrev
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.EndModel.GetPrev(System.Int32,System.String)">
+            <summary>
+            Class for calling database for GetPreviousEnds.
+            </summary>
+            <param name="finalScore"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ArcheryScoringApp.Model.PracticeViewModel">
+            <summary>
+            Viewmodel class for Practice screen.
+            Used by dataGrids for dataset.
+            Code modified from Syncfusion. (2001 - 2018). Xamarin.Forms. Retrieved August 2018, from Syncfusion Documentation: https://help.syncfusion.com/xamarin/introduction/overview#how-to-best-read-this-user-guide
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.PracticeViewModel.#ctor">
+            <summary>
+            Constructor for scoring screen dataGrid
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.PracticeViewModel.#ctor(System.Collections.Generic.List{ArcheryScoringApp.Data.End})">
+            <summary>
+            Constructor for Previous dataGrid
+            </summary>
+            <param name="prev"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.PracticeViewModel.GenerateEnds">
+            <summary>
+            Generates ends for scoring screen dataGrid dataset.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.Model.PracticeViewModel.GeneratePrevEnds(System.Collections.Generic.List{ArcheryScoringApp.Data.End})">
+            <summary>
+            Generates ends for previous dataGrid dataset.
+            </summary>
+            <param name="prevEnd"></param>
+        </member>
+        <member name="T:ArcheryScoringApp.ArchMain">
+            <summary>
+            The content page for the main page of the application.
+            Uses SyncFusion commponets, and code for components are modelled 
+            on SynFusion documentation and Miroscoft Xamarin.Forms documentation.
+            Syncfusion. (2001 - 2018). Xamarin.Forms. Retrieved August 2018, from Syncfusion Documentation: https://help.syncfusion.com/xamarin/introduction/overview#how-to-best-read-this-user-guide
+            David Britch, C. D. (2017, July 12). Xamarin.Forms User Interface Views. Retrieved August 2018, from Microsoft: https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/index
+            </summary>
+        </member>
+        <member name="F:ArcheryScoringApp.ArchMain.dist">
+            holds bow type selected from combo box, static internal as it is accessed within namespace.
+        </member>
+        <member name="F:ArcheryScoringApp.ArchMain.compType">
+            holds distance selected from combo box, static internal as it is accessed within namespace.
+        </member>
+        <member name="F:ArcheryScoringApp.ArchMain.noBowOrDist">
+            holds competition type selected from combo box, static internal as it is accessed within namespace.
+        </member>
+        <member name="M:ArcheryScoringApp.ArchMain.#ctor">
+            pop up, declared in constructor for use in methods.
+            <summary>
+            Constructor.
+            Sets the elements on the page and the layout.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.ArchMain.PracButtonClicked(System.Object,System.EventArgs)">
+            <summary>
+            Method for when practice button is pressed
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.ArchMain.ValuesNull">
+            <summary>
+            Method for popup when distance or bowtype have not been selected.
+            Popup is modal.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.ArchMain.BackUpButtonClicked(System.Object,System.EventArgs)">
+            <summary>
+            Method for when backup button is pressed.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.ArchMain.ErrorMess(System.String)">
+            <summary>
+            The error message for e-mail and file writing.
+            Called from the DatabaseBackup class.
+            Popup is modal.
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="T:ArcheryScoringApp.UIComp720">
+            <summary>
+            The content page for the 720 Competition scoring page of the application.
+            Uses SyncFusion commponets, and code for components are modelled 
+            on SynFusion documentation and Miroscoft Xamarin.Forms documentation.
+            Syncfusion. (2001 - 2018). Xamarin.Forms. Retrieved August 2018, from Syncfusion Documentation: https://help.syncfusion.com/xamarin/introduction/overview#how-to-best-read-this-user-guide
+            David Britch, C. D. (2017, July 12). Xamarin.Forms User Interface Views. Retrieved August 2018, from Microsoft: https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/index
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.UIComp720.#ctor">
+            <summary>
+            Constructor.
+            Sets components and layout for page.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.UIComp720.NotValid(System.String)">
+            <summary>
+            Method for popup when score is not a valid score
+            public as it is called from Comp720Model.
+            </summary>
+            <param name="score"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UIComp720.DetailsButtonClicked(System.Object,System.EventArgs)">
+            <summary>
+            Displays details when details button clicked.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UIComp720.createButton(System.String)">
+            <summary>
+            method for creating a new button with
+            text suplied by lbl param.
+            </summary>
+            <param name="lbl"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.UIComp720.SightChanged(System.Object,Xamarin.Forms.TextChangedEventArgs)">
+            <summary>
+            Handles when text in sight entry box changes.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UIComp720.EditSightClicked(System.Object,System.EventArgs)">
+            <summary>
+            Handles when button for editing sight is clicked.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UIComp720.SearchChanged(System.Object,Xamarin.Forms.TextChangedEventArgs)">
+            <summary>
+            Handles text being changed in search entry field
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UIComp720.PrevButtonClicked(System.Object,System.EventArgs)">
+            <summary>
+            Handles prev scoring sheet pop-up.
+            Pop-up is modal.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UIComp720.BackButtonClicked(System.Object,System.EventArgs)">
+            <summary>
+            Navigation method for back.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UIComp720.MainButtonClicked(System.Object,System.EventArgs)">
+            <summary>
+            Naviagtion method for root page.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UIComp720.CreateDataGrid">
+            <summary>
+            Creates the datgrid for scoring.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.UIComp720.DataGrid_QueryCellStyle(System.Object,Syncfusion.SfDataGrid.XForms.QueryCellStyleEventArgs)">
+            <summary>
+            Sets style for scoring and previous datagrids.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UIComp720.CreateDetailsGrid">
+            <summary>
+            Creates grid for details pop-up.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.UIComp720.CreateDataGridPrev(System.Collections.Generic.List{ArcheryScoringApp.Data.End})">
+            <summary>
+            Creates dataGrid for previous pop-up.
+            Seperate datagrid due to issues with having the same dataGrid displaying twice.
+            </summary>
+            <param name="ends"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.UIComp720.OnAppearing">
+            <summary>
+            For Scoring sheet and Details to be set up in database and ID's returned.
+            </summary>
+        </member>
+        <member name="T:ArcheryScoringApp.UINotesAndWeather">
+            <summary>
+            The content page for the main page of the application.
+            Code for components are modelled on Miroscoft Xamarin.Forms documentation.
+            David Britch, C. D. (2017, July 12). Xamarin.Forms User Interface Views. Retrieved August 2018, from Microsoft: https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/index
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.UINotesAndWeather.#ctor(System.String)">
+            <summary>
+            Constructor.
+            Uses passed in aRef to set endRef. Needed for database and dataset
+            so that the note and weather cna be associated with an end.
+            Sets the content and layout of the page.
+            </summary>
+            <param name="aRef"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UINotesAndWeather.CreateButton(System.String)">
+            <summary>
+            Creates a new button with text set to label.
+            </summary>
+            <param name="label"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.UINotesAndWeather.NoteChanged(System.Object,Xamarin.Forms.TextChangedEventArgs)">
+            <summary>
+            Handles notes editor box text changes.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UINotesAndWeather.TempChanged(System.Object,Xamarin.Forms.TextChangedEventArgs)">
+            <summary>
+            Handles text change for temperature entry box.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UINotesAndWeather.WindSpeedChanged(System.Object,Xamarin.Forms.TextChangedEventArgs)">
+            <summary>
+            Handles text change for windpseed entry box.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UINotesAndWeather.WindDirChanged(System.Object,Xamarin.Forms.TextChangedEventArgs)">
+            <summary>
+            Handles text change for wind direction entry box.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UINotesAndWeather.HumidChanged(System.Object,Xamarin.Forms.TextChangedEventArgs)">
+            <summary>
+            Handles text change for humidity entry box.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UINotesAndWeather.OtherChanged(System.Object,Xamarin.Forms.TextChangedEventArgs)">
+            <summary>
+            Handles text changed for other entry box.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UINotesAndWeather.GetPrevNotesAndWeather">
+            <summary>
+            Checks to see if notes or weather already exist in dataset for end.
+            If they exist, calls method and sets class variables to return for display.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.UINotesAndWeather.SaveClicked(System.Object,System.EventArgs)">
+            <summary>
+            Handles save button clicked code.
+            async due to page navigation call.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UINotesAndWeather.BackButtonPressed(System.Object,System.EventArgs)">
+            <summary>
+            Handles back navigation.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:ArcheryScoringApp.UIPractice">
+            <summary>
+            The content page for the Practice scoring page of the application.
+            Uses SyncFusion commponets, and code for components are modelled 
+            on SynFusion documentation and Miroscoft Xamarin.Forms documentation.
+            Syncfusion. (2001 - 2018). Xamarin.Forms. Retrieved August 2018, from Syncfusion Documentation: https://help.syncfusion.com/xamarin/introduction/overview#how-to-best-read-this-user-guide
+            David Britch, C. D. (2017, July 12). Xamarin.Forms User Interface Views. Retrieved August 2018, from Microsoft: https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/index
+            </summary>
+        </member>
+        <member name="P:ArcheryScoringApp.UIPractice.dtlIDPrac">
+            internal so it can be accessed from other classes
+        </member>
+        <member name="P:ArcheryScoringApp.UIPractice.HoldPracID">
+            internal so it can be accessed from other classes
+        </member>
+        <member name="F:ArcheryScoringApp.UIPractice.marking">
+            holds PracID while previous fired. 
+        </member>
+        <member name="M:ArcheryScoringApp.UIPractice.#ctor">
+            <summary>
+            Constructor.
+            Sets components and layout for Practice page.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.UIPractice.NotValid(System.String)">
+            <summary>
+            Displays pop-up for invalid score.
+            Called from PracticeModel.
+            </summary>
+            <param name="score"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UIPractice.MainButtonClicked(System.Object,System.EventArgs)">
+            <summary>
+            Handles navigation to root page.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UIPractice.NotesAndWeatherClicked(System.Object,System.EventArgs)">
+            <summary>
+            Handles navigation to notes and weather page.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UIPractice.SelectEndRow">
+            <summary>
+            Pop-up for when a row is not selected and notes weather button pushed.
+            Pop-up modal.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.UIPractice.DetailsButtonClicked(System.Object,System.EventArgs)">
+            <summary>
+            Gives details pop-up when details button pressed
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UIPractice.SightChanged(System.Object,Xamarin.Forms.TextChangedEventArgs)">
+            <summary>
+            Handles text changing in sight marking entry box.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UIPractice.EditSightClicked(System.Object,System.EventArgs)">
+            <summary>
+            Method for when Editsight clicked.
+            Calls database.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UIPractice.SearchChanged(System.Object,Xamarin.Forms.TextChangedEventArgs)">
+            <summary>
+            handles texted changed in search entry box.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UIPractice.PrevButtonClicked(System.Object,System.EventArgs)">
+            <summary>
+            Handle pop-up of previous scoring sheet.
+            Pop-up modal.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UIPractice.SaveClicked(System.Object,System.EventArgs)">
+            <summary>
+            Mthod calls saving ends, notes and weather conditions when button pressed.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UIPractice.createButton(System.String)">
+            <summary>
+            creates new buttons with text of lbl param.
+            </summary>
+            <param name="lbl"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.UIPractice.CreateDataGrid">
+            <summary>
+            Creates dataGrid for scoring sheet.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.UIPractice.CreateDataGridPrev(System.Collections.Generic.List{ArcheryScoringApp.Data.End})">
+            <summary>
+            Creates dataGrid for displaying previous sheet.
+            Seperate dataGrid as it contains extra columns.
+            </summary>
+            <param name="ends"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.UIPractice.CreateDetailsGrid">
+            <summary>
+            Creates grid for details pop-up.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.UIPractice.OnAppearing">
+            <summary>
+            For Scoring sheet and Details to be set up in database and ID's returned.
+            </summary>
+        </member>
+        <member name="T:ArcheryScoringApp.UIStats">
+            <summary>
+            The content page for the Statistics page of the application.
+            Code for components are modelled on Miroscoft Xamarin.Forms documentation.
+            David Britch, C. D. (2017, July 12). Xamarin.Forms User Interface Views. Retrieved August 2018, from Microsoft: https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/index
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.UIStats.#ctor">
+            <summary>
+            Constructor for Statistics page.
+            Sets components and layout.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.UIStats.CreateButton(System.String)">
+            <summary>
+            Creates a new button with text from
+            passed in label variable.
+            </summary>
+            <param name="label"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.UIStats.ContClicked(System.Object,System.EventArgs)">
+            <summary>
+            Naviagation, sets nxt page in stack as the
+            720 Competition screen.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UIStats.BackClicked(System.Object,System.EventArgs)">
+            <summary>
+            Navigation, pops current page off stack to
+            display previous page.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.UIStats.getStats">
+            <summary>
+            Method for getting the values for
+            page variables.
+            </summary>
+        </member>
+        <member name="T:ArcheryScoringApp.ViewModel.NotesWeatherViewModel">
+            <summary>
+            Viewmodel class for the notes and weather page.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.ViewModel.NotesWeatherViewModel.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.ViewModel.NotesWeatherViewModel.NotesSaved(System.String,System.String)">
+            <summary>
+            Sends notes and endNum (notes object)to the dataset.
+            </summary>
+            <param name="endNum"></param>
+            <param name="note"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.ViewModel.NotesWeatherViewModel.WeatherSaved(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Sends weather conditions object to the dataset.
+            </summary>
+            <param name="endRef"></param>
+            <param name="temp"></param>
+            <param name="speed"></param>
+            <param name="dir"></param>
+            <param name="hum"></param>
+            <param name="other"></param>
+        </member>
+        <member name="M:ArcheryScoringApp.ViewModel.NotesWeatherViewModel.DoNotesExist(System.String)">
+            <summary>
+            Checks if dataset contains notes for and end.
+            Returns to UI.
+            </summary>
+            <param name="aRef"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.ViewModel.NotesWeatherViewModel.DoWeatherExist(System.String)">
+            <summary>
+            Checks if dataset contains weather conditions object for an end.
+            Returns to UI.
+            </summary>
+            <param name="aRef"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.ViewModel.NotesWeatherViewModel.PrevNotes(System.String)">
+            <summary>
+            Returns saved notes for an end from dataset
+            to UI.
+            </summary>
+            <param name="aRef"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.ViewModel.NotesWeatherViewModel.PrevWeather(System.String)">
+            <summary>
+            Returns weather condtions for an end from dataset to UI.
+            </summary>
+            <param name="aRef"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ArcheryScoringApp.ViewModel.StatisticsViewModel">
+            <summary>
+            View model class for the Statistics page.
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.ViewModel.StatisticsViewModel.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:ArcheryScoringApp.ViewModel.StatisticsViewModel.GetSightMarkings(System.String)">
+            <summary>
+            Calls the database method for getting sight markings for selected bow, 
+            and returns them to UI.
+            </summary>
+            <param name="bow"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.ViewModel.StatisticsViewModel.GetPB">
+            <summary>
+            Calls the database method for personal best for selected
+            bow and distance.
+            Returns to UI.
+            </summary>
+            <returns></returns>   
+        </member>
+        <member name="M:ArcheryScoringApp.ViewModel.StatisticsViewModel.GetLastBst">
+            <summary>
+            Calls databse for last best for selected bow and distance
+            combination.
+            Then returns this to UI.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ArcheryScoringApp.ViewModel.StatisticsViewModel.GetLast">
+            <summary>
+            Calls database method for last score and returns
+            to UI.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:SyncFusionTrial.UWP.ArcheryScoringApp_UWP_XamlTypeInfo.XamlMetaDataProvider">
+            <summary>
+            Main class for providing metadata for the app or library
+            </summary>
+        </member>
+        <member name="M:SyncFusionTrial.UWP.ArcheryScoringApp_UWP_XamlTypeInfo.XamlMetaDataProvider.GetXamlType(System.Type)">
+            <summary>
+            GetXamlType(Type)
+            </summary>
+        </member>
+        <member name="M:SyncFusionTrial.UWP.ArcheryScoringApp_UWP_XamlTypeInfo.XamlMetaDataProvider.GetXamlType(System.String)">
+            <summary>
+            GetXamlType(String)
+            </summary>
+        </member>
+        <member name="M:SyncFusionTrial.UWP.ArcheryScoringApp_UWP_XamlTypeInfo.XamlMetaDataProvider.GetXmlnsDefinitions">
+            <summary>
+            GetXmlnsDefinitions()
+            </summary>
+        </member>
+    </members>
+</doc>

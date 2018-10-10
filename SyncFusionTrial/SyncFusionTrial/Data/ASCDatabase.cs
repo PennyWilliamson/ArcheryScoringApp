@@ -78,17 +78,17 @@ namespace ArcheryScoringApp.Data
             {
                 FirstName = "Caitlin",
                 LastName = "Thomas-Riley",
-                BowType = ArchMain.bowType,
+                BowType = UIArchMain.bowType,
                 Division = "JWR",
                 Club = "Randwick",
                 Date = date,
                 ArchNZNum = 3044,
-                Dist = ArchMain.dist
+                Dist = UIArchMain.dist
             };
 
             dbConn.Insert(details);
 
-            var bow = dbConn.Get<Bow>(ArchMain.bowType);
+            var bow = dbConn.Get<Bow>(UIArchMain.bowType);
             details.bow = bow;
             dbConn.UpdateWithChildren(details);
             var dtlID = details.DetailsID;
@@ -172,7 +172,7 @@ namespace ArcheryScoringApp.Data
         {
             var bow = new Bow()
             {//as update replaces tuple
-                BowType = ArchMain.bowType,
+                BowType = UIArchMain.bowType,
                 SightMarkings = markings
             };
 
@@ -199,8 +199,8 @@ namespace ArcheryScoringApp.Data
         public List<ScoringSheet> getPB()
         {
             string type = "720Competition";//hard set as only 720 competition is in, will need passed as a variable
-            string distance = ArchMain.dist;
-            string bow = ArchMain.bowType;
+            string distance = UIArchMain.dist;
+            string bow = UIArchMain.bowType;
             var b = dbConn.Query<ScoringSheet>("SELECT ID, FinalTotal FROM ScoringSheet AS ss JOIN Details AS d ON ss.DetailsID = d.DetailsID WHERE ss.Type = ? AND d.BowType = ? AND d.Dist = 70 Order BY FinalTotal DESC LIMIT 1", type, bow, distance);
 
             return b;
@@ -215,8 +215,8 @@ namespace ArcheryScoringApp.Data
         {
             int i = 0;
             string type = "720Competition";//hard set as only 720 competition is in, will need passed as a variable
-            string distance = ArchMain.dist;
-            string bow = ArchMain.bowType;
+            string distance = UIArchMain.dist;
+            string bow = UIArchMain.bowType;
             var b = dbConn.Query<ScoringSheet>("SELECT DISTINCT ID, FinalTotal FROM ScoringSheet AS ss JOIN Details AS d ON ss.DetailsID = d.DetailsID WHERE FinalTotal > ? AND ss.Type = ? AND d.BowType = ? AND d.Dist = ? ORDER BY ID DESC LIMIT 1", i, type, bow, distance);
             return b;
         }
@@ -231,8 +231,8 @@ namespace ArcheryScoringApp.Data
         {
             int i = 0;
             string type = "720Competition";//hard set as only 720 competition is in, will need passed as a variable
-            string distance = ArchMain.dist;
-            string bow = ArchMain.bowType;
+            string distance = UIArchMain.dist;
+            string bow = UIArchMain.bowType;
             var b = dbConn.Query<ScoringSheet>("SELECT DISTINCT ID, FinalTotal FROM ScoringSheet AS ss JOIN Details as d ON ss.DetailsID = d.DetailsID WHERE FinalTotal > ? AND ss.Type = ? AND ss.ID > ? AND d.BowType = ? AND d.Dist = ? ORDER BY FinalTotal DESC LIMIT 1", i, type, id, bow, distance);
             return b;
         }

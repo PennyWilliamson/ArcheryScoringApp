@@ -10,9 +10,9 @@ namespace ArcheryScoringApp.Model
     /// </summary>
     static class EndRef
     {
-        static int counter = 0;//allows ends be numbered 1 to 12 as last 1 or 2 digits.
+        static int counter = 0;//keeps track of end numbers
         static Random aNum = new Random();//a random number object.
-        static int endCount = 1; //keeps track of end numbers
+        static int endCount = 1; //allows ends be numbered 1 to 12 as last 1 or 2 digits.
         static string eR { get; set; }//holds end Ref for return.
 
         /// <summary>

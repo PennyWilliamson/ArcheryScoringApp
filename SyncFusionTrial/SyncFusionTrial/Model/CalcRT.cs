@@ -21,7 +21,7 @@ namespace ArcheryScoringApp.Model
         /// <param name="eT"></param>
         /// <param name="pvrScr"></param>
         /// <returns></returns>
-        static public int runningTotal(int eT, int pvrScr)
+        static public int RunningTotal(int eT, int pvrScr)
         {
             curRT = curRT + eT - pvrScr; //adds new score and subtracts old score for accuracy.
             return curRT;

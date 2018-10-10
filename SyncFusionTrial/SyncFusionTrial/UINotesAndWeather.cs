@@ -254,7 +254,6 @@ namespace ArcheryScoringApp
             //Assumption made that practice will not happen in 0 degree conditions
             if(tempEntry != null || windDirEntry != null || humidEntry != null || otherEntry != null)
             {
-                // App.Database.AddWeather(endRef, temp, windspeed, windDir, humid, other);
                 viewModel.WeatherSaved(endRef, tempEntry, windspeedEntry, windDirEntry, humidEntry, otherEntry);
             }
 

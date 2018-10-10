@@ -48,57 +48,5 @@ namespace ArcheryScoringApp.Model
         }
     }
 
-   /* /// <summary>
-    /// Helper class.
-    /// Holds code for dataset practice scoring.
-    /// Static so it doesnot depend on end on weather object.
-    /// </summary>
-    static class WeatherHold1
-    {
-        static Dictionary<string, WeatherModel> weatherHold = new Dictionary<string, WeatherModel>();
 
-        static public void ToCollection(WeatherModel weather)
-        {
-            string key = weather.endRef;
-            if (!weatherHold.ContainsKey(key))
-            {
-                weatherHold.Add(key, weather);
-            }
-            else
-            {
-                weatherHold.Remove(key);
-                weatherHold.Add(key, weather);
-            }
-        }
-
-        static public Boolean WeatherExist(string aRef)
-        {
-            bool exists = false;
-            if(weatherHold.ContainsKey(aRef))
-            {
-                exists = true;
-            }
-            return exists;
-        }
-
-        static public WeatherModel GetWeather(string aRef)
-        {
-            WeatherModel prev = null;
-
-            if(weatherHold.ContainsKey(aRef))
-            {
-                prev = weatherHold[aRef];
-            }
-
-            return prev;
-        }
-
-        static public void WeatherSaved()
-        {
-            foreach (var weather in weatherHold.Values)
-            {
-                App.database.AddWeather(weather.endRef, weather.temp, weather.speed, weather.dir, weather.hum, weather.other);
-            }
-        }
-    }*/
 }

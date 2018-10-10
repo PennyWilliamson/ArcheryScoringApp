@@ -16,7 +16,7 @@ namespace ArcheryScoringApp
     /// Syncfusion. (2001 - 2018). Xamarin.Forms. Retrieved August 2018, from Syncfusion Documentation: https://help.syncfusion.com/xamarin/introduction/overview#how-to-best-read-this-user-guide
     /// David Britch, C. D. (2017, July 12). Xamarin.Forms User Interface Views. Retrieved August 2018, from Microsoft: https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/index
     /// </summary>
-	public class ArchMain : ContentPage
+	public class UIArchMain : ContentPage
 	{
         internal static string bowType;///holds bow type selected from combo box, static internal as it is accessed within namespace.
         internal static string dist;///holds distance selected from combo box, static internal as it is accessed within namespace.
@@ -27,7 +27,7 @@ namespace ArcheryScoringApp
         /// Constructor.
         /// Sets the elements on the page and the layout.
         /// </summary>
-        public ArchMain ()
+        public UIArchMain ()
 		{
             //resets values
             UIComp720.ID = -1;
@@ -167,8 +167,8 @@ namespace ArcheryScoringApp
             {
                 //values reset
                 UIComp720.ID = -1;
-                Model.TensAndXs.tens = 0;
-                Model.TensAndXs.xs = 0;
+                Model.CalcCompEndTotal.tens = 0;
+                Model.CalcCompEndTotal.xs = 0;
                 Model.CalcRT.curRT = 0;
                 await Navigation.PushAsync(new UIStats() { Title = "Competition Statistics" });//calls new page
             }
@@ -232,7 +232,7 @@ namespace ArcheryScoringApp
              bowBack.BowToCSV();
              compBack.CompToCSV();
              pracBack.PracToCSV();
-             email.EmailBow();
+             email.EmailBackup();
 
         }
         

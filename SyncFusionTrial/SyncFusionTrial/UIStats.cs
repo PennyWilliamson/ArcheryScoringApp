@@ -135,7 +135,7 @@ namespace ArcheryScoringApp
             //View model object for method calls.
             ViewModel.StatisticsViewModel viewModel = new ViewModel.StatisticsViewModel();
 
-            sightMarking= viewModel.GetSightMarkings(ArchMain.bowType);
+            sightMarking= viewModel.GetSightMarkings(UIArchMain.bowType);
 
 
             pb = viewModel.GetPB();

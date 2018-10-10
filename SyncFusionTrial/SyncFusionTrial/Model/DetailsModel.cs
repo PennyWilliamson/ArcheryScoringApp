@@ -100,7 +100,7 @@ namespace ArcheryScoringApp.Model
         }
 
         /// <summary>
-        /// Get, set
+        /// Method for adding details to database.
         /// </summary>
         /// <param name="date"></param>
         /// <returns></returns>

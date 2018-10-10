@@ -22,7 +22,7 @@ namespace ArcheryScoringApp.Data
         /// Based on the code from the NuGet Plugin.Messaging documentation
         /// cjlotz, j. (n/d). Xamarin.Plugins/Messaging. Retrieved September 17, 2018, from GitHub cjlotz: https://github.com/cjlotz/Xamarin.Plugins/blob/master/Messaging/Details.md
         /// </summary>
-        public void EmailBow()
+        public void EmailBackup()
         {
             try //catches errors
             {
@@ -52,7 +52,7 @@ namespace ArcheryScoringApp.Data
             {
                 string e = ex.ToString();//error for debug
                 string err = "Sorry e-mail could not be opened";//error message for pop up
-                ArchMain.ErrorMess(err);
+                UIArchMain.ErrorMess(err);
             }
         }
 
@@ -194,7 +194,6 @@ namespace ArcheryScoringApp.Data
             textWriter.Close();
 
             string text = File.ReadAllText(fileName);
-            //   ArchMain.ErrorMess(text);
 
         }
     }

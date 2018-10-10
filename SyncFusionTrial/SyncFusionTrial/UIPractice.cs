@@ -492,12 +492,12 @@ namespace ArcheryScoringApp
             //Date class variable.
             //BowType and Dist ArchMain class variables.
             gridDetails.Children.Add(new Label { Text = "Name: Caitlin Thomas-Riley", TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 0, 0);
-            gridDetails.Children.Add(new Label { Text = "Bow Type: " + ArchMain.bowType, TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 2, 0);
+            gridDetails.Children.Add(new Label { Text = "Bow Type: " + UIArchMain.bowType, TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 2, 0);
             gridDetails.Children.Add(new Label { Text = "Division: JWR", TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 0, 1);
             gridDetails.Children.Add(new Label { Text = "Club: Randwick", TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 2, 1);
             gridDetails.Children.Add(new Label { Text = "Date: " + date, TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 0, 2);
             gridDetails.Children.Add(new Label { Text = "Archery NZ No.: 3044", TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 2, 2);
-            gridDetails.Children.Add(new Label { Text = "Distance: " + ArchMain.dist + "m", TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 0, 3);
+            gridDetails.Children.Add(new Label { Text = "Distance: " + UIArchMain.dist + "m", TextColor = Color.Black, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center }, 0, 3);
 
             return gridDetails;
         }
@@ -513,7 +513,7 @@ namespace ArcheryScoringApp
             string type = "Practice";
             if (PracID == -1) //set to -1 in App constructor so that this does not refire a new save
             {
-                Model.PracticeModel.rT = 0; //resets running total
+                Model.CalcRT.curRT = 0; //resets running total
                 Model.DetailsModel details = new Model.DetailsModel();
                 dtlIDPrac = details.SetDetails(date);
 

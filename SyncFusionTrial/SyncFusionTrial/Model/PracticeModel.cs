@@ -29,7 +29,7 @@ namespace ArcheryScoringApp.Model
         private string notes;//for previous sheet
 
         private int eT; //for holding new end total value
-        static internal int rT; //for holding new running total value
+      //  static internal int rT; //for holding new running total value
         private string eR; //end reference
 
         public event PropertyChangedEventHandler PropertyChanged;//needed for INotifyPropertyChanged.
@@ -242,8 +242,7 @@ namespace ArcheryScoringApp.Model
             {
 
                 bool valid = int.TryParse(score, out curScr);//gives value of 0 if unable to parse, which handles M's
-                int a = UIPractice.PracID;
-                int aa = a;
+
                 if (UIPractice.PracID != -1)//stops it firing on set-up
                 {
                     if (valid == false)
@@ -284,7 +283,7 @@ namespace ArcheryScoringApp.Model
             }
 
             current = this.endTotal + curScr - prvScr; // adds new score and subtracts old score for accuracy
-            runningTotal = CalcRT.runningTotal(curScr, prvScr);
+            runningTotal = CalcRT.RunningTotal(curScr, prvScr);
             return current;
         }
 
@@ -384,70 +383,5 @@ namespace ArcheryScoringApp.Model
 
 
 
-    /*  static class CalcRT
-      {
-          internal static int curRT { get; set; } //static as this is independant of end objects.
-
-          static public int runningTotal(int eT, int pvrScr)
-          {
-              curRT = curRT + eT - pvrScr; //adds new score and subtracts old score for accuracy.
-              return curRT;
-          }
-      }
-      */
-   /* static class EndRefPrac
-    {
-        static Random aNum = new Random();
-        static int endCount = 1;
-        static string eR { get; set; }
-
-        static public string SetRef()
-        {
-            int ranNum = aNum.Next(1, 1000000);
-
-            eR = "Prac" + ranNum + endCount.ToString();//Prac identifies it as practice, ranNum helps make it unique.
-            endCount = endCount + 1;
-
-            return eR;
-        }
-    }*/
-
-   /* static class PracEndsHold
-    {
-        static Dictionary<string, EndModel> hold = new Dictionary<string, EndModel>();
-
-        static public void HoldEnds(string anEndRef, int anEndTotal, string aScore1, string aScore2, string aScore3, string aScore4, string aScore5, string aScore6)
-        {
-
-            EndModel end = new EndModel(anEndRef, UIPractice.PracID, anEndTotal, aScore1, aScore2, aScore3, aScore4, aScore5, aScore6);
-
-
-            if (!hold.ContainsKey(anEndRef))
-            {
-                hold.Add(anEndRef, end);
-            }
-            else
-            {
-
-                hold.Remove(anEndRef);
-                hold.Add(anEndRef, end);
-
-            }
-
-        }
-
-        static public void Save()
-        {
-            foreach (var end in hold.Values)
-            {
-                App.Database.InsertEnds(end);
-                App.Database.UpdateFinalScore(UIPractice.PracID, CalcRT.curRT, UIPractice.dtlIDPrac, "Practice");//adds final total to scoring sheet
-            }
-        }
-
-        static public void ResetHold()
-        {
-            hold = new Dictionary<string, EndModel>();
-        }
-    }*/
+   
 }

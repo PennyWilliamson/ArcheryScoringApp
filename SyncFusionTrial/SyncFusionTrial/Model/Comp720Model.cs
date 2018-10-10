@@ -63,7 +63,7 @@ namespace ArcheryScoringApp.Model
             {
                 if (endNum == "Xs: " || endNum == "10s: ")
                 {
-                    getTensAndXs(endNum);
+                    GetTensAndXs(endNum);
                 }
                 else
                 {
@@ -169,11 +169,11 @@ namespace ArcheryScoringApp.Model
                 curScr = 10;
                 if (score == "X" || score == "x")
                 {
-                    TensAndXs.Xs();//increases count of Xs by one
+                    CalcCompEndTotal.Xs();//increases count of Xs by one
                 }
                 else
                 {
-                    TensAndXs.Tens();//increases count of 10s by one
+                    CalcCompEndTotal.Tens();//increases count of 10s by one
                 }
             }
             else
@@ -209,11 +209,11 @@ namespace ArcheryScoringApp.Model
                 prvScr = 10;
                 if (r == "X" || r == "x")
                 {
-                    TensAndXs.RemoveXs();//decreases count of Xs by one
+                    CalcCompEndTotal.RemoveXs();//decreases count of Xs by one
                 }
                 else
                 {
-                    TensAndXs.RemoveTens();//decreases count of 10s by one
+                    CalcCompEndTotal.RemoveTens();//decreases count of 10s by one
                 }
             }
             else
@@ -226,8 +226,8 @@ namespace ArcheryScoringApp.Model
 
             }
             current = this.threeTotal + curScr - prvScr; // minus prvScr to allow scores to be changed in case of user error
-            runningTotal = CalcRT.runningTotal(curScr, prvScr);
-            endTotal = CalcEndTotal.CalcEnd(curScr, prvScr, eR);
+            runningTotal = CalcRT.RunningTotal(curScr, prvScr);
+            endTotal = CalcCompEndTotal.CalcEnd(curScr, prvScr, eR);
             return current;
         }
 
@@ -235,16 +235,16 @@ namespace ArcheryScoringApp.Model
         /// Gets the number of tens and x's for display on dataGrid.
         /// </summary>
         /// <param name="endNum"></param>
-        public void getTensAndXs(string endNum)
+        public void GetTensAndXs(string endNum)
         {
             if (endNum == "Xs: ")
             {
-                arrow1 = TensAndXs.GetXs();
+                arrow1 = CalcCompEndTotal.GetXs();
 
             }
             if (endNum == "10s: ")
             {
-                arrow1 = TensAndXs.GetTens();
+                arrow1 = CalcCompEndTotal.GetTens();
 
             }
         }
